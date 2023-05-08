@@ -26,6 +26,8 @@
             }
         ],
         "react/react-in-jsx-scope": "off",
-        "no-console": 2
+        "no-console": 2,
+        "import/no-extraneous-dependencies": "off",
+        "no-restricted-exports": "off"
     }
 }
