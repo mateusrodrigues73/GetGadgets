@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
-import GlobalStyle from './styles/Global.Styles';
-import Theme from './styles/Theme.styles';
+import GlobalStyle from './styles/Global';
+import Theme from './styles/Theme';
 import App from './App';
 import Home from './pages/Home';
 
