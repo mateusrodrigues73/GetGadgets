@@ -9,6 +9,10 @@ const Theme = {
     neutralBlack: '#0F0E0E',
     error: '#FFEF15',
   },
+  fonts: {
+    heading: 'Source Sans Pro, sans-serif',
+    body: 'Lato, sans-serif',
+  },
 };
 
 export default Theme;
