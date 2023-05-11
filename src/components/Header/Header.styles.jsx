@@ -1,5 +1,9 @@
 import { styled } from 'styled-components';
-import { SearchOutlined } from '@ant-design/icons';
+import {
+  SearchOutlined,
+  UserOutlined,
+  ShoppingCartOutlined,
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 export const HeaderContainer = styled.div`
@@ -9,6 +13,17 @@ export const HeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+`;
+
+export const HeaderWrapper = styled.div`
+  width: 1280px;
+  height: 120px;
+  background-color: ${({ theme }) => theme.colors.secondaryDark};
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
   align-items: center;
 `;
 
@@ -84,4 +99,36 @@ export const LinkItem = styled(Link)`
   &:active {
     background-color: ${({ theme }) => theme.colors.primary};
   }
+`;
+
+export const LinkIconContainer = styled.div`
+  display: flex;
+  column-gap: 20px;
+  padding: 10px;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.secondaryLight};
+    border-radius: 3px;
+  }
+
+  &:active {
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+export const UserIcon = styled(UserOutlined)`
+  font-size: 40px;
+  color: ${({ theme }) => theme.colors.contrastLight};
+`;
+
+export const ShoppingCarIcon = styled(ShoppingCartOutlined)`
+  font-size: 40px;
+  color: ${({ theme }) => theme.colors.contrastLight};
+`;
+
+export const LinkWithIcon = styled(Link)`
+  color: ${({ theme }) => theme.colors.neutralWith};
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: 18px;
+  text-decoration: none;
 `;
