@@ -19,7 +19,6 @@ export const HeaderContainer = styled.div`
 
 export const HeaderWrapper = styled.div`
   width: 1200px;
-  height: 120px;
   background-color: ${({ theme }) => theme.colors.secondaryDark};
   display: flex;
   flex-direction: row;
