@@ -16,7 +16,7 @@ import {
   LinkWithIcon,
 } from './Header.styles';
 
-function Header() {
+const Header = () => {
   // eslint-disable-next-line no-unused-vars
   const [searchInput, setSearchinput] = useState('');
 
@@ -62,6 +62,6 @@ function Header() {
       </HeaderWrapper>
     </HeaderContainer>
   );
-}
+};
 
 export default Header;
