@@ -14,4 +14,28 @@ export const LoginContainer = styled.div`
   justify-content: center;
 `;
 
-export const LoginWrapper = styled.div``;
+export const CheckBoxContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  align-self: flex-start;
+  padding-left: 12px;
+`;
+
+export const Checkbox = styled.input`
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+`;
+
+export const CheckBoxText = styled.span`
+  font-family: ${({ theme }) => theme.fonts.body};
+  font-size: 16px;
+  color: ${({ theme }) => theme.colors.neutralWith};
+  padding-left: 6px;
+`;
+
+export const ForgotPassContainer = styled.div`
+  width: 220px;
+  padding-left: 12px;
+`;
