@@ -36,6 +36,7 @@ export const SocialContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 23px;
+  width: 285px;
 `;
 
 export const SocialIconsContainer = styled.div`
