@@ -8,6 +8,7 @@ import {
 import AuthTitle from '../../components/AuthTitle';
 import AuthInput from '../../components/AuthInput';
 import AuthLink from '../../components/AuthLink';
+import GradientButton from '../../components/GradientButton';
 
 const Login = () => (
   <LoginContainer>
@@ -21,6 +22,7 @@ const Login = () => (
     <ForgotPassContainer>
       <AuthLink to="/" text="Esqueceu sua senha?" />
     </ForgotPassContainer>
+    <GradientButton width="220px" height="25px" />
   </LoginContainer>
 );
 
