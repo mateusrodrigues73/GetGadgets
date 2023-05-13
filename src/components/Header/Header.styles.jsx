@@ -1,10 +1,10 @@
 import { styled } from 'styled-components';
+import { Link } from 'react-router-dom';
 import {
   SearchOutlined,
   UserOutlined,
   ShoppingCartOutlined,
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
 
 export const HeaderContainer = styled.div`
   width: 100%;
