@@ -47,23 +47,46 @@ export const SocialIconsContainer = styled.div`
 export const FacebookIcon = styled(FacebookFilled)`
   font-size: 50px;
   color: ${({ theme }) => theme.colors.secondaryLight};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+    cursor: pointer;
+  }
+
+  &:active {
+    color: ${({ theme }) => theme.colors.neutralWith};
+  }
 `;
 
 export const InstagramIcon = styled(InstagramFilled)`
   font-size: 50px;
   color: ${({ theme }) => theme.colors.secondaryLight};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+    cursor: pointer;
+  }
+
+  &:active {
+    color: ${({ theme }) => theme.colors.neutralWith};
+  }
 `;
 
 export const TwitterIcon = styled(TwitterSquareFilled)`
   font-size: 50px;
   color: ${({ theme }) => theme.colors.secondaryLight};
 
+  &::span {
+    width: 50px;
+    height: 50px;
+  }
+
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary};
     cursor: pointer;
   }
 
   &:active {
-    background-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.neutralWith};
   }
 `;
