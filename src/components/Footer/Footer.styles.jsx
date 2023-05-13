@@ -1,10 +1,10 @@
+import { styled } from 'styled-components';
+import { Link } from 'react-router-dom';
 import {
   FacebookFilled,
   InstagramFilled,
   TwitterSquareFilled,
 } from '@ant-design/icons';
-
-import { styled } from 'styled-components';
 
 export const FooterContainer = styled.div`
   width: 100%;
@@ -35,8 +35,9 @@ export const SectionTitle = styled.div`
 export const SocialContainer = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 23px;
+  justify-content: space-between;
   width: 285px;
+  height: 133px;
 `;
 
 export const SocialIconsContainer = styled.div`
@@ -89,5 +90,43 @@ export const TwitterIcon = styled(TwitterSquareFilled)`
 
   &:active {
     color: ${({ theme }) => theme.colors.neutralWith};
+  }
+`;
+
+export const LinksContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 285px;
+`;
+
+export const LinksWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+`;
+
+export const LinksColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: flex-start;
+  row-gap: 11px;
+  margin-top: 17px;
+`;
+
+export const FooterLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.neutralWith};
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: 18px;
+  text-decoration: none;
+  padding: 1px;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.secondaryLight};
+    border-radius: 3px;
+  }
+
+  &:active {
+    background-color: ${({ theme }) => theme.colors.primary};
   }
 `;
