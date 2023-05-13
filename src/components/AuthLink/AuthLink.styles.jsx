@@ -6,6 +6,7 @@ const LinkItem = styled(Link)`
   font-family: ${({ theme }) => theme.fonts.body};
   font-size: 16px;
   text-decoration: none;
+  padding: 3px;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.secondaryLight};
