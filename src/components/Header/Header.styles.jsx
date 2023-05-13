@@ -108,6 +108,7 @@ export const LinkIconContainer = styled.div`
   &:hover {
     background-color: ${({ theme }) => theme.colors.secondaryLight};
     border-radius: 3px;
+    cursor: pointer;
   }
 
   &:active {
