@@ -48,7 +48,7 @@ const Header = () => {
           </LinksContainer>
         </SearchLinksContainer>
         <LinkIconContainer>
-          <LinkWithIcon to="/">
+          <LinkWithIcon to="/entrar">
             Faça seu login <br /> ou cadastre-se
           </LinkWithIcon>
           <UserIcon />
