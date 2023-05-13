@@ -1,9 +1,11 @@
 import {
   LoginContainer,
-  CheckBoxContainer,
+  LoginWrapper,
   Checkbox,
   CheckBoxText,
-  ForgotPassContainer,
+  OuContainer,
+  OuLine,
+  OuText,
 } from './Login.styles';
 import AuthTitle from '../../components/AuthTitle';
 import AuthInput from '../../components/AuthInput';
@@ -20,19 +22,30 @@ const Login = () => {
       <AuthTitle title="Fazer login" />
       <AuthInput placeholder="E-mail" />
       <AuthInput placeholder="Senha" />
-      <CheckBoxContainer>
+      <LoginWrapper>
         <Checkbox type="checkbox" />
         <CheckBoxText>Lembre-me</CheckBoxText>
-      </CheckBoxContainer>
-      <ForgotPassContainer>
+      </LoginWrapper>
+      <LoginWrapper>
         <AuthLink to="/" text="Esqueceu sua senha?" />
-      </ForgotPassContainer>
+      </LoginWrapper>
       <GradientButton
         width="220px"
         height="25px"
         text="Entrar"
         onClick={logar}
       />
+      <OuContainer>
+        <OuLine />
+        <OuText>ou</OuText>
+        <OuLine />
+      </OuContainer>
+      <LoginWrapper>
+        <AuthLink to="/" text="Cadastre-se" />
+      </LoginWrapper>
+      <LoginWrapper>
+        <AuthLink to="/" text="Voltar para a home" />
+      </LoginWrapper>
     </LoginContainer>
   );
 };
