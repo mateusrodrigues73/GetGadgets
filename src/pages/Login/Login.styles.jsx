@@ -12,9 +12,10 @@ export const LoginContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  row-gap: 1.5rem;
 `;
 
-export const CheckBoxContainer = styled.div`
+export const LoginWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -25,6 +26,7 @@ export const CheckBoxContainer = styled.div`
 export const Checkbox = styled.input`
   width: 13px;
   height: 13px;
+  margin-right: 6px;
   cursor: pointer;
 `;
 
@@ -32,10 +34,25 @@ export const CheckBoxText = styled.span`
   font-family: ${({ theme }) => theme.fonts.body};
   font-size: 16px;
   color: ${({ theme }) => theme.colors.neutralWith};
-  padding-left: 6px;
 `;
 
-export const ForgotPassContainer = styled.div`
+export const OuContainer = styled.div`
   width: 220px;
-  padding-left: 12px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+`;
+
+export const OuLine = styled.div`
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.neutralWith};
+  width: 100%;
+`;
+
+export const OuText = styled.span`
+  font-family: ${({ theme }) => theme.fonts.body};
+  font-size: 16px;
+  color: ${({ theme }) => theme.colors.neutralWith};
+  margin-left: 18px;
+  margin-right: 18px;
 `;
