@@ -9,6 +9,7 @@ export const LoginContainer = styled.div`
   margin-bottom: 9%;
   padding: 33px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
