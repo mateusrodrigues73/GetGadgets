@@ -1,7 +1,9 @@
+import { LoginContainer } from './Login.styles';
+
 const Login = () => (
-  <div>
+  <LoginContainer>
     <h1>Login</h1>
-  </div>
+  </LoginContainer>
 );
 
 export default Login;
