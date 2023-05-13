@@ -9,12 +9,12 @@ const Input = styled.input`
   border-bottom: 1px solid ${({ theme }) => theme.colors.neutralWith};
   outline: none;
   font-family: ${({ theme }) => theme.fonts.body};
-  font-size: 12px;
+  font-size: 16px;
   color: ${({ theme }) => theme.colors.neutralWith};
 
   &::placeholder {
     font-family: ${({ theme }) => theme.fonts.body};
-    font-size: 12px;
+    font-size: 16px;
     color: ${({ theme }) => theme.colors.neutralWith};
   }
 `;
