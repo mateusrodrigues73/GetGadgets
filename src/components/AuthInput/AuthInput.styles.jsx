@@ -18,10 +18,22 @@ const Input = styled.input`
     color: ${({ theme }) => theme.colors.neutralWith};
   }
 
+  &:hover {
+    border-bottom-color: ${({ theme }) => theme.colors.secondaryLight};
+
+    &::placeholder {
+      color: ${({ theme }) => theme.colors.secondaryLight};
+    }
+  }
+
   &:focus {
     border: none;
     border-radius: 10px 0px;
     background-color: ${({ theme }) => theme.colors.primary};
+
+    &::placeholder {
+      color: ${({ theme }) => theme.colors.neutralWith};
+    }
   }
 `;
 
