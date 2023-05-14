@@ -17,6 +17,12 @@ const Input = styled.input`
     font-size: 16px;
     color: ${({ theme }) => theme.colors.neutralWith};
   }
+
+  &:focus {
+    border: none;
+    border-radius: 10px 0px;
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 export default Input;
