@@ -9,6 +9,7 @@ import App from './App';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import ForgotPassWord from './pages/ForgotPassword';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/cadastro',
         element: <SignUp />,
+      },
+      {
+        path: '/recuperar-senha',
+        element: <ForgotPassWord />,
       },
     ],
   },
