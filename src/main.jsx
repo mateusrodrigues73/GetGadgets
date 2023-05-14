@@ -8,6 +8,7 @@ import Theme from './styles/Theme';
 import App from './App';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import SignUp from './pages/SignUp';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: '/entrar',
         element: <Login />,
+      },
+      {
+        path: '/cadastro',
+        element: <SignUp />,
       },
     ],
   },
