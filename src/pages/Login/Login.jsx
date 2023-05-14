@@ -41,7 +41,7 @@ const Login = () => {
         <OuLine />
       </OuContainer>
       <LoginWrapper>
-        <AuthLink to="/" text="Cadastre-se" />
+        <AuthLink to="/cadastro" text="Cadastre-se" />
       </LoginWrapper>
       <LoginWrapper>
         <AuthLink to="/" text="Voltar para a home" />
