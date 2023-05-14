@@ -9,12 +9,12 @@ const LinkItem = styled(Link)`
   padding: 3px;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.secondaryLight};
+    background-color: ${({ theme }) => theme.colors.primary};
     border-radius: 3px;
   }
 
   &:active {
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.colors.secondaryLight};
   }
 `;
 
