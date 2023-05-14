@@ -27,7 +27,7 @@ const Login = () => {
         <CheckBoxText>Lembre-me</CheckBoxText>
       </LoginWrapper>
       <LoginWrapper>
-        <AuthLink to="/" text="Esqueceu sua senha?" />
+        <AuthLink to="/recuperar-senha" text="Esqueceu sua senha?" />
       </LoginWrapper>
       <GradientButton
         width="220px"
