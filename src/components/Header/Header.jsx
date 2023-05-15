@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 import {
   HeaderContainer,
@@ -16,9 +16,12 @@ import {
   LinkWithIcon,
 } from './Header.styles';
 
+import { AuthContext } from '../../contexts/AuthProvider';
+
 const Header = () => {
   // eslint-disable-next-line no-unused-vars
   const [searchInput, setSearchinput] = useState('');
+  const { session } = useContext(AuthContext);
 
   const handleInputChange = (event) => {
     setSearchinput(event.target.value);
@@ -48,9 +51,15 @@ const Header = () => {
           </LinksContainer>
         </SearchLinksContainer>
         <LinkIconContainer>
-          <LinkWithIcon to="/entrar">
-            Faça seu login <br /> ou cadastre-se
-          </LinkWithIcon>
+          {!session ? (
+            <LinkWithIcon to="/entrar">
+              Faça seu login <br /> ou cadastre-se
+            </LinkWithIcon>
+          ) : (
+            <LinkWithIcon to="/">
+              Seu perfil de <br /> usuário
+            </LinkWithIcon>
+          )}
           <UserIcon />
         </LinkIconContainer>
         <LinkIconContainer>
