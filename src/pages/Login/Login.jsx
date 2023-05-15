@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+
 import {
   LoginContainer,
   LoginWrapper,
@@ -7,12 +9,19 @@ import {
   OuLine,
   OuText,
 } from './Login.styles';
+
 import AuthTitle from '../../components/AuthTitle';
 import AuthInput from '../../components/AuthInput';
 import AuthLink from '../../components/AuthLink';
 import GradientButton from '../../components/GradientButton';
 
+import { AuthContext } from '../../contexts/AuthProvider';
+
 const Login = () => {
+  const { session } = useContext(AuthContext);
+  // eslint-disable-next-line no-console
+  console.log(session);
+
   const logar = () => {
     // TODO: implementar função para logar usuário
   };
