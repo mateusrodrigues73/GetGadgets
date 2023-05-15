@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   LoginContainer,
@@ -15,22 +16,53 @@ import AuthInput from '../../components/AuthInput';
 import AuthLink from '../../components/AuthLink';
 import GradientButton from '../../components/GradientButton';
 
+import showToast from '../../utils/ShowToasts';
+
 import { AuthContext } from '../../contexts/AuthProvider';
 
 const Login = () => {
-  const { session } = useContext(AuthContext);
-  // eslint-disable-next-line no-console
-  console.log(session);
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [isValid, setisValid] = useState(false);
+  const { session, signIn } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const logar = () => {
-    // TODO: implementar função para logar usuário
+  const validar = () => {
+    if (email && senha) {
+      setisValid(true);
+    } else {
+      setisValid(false);
+    }
   };
+
+  const entrar = async () => {
+    if (isValid) {
+      await signIn(email, senha);
+    } else {
+      showToast(
+        'entrar-validate-warn',
+        'warn',
+        'Preencha todos os campos!',
+        'colored'
+      );
+    }
+  };
+
+  useEffect(() => {
+    validar();
+  }, [email, senha]);
+
+  useEffect(() => {
+    if (session) {
+      navigate('/');
+    }
+  }, []);
 
   return (
     <LoginContainer>
       <AuthTitle title="Fazer login" />
-      <AuthInput placeholder="E-mail" />
-      <AuthInput placeholder="Senha" />
+      <AuthInput placeholder="E-mail" setValue={setEmail} />
+      <AuthInput placeholder="Senha" setValue={setSenha} />
       <LoginWrapper>
         <Checkbox type="checkbox" />
         <CheckBoxText>Lembre-me</CheckBoxText>
@@ -42,7 +74,7 @@ const Login = () => {
         width="220px"
         height="25px"
         text="Entrar"
-        onClick={logar}
+        onClick={entrar}
       />
       <OuContainer>
         <OuLine />
