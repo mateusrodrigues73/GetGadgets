@@ -29,6 +29,7 @@
         "no-console": 2,
         "import/no-extraneous-dependencies": "off",
         "no-restricted-exports": "off",
-        "react/function-component-definition": "off"
+        "react/function-component-definition": "off",
+        "react/jsx-no-constructed-context-values": "off"
     }
 }
