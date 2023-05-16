@@ -41,7 +41,12 @@ const AuthPassInput = ({ placeholder, setValue }) => {
       onMouseLeave={handleInputLeave}
       onClick={handleInputLeave}
     >
-      <AuthInput placeholder={placeholder} type={type} setValue={setValue} />
+      <AuthInput
+        placeholder={placeholder}
+        type={type}
+        setValue={setValue}
+        padding="35px"
+      />
       {hidden ? (
         <HiddenIcon onClick={setInput} color={iconColor} />
       ) : (
