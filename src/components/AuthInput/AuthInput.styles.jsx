@@ -12,6 +12,9 @@ const Input = styled.input`
   font-size: 16px;
   color: ${({ theme }) => theme.colors.neutralWith};
 
+  ${({ padding }) =>
+    padding ? `padding-right: ${padding};` : 'padding-right: 12px;'}
+
   &::placeholder {
     font-family: ${({ theme }) => theme.fonts.body};
     font-size: 16px;
