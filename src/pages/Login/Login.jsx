@@ -14,6 +14,7 @@ import {
 import AuthTitle from '../../components/AuthTitle';
 import AuthInput from '../../components/AuthInput';
 import AuthLink from '../../components/AuthLink';
+import AuthPassInput from '../../components/AuthPassInput/AuthPassInput';
 import GradientButton from '../../components/GradientButton';
 
 import showToast from '../../utils/ShowToasts';
@@ -61,8 +62,8 @@ const Login = () => {
   return (
     <LoginContainer>
       <AuthTitle title="Fazer login" />
-      <AuthInput placeholder="E-mail" setValue={setEmail} />
-      <AuthInput placeholder="Senha" setValue={setSenha} />
+      <AuthInput placeholder="E-mail" type="email" setValue={setEmail} />
+      <AuthPassInput placeholder="Senha" setValue={setSenha} />
       <LoginWrapper>
         <Checkbox type="checkbox" />
         <CheckBoxText>Lembre-me</CheckBoxText>
