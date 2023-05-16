@@ -20,6 +20,7 @@ const Input = styled.input`
 
   &:hover {
     border-bottom-color: ${({ theme }) => theme.colors.secondaryLight};
+    color: ${({ theme }) => theme.colors.secondaryLight};
 
     &::placeholder {
       color: ${({ theme }) => theme.colors.secondaryLight};
@@ -30,6 +31,7 @@ const Input = styled.input`
     border: none;
     border-radius: 10px 0px;
     background-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.neutralWith};
 
     &::placeholder {
       color: ${({ theme }) => theme.colors.neutralWith};
