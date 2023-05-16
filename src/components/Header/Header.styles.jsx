@@ -35,7 +35,7 @@ export const SearchLinksContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 10px;
-  margin-top: 27px;
+  margin-top: 10px;
 `;
 
 export const SearchContainer = styled.div`
@@ -58,6 +58,15 @@ export const SearchInput = styled.input`
     font-family: ${({ theme }) => theme.fonts.heading};
     font-size: 18px;
     color: ${({ theme }) => theme.colors.neutralWith};
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
+
+  &:focus {
+    background-color: ${({ theme }) => theme.colors.secondaryLight};
+    border: 1px solid ${({ theme }) => theme.colors.neutralWith};
   }
 `;
 
