@@ -16,6 +16,7 @@ export const HiddenIcon = styled(EyeInvisibleOutlined)`
   &:hover {
     cursor: pointer;
     font-size: 19px;
+    color: ${({ theme }) => theme.colors.neutralWith};
   }
 `;
 
@@ -30,5 +31,6 @@ export const ShowIcon = styled(EyeOutlined)`
   &:hover {
     cursor: pointer;
     font-size: 19px;
+    color: ${({ theme }) => theme.colors.neutralWith};
   }
 `;
