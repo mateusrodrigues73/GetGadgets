@@ -11,7 +11,7 @@ export const HiddenIcon = styled(EyeInvisibleOutlined)`
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
-  color: ${({ theme }) => theme.colors.neutralWith};
+  color: ${({ color }) => color};
 
   &:hover {
     cursor: pointer;
@@ -25,7 +25,7 @@ export const ShowIcon = styled(EyeOutlined)`
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
-  color: ${({ theme }) => theme.colors.neutralWith};
+  color: ${({ color }) => color};
 
   &:hover {
     cursor: pointer;
