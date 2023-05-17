@@ -27,19 +27,19 @@ const AuthPassInput = ({ placeholder, setValue }) => {
     }
   };
 
-  const handleInputHover = () => {
+  const setColorBLue = () => {
     setIconColor(colors.secondaryLight);
   };
 
-  const handleInputLeave = () => {
+  const setColorWith = () => {
     setIconColor(colors.neutralWith);
   };
 
   return (
     <PassContainer
-      onMouseEnter={handleInputHover}
-      onMouseLeave={handleInputLeave}
-      onClick={handleInputLeave}
+      onMouseEnter={setColorBLue}
+      onMouseLeave={setColorWith}
+      onClick={setColorWith}
     >
       <AuthInput
         placeholder={placeholder}
