@@ -4,6 +4,7 @@ const Input = styled.input`
   width: 220px;
   height: 30px;
   padding-left: 12px;
+  padding-right: 12px;
   background-color: ${({ theme }) => theme.colors.secondaryDark};
   border: none;
   border-bottom: 1px solid ${({ theme }) => theme.colors.neutralWith};
@@ -11,9 +12,6 @@ const Input = styled.input`
   font-family: ${({ theme }) => theme.fonts.body};
   font-size: 16px;
   color: ${({ theme }) => theme.colors.neutralWith};
-
-  ${({ padding }) =>
-    padding ? `padding-right: ${padding};` : 'padding-right: 12px;'}
 
   &::placeholder {
     font-family: ${({ theme }) => theme.fonts.body};
