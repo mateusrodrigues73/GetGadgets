@@ -2,9 +2,12 @@ import { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { ThemeContext } from 'styled-components';
 
-import { PassContainer, ShowIcon, HiddenIcon } from './AuthPassInput.styles';
-
-import AuthInput from '../AuthInput';
+import {
+  PassContainer,
+  Input,
+  ShowIcon,
+  HiddenIcon,
+} from './AuthPassInput.styles';
 
 const AuthPassInput = ({ placeholder, setValue }) => {
   const theme = useContext(ThemeContext);
@@ -12,6 +15,7 @@ const AuthPassInput = ({ placeholder, setValue }) => {
   const [hidden, setHidden] = useState(true);
   const [type, setType] = useState('password');
   const [iconColor, setIconColor] = useState(colors.neutralWith);
+  const [isFocused, setIsFocused] = useState(false);
 
   const setInput = () => {
     if (hidden) {
@@ -28,11 +32,28 @@ const AuthPassInput = ({ placeholder, setValue }) => {
   };
 
   const setColorBLue = () => {
-    setIconColor(colors.secondaryLight);
+    if (!isFocused) {
+      setIconColor(colors.secondaryLight);
+    }
   };
 
   const setColorWith = () => {
+    if (!isFocused) {
+      setIconColor(colors.neutralWith);
+    }
+  };
+
+  const handleInputFocus = () => {
+    setIsFocused(true);
     setIconColor(colors.neutralWith);
+  };
+
+  const handleInputBlur = () => {
+    setIsFocused(false);
+  };
+
+  const handleInputChange = (event) => {
+    setValue(event.target.value);
   };
 
   return (
@@ -41,11 +62,12 @@ const AuthPassInput = ({ placeholder, setValue }) => {
       onMouseLeave={setColorWith}
       onClick={setColorWith}
     >
-      <AuthInput
+      <Input
         placeholder={placeholder}
         type={type}
-        setValue={setValue}
-        padding="35px"
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
+        onChange={handleInputChange}
       />
       {hidden ? (
         <HiddenIcon onClick={setInput} color={iconColor} />
