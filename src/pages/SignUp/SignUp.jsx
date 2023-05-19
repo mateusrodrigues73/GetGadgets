@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import showToast from '../../utils/ShowToasts';
 
 import {
   SignUpContainer,
@@ -24,12 +25,31 @@ const SignUp = () => {
   const [senha, setSenha] = useState('');
   const [confirmeSenha, setConfirmeSenha] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-  // eslint-disable-next-line no-unused-vars
+  const [message, setMessage] = useState('');
+  const [messageId, setMessageId] = useState('');
   const [isValid, setIsValid] = useState(false);
 
   const cadastrar = () => {
-    setIsValid(validate(nome, sobrenome, email, senha, confirmeSenha));
+    if (isValid) {
+      showToast('messageId', 'success', 'Dados válidos');
+    } else {
+      showToast(messageId, 'warn', message);
+    }
   };
+
+  useEffect(() => {
+    setIsValid(
+      validate(
+        nome,
+        sobrenome,
+        email,
+        senha,
+        confirmeSenha,
+        setMessage,
+        setMessageId
+      )
+    );
+  }, [nome, sobrenome, email, senha, confirmeSenha]);
 
   return (
     <SignUpContainer>
@@ -47,7 +67,7 @@ const SignUp = () => {
           <PassInstructions>Senha deve ter:</PassInstructions>
           <PassInstructions>Letras maiúsculas e minúsculas;</PassInstructions>
           <PassInstructions>Pelo menos um caractere especial;</PassInstructions>
-          <PassInstructions>Pelo menos um dígito;</PassInstructions>
+          <PassInstructions>Pelo menos um dígito numérico;</PassInstructions>
           <PassInstructions>No mínimo 8 caracteres;</PassInstructions>
           <PassInstructions>Nenhum espaço em branco.</PassInstructions>
         </PassInstructionsWrapper>
