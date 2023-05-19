@@ -9,7 +9,7 @@ import {
   HiddenIcon,
 } from './AuthPassInput.styles';
 
-const AuthPassInput = ({ placeholder, setValue }) => {
+const AuthPassInput = ({ placeholder, setValue, passFocus }) => {
   const theme = useContext(ThemeContext);
   const { colors } = theme;
   const [hidden, setHidden] = useState(true);
@@ -46,10 +46,12 @@ const AuthPassInput = ({ placeholder, setValue }) => {
   const handleInputFocus = () => {
     setIsFocused(true);
     setIconColor(colors.neutralWith);
+    passFocus(true);
   };
 
   const handleInputBlur = () => {
     setIsFocused(false);
+    passFocus(false);
   };
 
   const handleInputChange = (event) => {
@@ -81,6 +83,11 @@ const AuthPassInput = ({ placeholder, setValue }) => {
 AuthPassInput.propTypes = {
   placeholder: PropTypes.string.isRequired,
   setValue: PropTypes.func.isRequired,
+  passFocus: PropTypes.func,
+};
+
+AuthPassInput.defaultProps = {
+  passFocus: null,
 };
 
 export default AuthPassInput;
