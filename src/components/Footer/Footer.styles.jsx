@@ -8,7 +8,7 @@ import {
 
 export const FooterContainer = styled.div`
   width: 100%;
-  height: 174px;
+  height: 164px;
   background-color: ${({ theme }) => theme.colors.secondaryDark};
   display: flex;
   flex-direction: row;
@@ -27,7 +27,7 @@ export const FooterWrapper = styled.div`
 
 export const SectionTitle = styled.div`
   font-family: ${({ theme }) => theme.fonts.heading};
-  font-size: 24px;
+  font-size: 20px;
   color: ${({ theme }) => theme.colors.neutralWith};
   text-align: center;
 `;
@@ -35,15 +35,17 @@ export const SectionTitle = styled.div`
 export const SocialContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-itens; flex-start;
   width: 285px;
   height: 133px;
+  row-gap: 2rem;
 `;
 
 export const SocialIconsContainer = styled.div`
+  width: 285px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
 `;
 
 export const FacebookIcon = styled(FacebookFilled)`
@@ -117,7 +119,7 @@ export const LinksColumn = styled.div`
 export const FooterLink = styled(Link)`
   color: ${({ theme }) => theme.colors.neutralWith};
   font-family: ${({ theme }) => theme.fonts.heading};
-  font-size: 18px;
+  font-size: 14 px;
   text-decoration: none;
   padding: 1px;
 

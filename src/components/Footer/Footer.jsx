@@ -17,9 +17,7 @@ const Footer = () => (
   <FooterContainer>
     <FooterWrapper>
       <SocialContainer>
-        <SectionTitle>
-          Acompanhe nossas redes <br /> sociais
-        </SectionTitle>
+        <SectionTitle>Nossas redes sociais</SectionTitle>
         <SocialIconsContainer>
           <FacebookIcon />
           <InstagramIcon />
@@ -43,7 +41,7 @@ const Footer = () => (
         </LinksWrapper>
       </LinksContainer>
       <LinksContainer>
-        <SectionTitle>Termo e políticas</SectionTitle>
+        <SectionTitle>Termos e políticas</SectionTitle>
         <LinksColumn>
           <FooterLink to="/">termos de publicação</FooterLink>
           <FooterLink to="/">termos de serviço</FooterLink>
