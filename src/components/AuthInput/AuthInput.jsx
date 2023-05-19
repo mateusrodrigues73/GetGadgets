@@ -15,7 +15,6 @@ const AuthInput = ({ placeholder, type, setValue }) => {
 AuthInput.propTypes = {
   placeholder: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-
   setValue: PropTypes.func.isRequired,
 };
 
