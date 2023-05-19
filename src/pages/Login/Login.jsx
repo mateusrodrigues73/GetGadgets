@@ -24,15 +24,15 @@ import { AuthContext } from '../../contexts/AuthProvider';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [isValid, setisValid] = useState(false);
+  const [isValid, setIsValid] = useState(false);
   const { session, signIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const validar = () => {
     if (email && senha) {
-      setisValid(true);
+      setIsValid(true);
     } else {
-      setisValid(false);
+      setIsValid(false);
     }
   };
 
@@ -40,12 +40,7 @@ const Login = () => {
     if (isValid) {
       await signIn(email, senha);
     } else {
-      showToast(
-        'entrar-validate-warn',
-        'warn',
-        'Preencha todos os campos!',
-        'colored'
-      );
+      showToast('entrar-validate-warn', 'warn', 'Preencha todos os campos!');
     }
   };
 
