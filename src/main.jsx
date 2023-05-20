@@ -21,7 +21,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/entrar',
+        path: '/entrar/:confirmacao?',
         element: <Login />,
       },
       {
