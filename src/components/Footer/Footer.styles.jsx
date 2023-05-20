@@ -35,10 +35,10 @@ export const SectionTitle = styled.div`
 export const SocialContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-itens; flex-start;
   width: 285px;
   height: 133px;
   row-gap: 2rem;
+  padding-top: 5px;
 `;
 
 export const SocialIconsContainer = styled.div`
