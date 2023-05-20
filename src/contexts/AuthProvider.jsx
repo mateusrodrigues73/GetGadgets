@@ -34,15 +34,42 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       if (error.message === 'Invalid login credentials') {
         msg = 'Credenciais de login inválidas!';
+      } else if (error.message === 'Email not confirmed') {
+        msg = 'Você deve confirmar seu e-mail antes de continuar!';
+      } else {
+        msg = 'Um erro ocorreu durante o login, tente novamente';
       }
       showToast('sign-in-error', 'error', msg);
     }
-    return msg;
+  };
+
+  const signUp = async (val) => {
+    let msg = '';
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: val.email,
+        password: val.senha,
+        options: {
+          emailRedirectTo: 'http://localhost:5173/entrar/validar-email',
+        },
+      });
+      if (error) {
+        throw new Error(error.message);
+      } else {
+        msg = `Sucesso, um e-mail de confirmação foi enviado para: ${val.email}`;
+        showToast('sign-up-success', 'success', msg);
+        navigate('/entrar');
+      }
+    } catch (error) {
+      msg = 'Um erro ocorreu durante o cadastro, tente novamente';
+      showToast('sign-in-error', 'error', msg);
+    }
   };
 
   const authContextValue = {
     session,
     signIn,
+    signUp,
   };
 
   return (
