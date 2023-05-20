@@ -54,7 +54,7 @@ const AuthPassInput = ({ placeholder, setValue, passFocus }) => {
   const handleInputBlur = () => {
     setIsFocused(false);
     if (passFocus) {
-      passFocus(true);
+      passFocus(false);
     }
   };
 
