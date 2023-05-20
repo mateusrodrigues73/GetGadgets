@@ -46,12 +46,16 @@ const AuthPassInput = ({ placeholder, setValue, passFocus }) => {
   const handleInputFocus = () => {
     setIsFocused(true);
     setIconColor(colors.neutralWith);
-    passFocus(true);
+    if (passFocus) {
+      passFocus(true);
+    }
   };
 
   const handleInputBlur = () => {
     setIsFocused(false);
-    passFocus(false);
+    if (passFocus) {
+      passFocus(true);
+    }
   };
 
   const handleInputChange = (event) => {
