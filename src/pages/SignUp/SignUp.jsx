@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import showToast from '../../utils/ShowToasts';
 
 import {
@@ -16,7 +16,7 @@ import GradientButton from '../../components/GradientButton';
 
 import validate from './validateInputs';
 
-// TODO: fixar states dos inputs
+import { AuthContext } from '../../contexts/AuthProvider';
 
 const SignUp = () => {
   const [nome, setNome] = useState('');
@@ -27,11 +27,18 @@ const SignUp = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [message, setMessage] = useState('');
   const [messageId, setMessageId] = useState('');
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
+  const { signUp } = useContext(AuthContext);
 
-  const cadastrar = () => {
+  const cadastrar = async () => {
     if (isValid) {
-      showToast('messageId', 'success', 'Dados válidos');
+      const dados = {
+        nome,
+        sobrenome,
+        email,
+        senha,
+      };
+      await signUp(dados);
     } else {
       showToast(messageId, 'warn', message);
     }
