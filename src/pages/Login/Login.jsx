@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   LoginContainer,
@@ -26,6 +26,7 @@ const Login = () => {
   const [senha, setSenha] = useState('');
   const [isValid, setIsValid] = useState(false);
   const { session, signIn } = useContext(AuthContext);
+  const { confirmacao } = useParams();
   const navigate = useNavigate();
 
   const validar = () => {
@@ -51,6 +52,16 @@ const Login = () => {
   useEffect(() => {
     if (session) {
       navigate('/');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (confirmacao && confirmacao === 'validar-email') {
+      showToast(
+        'entrar-validate-success',
+        'success',
+        'E-mail verificado, agora você pode logar com suas credenciais'
+      );
     }
   }, []);
 
