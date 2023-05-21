@@ -13,6 +13,7 @@ import AuthInput from '../../components/AuthInput';
 import AuthLink from '../../components/AuthLink';
 import AuthPassInput from '../../components/AuthPassInput/AuthPassInput';
 import GradientButton from '../../components/GradientButton';
+import Loader from '../../components/Loader';
 
 import validate from './validateInputs';
 
@@ -28,6 +29,7 @@ const SignUp = () => {
   const [message, setMessage] = useState('');
   const [messageId, setMessageId] = useState('');
   const [isValid, setIsValid] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { signUp } = useContext(AuthContext);
 
   const cadastrar = async () => {
@@ -38,7 +40,9 @@ const SignUp = () => {
         email,
         senha,
       };
+      setIsLoading(true);
       await signUp(dados);
+      setIsLoading(true);
     } else {
       showToast(messageId, 'warn', message);
     }
@@ -93,6 +97,7 @@ const SignUp = () => {
       <SignUpWrapper>
         <AuthLink to="/entrar" text="Voltar" />
       </SignUpWrapper>
+      {isLoading && <Loader />}
     </SignUpContainer>
   );
 };
