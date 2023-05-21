@@ -14,8 +14,9 @@ import {
 import AuthTitle from '../../components/AuthTitle';
 import AuthInput from '../../components/AuthInput';
 import AuthLink from '../../components/AuthLink';
-import AuthPassInput from '../../components/AuthPassInput/AuthPassInput';
+import AuthPassInput from '../../components/AuthPassInput';
 import GradientButton from '../../components/GradientButton';
+import Loader from '../../components/Loader';
 
 import showToast from '../../utils/ShowToasts';
 
@@ -25,6 +26,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [isValid, setIsValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { session, signIn } = useContext(AuthContext);
   const { confirmacao } = useParams();
   const navigate = useNavigate();
@@ -39,7 +41,9 @@ const Login = () => {
 
   const entrar = async () => {
     if (isValid) {
+      setIsLoading(true);
       await signIn(email, senha);
+      setIsLoading(false);
     } else {
       showToast('entrar-validate-warn', 'warn', 'Preencha todos os campos!');
     }
@@ -94,6 +98,7 @@ const Login = () => {
       <LoginWrapper>
         <AuthLink to="/" text="Voltar para a home" />
       </LoginWrapper>
+      {isLoading && <Loader />}
     </LoginContainer>
   );
 };
