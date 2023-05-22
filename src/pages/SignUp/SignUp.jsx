@@ -11,7 +11,7 @@ import {
 import AuthTitle from '../../components/AuthTitle';
 import AuthInput from '../../components/AuthInput';
 import AuthLink from '../../components/AuthLink';
-import AuthPassInput from '../../components/AuthPassInput/AuthPassInput';
+import AuthPassInput from '../../components/AuthPassInput';
 import GradientButton from '../../components/GradientButton';
 import Loader from '../../components/Loader';
 
