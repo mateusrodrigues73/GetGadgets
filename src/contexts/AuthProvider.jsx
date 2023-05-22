@@ -1,20 +1,17 @@
-import { createContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import { createClient } from '@supabase/supabase-js';
 
 import showToast from '../utils/ShowToasts';
+
+import { SupabaseContext } from './SupabaseProvider';
 
 export const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
+  const { supabase } = useContext(SupabaseContext);
   const [session, setSession] = useState(null);
   const navigate = useNavigate();
-
-  const supabase = createClient(
-    import.meta.env.VITE_SUPABASE_URL,
-    import.meta.env.VITE_SUPABASE_ANON_KEY
-  );
 
   const signIn = async (email, password) => {
     let msg = '';
