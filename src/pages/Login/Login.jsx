@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import {
   LoginContainer,
@@ -29,7 +29,12 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { session, signIn } = useContext(AuthContext);
   const { confirmacao } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const params = new URLSearchParams(location.hash.replace('#', ''));
+  const error = params.get('error');
+  const errorDescription = params.get('error_description');
 
   const validar = () => {
     if (email && senha) {
@@ -60,7 +65,9 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    if (confirmacao && confirmacao === 'validar-email') {
+    if (error && errorDescription === 'Email link is invalid or has expired') {
+      showToast('entrar-validate-error', 'error', 'Link inválido ou expirado');
+    } else if (confirmacao && confirmacao === 'validar-email') {
       showToast(
         'entrar-validate-success',
         'success',
