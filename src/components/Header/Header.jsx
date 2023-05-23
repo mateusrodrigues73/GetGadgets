@@ -21,7 +21,7 @@ import { AuthContext } from '../../contexts/AuthProvider';
 const Header = () => {
   // eslint-disable-next-line no-unused-vars
   const [searchInput, setSearchinput] = useState('');
-  const { session } = useContext(AuthContext);
+  const { sessionUser } = useContext(AuthContext);
 
   const handleInputChange = (event) => {
     setSearchinput(event.target.value);
@@ -51,7 +51,7 @@ const Header = () => {
           </LinksContainer>
         </SearchLinksContainer>
         <LinkIconContainer>
-          {!session ? (
+          {!sessionUser ? (
             <LinkWithIcon to="/entrar">
               Faça seu login <br /> ou cadastre-se
             </LinkWithIcon>
