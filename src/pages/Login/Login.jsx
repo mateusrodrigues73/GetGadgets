@@ -27,7 +27,7 @@ const Login = () => {
   const [senha, setSenha] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { session, signIn } = useContext(AuthContext);
+  const { sessionUser, signIn } = useContext(AuthContext);
   const { confirmacao } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const Login = () => {
   }, [email, senha]);
 
   useEffect(() => {
-    if (session) {
+    if (sessionUser) {
       navigate('/');
     }
   }, []);
