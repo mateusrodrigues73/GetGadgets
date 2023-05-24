@@ -64,6 +64,18 @@ const Login = () => {
     }
   };
 
+  const getUrlParams = () => {
+    if (error && errorDescription === 'Email link is invalid or has expired') {
+      showToast('entrar-validate-error', 'error', 'Link inválido ou expirado');
+    } else if (confirmacao && confirmacao === 'validar-email') {
+      showToast(
+        'entrar-validate-success',
+        'success',
+        'E-mail verificado, agora você pode logar com suas credenciais'
+      );
+    }
+  };
+
   useEffect(() => {
     validar();
   }, [email, senha]);
@@ -75,15 +87,7 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    if (error && errorDescription === 'Email link is invalid or has expired') {
-      showToast('entrar-validate-error', 'error', 'Link inválido ou expirado');
-    } else if (confirmacao && confirmacao === 'validar-email') {
-      showToast(
-        'entrar-validate-success',
-        'success',
-        'E-mail verificado, agora você pode logar com suas credenciais'
-      );
-    }
+    getUrlParams();
   }, []);
 
   return (
