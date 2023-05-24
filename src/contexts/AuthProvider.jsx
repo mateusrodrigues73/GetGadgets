@@ -16,6 +16,56 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // TODO: finalizar funcionalidade de salvar perfil de usuário no banco
+
+  const storeUser = async (id, userData) => {
+    try {
+      const { data, error } = await supabase
+        .from('usuarios')
+        .insert({
+          id,
+          nome: userData.nome,
+          sobrenome: userData.sobrenome,
+          email: userData.email,
+          senha: userData.senha,
+        })
+        .select();
+      if (error) {
+        throw new Error(error.message);
+      }
+      // eslint-disable-next-line no-console
+      console.log('AuthProvider, storeUser, data:');
+      // eslint-disable-next-line no-console
+      console.log(data);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
+  };
+
+  const signUp = async (userData) => {
+    let msg = '';
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: userData.email,
+        password: userData.senha,
+        options: {
+          emailRedirectTo: 'http://localhost:5173/entrar/validar-email',
+        },
+      });
+      if (error) {
+        throw new Error(error.message);
+      }
+      await storeUser(data.user.id, userData);
+      msg = `Sucesso, um e-mail de confirmação foi enviado para: ${userData.email}`;
+      showToast('sign-up-success', 'success', msg);
+      navigate('/entrar');
+    } catch (error) {
+      msg = 'Um erro ocorreu durante o cadastro, tente novamente';
+      showToast('sign-in-error', 'error', msg);
+    }
+  };
+
   const signIn = async (email, password, keepLogin) => {
     let msg = '';
     try {
@@ -46,30 +96,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signUp = async (val) => {
-    let msg = '';
-    try {
-      const { error } = await supabase.auth.signUp({
-        email: val.email,
-        password: val.senha,
-        options: {
-          emailRedirectTo: 'http://localhost:5173/entrar/validar-email',
-        },
-      });
-      if (error) {
-        throw new Error(error.message);
-      } else {
-        msg = `Sucesso, um e-mail de confirmação foi enviado para: ${val.email}`;
-        showToast('sign-up-success', 'success', msg);
-        navigate('/entrar');
-      }
-    } catch (error) {
-      msg = 'Um erro ocorreu durante o cadastro, tente novamente';
-      showToast('sign-in-error', 'error', msg);
-    }
-  };
-
-  const getUser = async () => {
+  const getUserSession = async () => {
     setLoading(true);
     let user;
     const { data } = await supabase.auth.getUser();
@@ -88,7 +115,7 @@ export const AuthProvider = ({ children }) => {
   const signOut = () => supabase.auth.signOut();
 
   useEffect(() => {
-    getUser();
+    getUserSession();
   }, []);
 
   const authContextValue = {
