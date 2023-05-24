@@ -23,6 +23,21 @@ export const LoginWrapper = styled.div`
   padding-left: 12px;
 `;
 
+export const CheckboxWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  align-self: flex-start;
+  margin-left: 12px;
+  padding: 3px;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.secondaryLight};
+    border-radius: 3px;
+    cursor: pointer;
+  }
+`;
+
 export const Checkbox = styled.input`
   width: 13px;
   height: 13px;
