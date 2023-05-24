@@ -4,6 +4,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import {
   LoginContainer,
   LoginWrapper,
+  CheckboxWrapper,
   Checkbox,
   CheckBoxText,
   OuContainer,
@@ -27,6 +28,7 @@ const Login = () => {
   const [senha, setSenha] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const { sessionUser, signIn } = useContext(AuthContext);
   const { confirmacao } = useParams();
   const location = useLocation();
@@ -47,10 +49,18 @@ const Login = () => {
   const entrar = async () => {
     if (isValid) {
       setIsLoading(true);
-      await signIn(email, senha);
+      await signIn(email, senha, isChecked);
       setIsLoading(false);
     } else {
       showToast('entrar-validate-warn', 'warn', 'Preencha todos os campos!');
+    }
+  };
+
+  const handleCheckboxChange = () => {
+    if (isChecked) {
+      setIsChecked(false);
+    } else {
+      setIsChecked(true);
     }
   };
 
@@ -81,10 +91,14 @@ const Login = () => {
       <AuthTitle title="Fazer login" />
       <AuthInput placeholder="E-mail" type="email" setValue={setEmail} />
       <AuthPassInput placeholder="Senha" setValue={setSenha} />
-      <LoginWrapper>
-        <Checkbox type="checkbox" />
-        <CheckBoxText>Lembre-me</CheckBoxText>
-      </LoginWrapper>
+      <CheckboxWrapper>
+        <Checkbox
+          type="checkbox"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+        />
+        <CheckBoxText onClick={handleCheckboxChange}>Lembre-me</CheckBoxText>
+      </CheckboxWrapper>
       <LoginWrapper>
         <AuthLink to="/recuperar-senha" text="Esqueceu sua senha?" />
       </LoginWrapper>
