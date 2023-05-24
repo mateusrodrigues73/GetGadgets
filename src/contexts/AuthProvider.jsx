@@ -13,10 +13,10 @@ export const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
   const { supabase } = useContext(SupabaseContext);
   const [sessionUser, setSessionUser] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const signIn = async (email, password) => {
+  const signIn = async (email, password, keepLogin) => {
     let msg = '';
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -26,6 +26,9 @@ export const AuthProvider = ({ children }) => {
       if (error) {
         throw new Error(error.message);
       } else {
+        if (!keepLogin) {
+          localStorage.removeItem(`sb-apovoiknbwujzmlwpvzo-auth-token`);
+        }
         setSessionUser(data);
         msg = 'Login bem sucedido';
         showToast('sign-in-success', 'success', msg);
@@ -82,15 +85,18 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const authContextValue = {
-    sessionUser,
-    signIn,
-    signUp,
-  };
+  const signOut = () => supabase.auth.signOut();
 
   useEffect(() => {
     getUser();
   }, []);
+
+  const authContextValue = {
+    sessionUser,
+    signIn,
+    signUp,
+    signOut,
+  };
 
   return (
     <AuthContext.Provider value={authContextValue}>
