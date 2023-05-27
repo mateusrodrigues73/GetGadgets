@@ -16,19 +16,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const storeUser = async (id, userData) => {
-    const { error } = await supabase.from('usuarios').insert({
-      id,
-      nome: userData.nome,
-      sobrenome: userData.sobrenome,
-      email: userData.email,
-      senha: userData.senha,
-    });
-    if (error) {
-      throw new Error(error.message);
-    }
-  };
-
   const getUser = async (id) => {
     const { data, error } = await supabase
       .from('usuarios')
@@ -49,6 +36,32 @@ export const AuthProvider = ({ children }) => {
       totalAvaliacoes: data[0].total_avaliacoes,
     };
     return user;
+  };
+
+  const getUserSession = async () => {
+    setLoading(true);
+    let user;
+    const { data } = await supabase.auth.getUser();
+    if (data.user) {
+      user = await getUser(data.user.id);
+    } else {
+      user = null;
+    }
+    setSessionUser(user);
+    setLoading(false);
+  };
+
+  const storeUser = async (id, userData) => {
+    const { error } = await supabase.from('usuarios').insert({
+      id,
+      nome: userData.nome,
+      sobrenome: userData.sobrenome,
+      email: userData.email,
+      senha: userData.senha,
+    });
+    if (error) {
+      throw new Error(error.message);
+    }
   };
 
   const signUp = async (userData) => {
@@ -87,7 +100,8 @@ export const AuthProvider = ({ children }) => {
         if (!keepLogin) {
           localStorage.removeItem(`sb-apovoiknbwujzmlwpvzo-auth-token`);
         }
-        setSessionUser(data);
+        const user = await getUser(data.user.id);
+        setSessionUser(user);
         msg = 'Login bem sucedido';
         showToast('sign-in-success', 'success', msg);
         navigate('/');
@@ -102,19 +116,6 @@ export const AuthProvider = ({ children }) => {
       }
       showToast('sign-in-error', 'error', msg);
     }
-  };
-
-  const getUserSession = async () => {
-    setLoading(true);
-    let user;
-    const { data } = await supabase.auth.getUser();
-    if (data.user) {
-      user = await getUser(data.user.id);
-    } else {
-      user = null;
-    }
-    setSessionUser(user);
-    setLoading(false);
   };
 
   const signOut = () => supabase.auth.signOut();
