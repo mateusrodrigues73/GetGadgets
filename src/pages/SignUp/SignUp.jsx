@@ -42,7 +42,7 @@ const SignUp = () => {
       };
       setIsLoading(true);
       await signUp(dados);
-      setIsLoading(true);
+      setIsLoading(false);
     } else {
       showToast(messageId, 'warn', message);
     }
