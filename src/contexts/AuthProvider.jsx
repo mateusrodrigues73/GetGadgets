@@ -29,6 +29,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getUser = async (id) => {
+    const { data, error } = await supabase
+      .from('usuarios')
+      .select()
+      .eq('id', id);
+    if (error) {
+      return false;
+    }
+    const user = {
+      id: data[0].id,
+      nome: data[0].nome,
+      sobrenome: data[0].sobrenome,
+      email: data[0].nome,
+      estatus: data[0].estatus,
+      imagem: data[0].imagem,
+      administrador: data[0].administrador,
+      mediaAvaliacoes: data[0].media_avaliacoes,
+      totalAvaliacoes: data[0].total_avaliacoes,
+    };
+    return user;
+  };
+
   const signUp = async (userData) => {
     let msg = '';
     try {
@@ -87,10 +109,7 @@ export const AuthProvider = ({ children }) => {
     let user;
     const { data } = await supabase.auth.getUser();
     if (data.user) {
-      user = {
-        id: data.user.id,
-        email: data.user.email,
-      };
+      user = await getUser(data.user.id);
     } else {
       user = null;
     }
