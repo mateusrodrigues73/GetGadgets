@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
   const { supabase } = useContext(SupabaseContext);
   const [sessionUser, setSessionUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [recoveryPass, setRecoveryPass] = useState(false);
   const navigate = useNavigate();
 
   const getUser = async (id) => {
@@ -136,14 +137,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const confirmRecoveryPassword = async () => {
+    supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setRecoveryPass(true);
+      }
+    });
+  };
+
   const signOut = () => supabase.auth.signOut();
 
   useEffect(() => {
     getUserSession();
+    confirmRecoveryPassword();
   }, []);
 
   const authContextValue = {
     sessionUser,
+    recoveryPass,
     signIn,
     signUp,
     signOut,
