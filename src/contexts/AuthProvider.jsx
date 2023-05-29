@@ -99,6 +99,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error(error.message);
       } else {
         if (!keepLogin) {
+          // TODO: alterar para clear
           localStorage.removeItem(`sb-apovoiknbwujzmlwpvzo-auth-token`);
         }
         const user = await getUser(data.user.id);
@@ -129,7 +130,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error(error.message);
       }
       msg = 'E-mail enviado com sucesso';
-      showToast('sign-in-error', 'success', msg);
+      showToast('send-reset-password-email-success', 'success', msg);
       navigate('/entrar');
     } catch (error) {
       msg = 'Ocorreu um erro ao enviar o e-mail, tente novamente';
@@ -146,7 +147,22 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updatePassword = async (pass) => {
-    // TODO: implementar função
+    let msg;
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: pass,
+      });
+      if (error) {
+        throw new Error(error.message);
+      }
+      msg = 'Senha atualizada com sucesso';
+      showToast('update-password-success', 'success', msg);
+      localStorage.clear();
+      navigate('/entrar');
+    } catch (error) {
+      msg = 'Ocorreu um erro ao alterar asenha, tente novamente';
+      showToast('update-password-error', 'error', msg);
+    }
   };
 
   const signOut = () => supabase.auth.signOut();
