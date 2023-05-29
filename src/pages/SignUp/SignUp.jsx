@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react';
-import showToast from '../../utils/ShowToasts';
 
 import {
   SignUpContainer,
@@ -15,7 +14,9 @@ import AuthPassInput from '../../components/AuthPassInput';
 import GradientButton from '../../components/GradientButton';
 import Loader from '../../components/Loader';
 
-import validate from './validateInputs';
+import showToast from '../../utils/ShowToasts';
+
+import validate from './signUpvalidateInputs';
 
 import { AuthContext } from '../../contexts/AuthProvider';
 
@@ -28,7 +29,7 @@ const SignUp = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [message, setMessage] = useState('');
   const [messageId, setMessageId] = useState('');
-  const [isValid, setIsValid] = useState(true);
+  const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { signUp } = useContext(AuthContext);
 
@@ -83,7 +84,6 @@ const SignUp = () => {
           <PassInstructions>Nenhum espaço em branco.</PassInstructions>
         </PassInstructionsWrapper>
       ) : null}
-
       <AuthPassInput
         placeholder="Confirme sua senha"
         setValue={setConfirmeSenha}
