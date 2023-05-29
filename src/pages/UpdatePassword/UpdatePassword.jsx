@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import {
   UpdatePassContainer,
@@ -27,7 +27,11 @@ const UpdatePassword = () => {
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { recoveryPass, updatePassword } = useContext(AuthContext);
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const params = new URLSearchParams(location.hash.replace('#', ''));
+  const error = params.get('error');
 
   const atualizar = async () => {
     if (isValid) {
@@ -40,7 +44,14 @@ const UpdatePassword = () => {
   };
 
   useEffect(() => {
-    if (!recoveryPass) {
+    if (error) {
+      showToast(
+        'update-pass-validate-error',
+        'error',
+        'Link inválido ou expirado, tente enviar outro e-mail'
+      );
+      navigate('/');
+    } else if (!recoveryPass) {
       navigate('/');
     }
   }, []);
