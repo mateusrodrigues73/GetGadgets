@@ -39,11 +39,11 @@ const UpdatePassword = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (!recoveryPass) {
-  //     navigate('/');
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!recoveryPass) {
+      navigate('/');
+    }
+  }, []);
 
   useEffect(() => {
     setIsValid(validate(senha, confirmeSenha, setMessage, setMessageId));
