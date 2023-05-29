@@ -145,6 +145,10 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
+  const updatePassword = async (pass) => {
+    // TODO: implementar função
+  };
+
   const signOut = () => supabase.auth.signOut();
 
   useEffect(() => {
@@ -159,6 +163,7 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signOut,
     sendResetPasswordEmail,
+    updatePassword,
   };
 
   return (
