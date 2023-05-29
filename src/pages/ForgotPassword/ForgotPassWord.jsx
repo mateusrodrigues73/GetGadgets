@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import {
   ForgotPassContainer,
@@ -10,14 +10,39 @@ import AuthTitle from '../../components/AuthTitle';
 import AuthInput from '../../components/AuthInput';
 import AuthLink from '../../components/AuthLink';
 import GradientButton from '../../components/GradientButton';
+import Loader from '../../components/Loader';
+
+import showToast from '../../utils/ShowToasts';
+
+import { AuthContext } from '../../contexts/AuthProvider';
 
 const ForgotPassWord = () => {
-  // eslint-disable-next-line no-unused-vars
   const [email, setEmail] = useState('');
+  const [isValid, setIsValid] = useState(false);
+  const { sendResetPasswordEmail } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const recuperar = () => {
-    // TODO: implementar função para enviar e-mail de confirmação de senha
+  const validar = () => {
+    if (email) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
   };
+
+  const recuperar = async () => {
+    if (isValid) {
+      setIsLoading(true);
+      await sendResetPasswordEmail(email);
+      setIsLoading(false);
+    } else {
+      showToast('entrar-validate-warn', 'warn', 'Preencha o campo de e-mail!');
+    }
+  };
+
+  useEffect(() => {
+    validar();
+  }, [email]);
 
   return (
     <ForgotPassContainer>
@@ -35,6 +60,7 @@ const ForgotPassWord = () => {
       <ForgotPassWrapper>
         <AuthLink to="/entrar" text="Voltar" />
       </ForgotPassWrapper>
+      {isLoading && <Loader />}
     </ForgotPassContainer>
   );
 };
