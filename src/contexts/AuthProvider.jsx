@@ -118,6 +118,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const sendResetPasswordEmail = async (email) => {
+    let msg = '';
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'http://localhost:5173/atualizar-senha',
+      });
+      if (error) {
+        throw new Error(error.message);
+      }
+      msg = 'E-mail enviado com sucesso';
+      showToast('sign-in-error', 'success', msg);
+      navigate('/entrar');
+    } catch (error) {
+      msg = 'Ocorreu um erro ao enviar o e-mail, tente novamente';
+      showToast('send-reset-password-email-error', 'error', msg);
+    }
+  };
+
   const signOut = () => supabase.auth.signOut();
 
   useEffect(() => {
@@ -129,6 +147,7 @@ export const AuthProvider = ({ children }) => {
     signIn,
     signUp,
     signOut,
+    sendResetPasswordEmail,
   };
 
   return (
