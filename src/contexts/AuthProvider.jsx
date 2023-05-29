@@ -99,8 +99,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error(error.message);
       } else {
         if (!keepLogin) {
-          // TODO: alterar para clear
-          localStorage.removeItem(`sb-apovoiknbwujzmlwpvzo-auth-token`);
+          localStorage.clear();
         }
         const user = await getUser(data.user.id);
         setSessionUser(user);
@@ -138,12 +137,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const confirmRecoveryPassword = async () => {
-    supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') {
-        setRecoveryPass(true);
+  const verifyEmail = async (email) => {
+    let msg;
+    try {
+      const { data, error } = await supabase.from('usuarios').select('email');
+      if (error) {
+        throw new Error(error.message);
       }
-    });
+      const emailExist = data.some((e) => e.email === email);
+      if (emailExist) {
+        await sendResetPasswordEmail(email);
+      } else {
+        msg = 'E-mail não encontrado na base de dados';
+        showToast('verify-email-error', 'error', msg);
+      }
+    } catch (error) {
+      msg = 'Ocorreu um erro ao verificar seu e-mail, tente novamente';
+      showToast('send-reset-password-email-error', 'error', msg);
+    }
   };
 
   const updatePassword = async (pass) => {
@@ -158,6 +169,8 @@ export const AuthProvider = ({ children }) => {
       msg = 'Senha atualizada com sucesso';
       showToast('update-password-success', 'success', msg);
       localStorage.clear();
+      setSessionUser(null);
+      setRecoveryPass(false);
       navigate('/entrar');
     } catch (error) {
       msg = 'Ocorreu um erro ao alterar asenha, tente novamente';
@@ -166,6 +179,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signOut = () => supabase.auth.signOut();
+
+  const confirmRecoveryPassword = async () => {
+    supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setRecoveryPass(true);
+      }
+    });
+  };
 
   useEffect(() => {
     getUserSession();
@@ -178,7 +199,7 @@ export const AuthProvider = ({ children }) => {
     signIn,
     signUp,
     signOut,
-    sendResetPasswordEmail,
+    verifyEmail,
     updatePassword,
   };
 
