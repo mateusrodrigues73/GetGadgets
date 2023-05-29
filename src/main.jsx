@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ForgotPassWord from './pages/ForgotPassword';
+import UpdatePassword from './pages/UpdatePassword';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: '/recuperar-senha',
         element: <ForgotPassWord />,
+      },
+      {
+        path: '/atualizar-senha',
+        element: <UpdatePassword />,
       },
     ],
   },
