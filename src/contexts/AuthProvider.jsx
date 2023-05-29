@@ -58,7 +58,6 @@ export const AuthProvider = ({ children }) => {
       nome: userData.nome,
       sobrenome: userData.sobrenome,
       email: userData.email,
-      senha: userData.senha,
     });
     if (error) {
       throw new Error(error.message);
@@ -173,7 +172,7 @@ export const AuthProvider = ({ children }) => {
       setRecoveryPass(false);
       navigate('/entrar');
     } catch (error) {
-      msg = 'Ocorreu um erro ao alterar asenha, tente novamente';
+      msg = 'Ocorreu um erro ao alterar a senha, tente novamente';
       showToast('update-password-error', 'error', msg);
     }
   };
