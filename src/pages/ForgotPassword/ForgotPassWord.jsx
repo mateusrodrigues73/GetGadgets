@@ -16,10 +16,12 @@ import showToast from '../../utils/ShowToasts';
 
 import { AuthContext } from '../../contexts/AuthProvider';
 
+// TODO: verificar erros na rota
+
 const ForgotPassWord = () => {
   const [email, setEmail] = useState('');
   const [isValid, setIsValid] = useState(false);
-  const { sendResetPasswordEmail } = useContext(AuthContext);
+  const { verifyEmail } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
 
   const validar = () => {
@@ -33,7 +35,7 @@ const ForgotPassWord = () => {
   const recuperar = async () => {
     if (isValid) {
       setIsLoading(true);
-      await sendResetPasswordEmail(email);
+      await verifyEmail(email);
       setIsLoading(false);
     } else {
       showToast('entrar-validate-warn', 'warn', 'Preencha o campo de e-mail!');
