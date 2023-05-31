@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
   const { supabase } = useContext(SupabaseContext);
   const [sessionUser, setSessionUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
   const [recoveryPass, setRecoveryPass] = useState(false);
   const navigate = useNavigate();
 
@@ -65,7 +66,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signUp = async (userData) => {
-    let msg = '';
     try {
       const { data, error } = await supabase.auth.signUp({
         email: userData.email,
@@ -78,17 +78,18 @@ export const AuthProvider = ({ children }) => {
         throw new Error(error.message);
       }
       await storeUser(data.user.id, userData);
-      msg = `Sucesso, um e-mail de confirmação foi enviado para: ${userData.email}`;
-      showToast('sign-up-success', 'success', msg);
+      setMessage(
+        `Sucesso, um e-mail de confirmação foi enviado para: ${userData.email}`
+      );
+      showToast('sign-up-success', 'success', message);
       navigate('/entrar');
     } catch (error) {
-      msg = 'Um erro ocorreu durante o cadastro, tente novamente';
-      showToast('sign-in-error', 'error', msg);
+      setMessage('Um erro ocorreu durante o cadastro, tente novamente');
+      showToast('sign-in-error', 'error', message);
     }
   };
 
   const signIn = async (email, password, keepLogin) => {
-    let msg = '';
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -102,24 +103,23 @@ export const AuthProvider = ({ children }) => {
         }
         const user = await getUser(data.user.id);
         setSessionUser(user);
-        msg = 'Login bem sucedido';
-        showToast('sign-in-success', 'success', msg);
+        setMessage('Login bem sucedido');
+        showToast('sign-in-success', 'success', message);
         navigate('/');
       }
     } catch (error) {
       if (error.message === 'Invalid login credentials') {
-        msg = 'Credenciais de login inválidas!';
+        setMessage('Credenciais de login inválidas!');
       } else if (error.message === 'Email not confirmed') {
-        msg = 'Você deve confirmar seu e-mail antes de continuar!';
+        setMessage('Você deve confirmar seu e-mail antes de continuar!');
       } else {
-        msg = 'Um erro ocorreu durante o login, tente novamente';
+        setMessage('Um erro ocorreu durante o login, tente novamente');
       }
-      showToast('sign-in-error', 'error', msg);
+      showToast('sign-in-error', 'error', message);
     }
   };
 
   const sendResetPasswordEmail = async (email) => {
-    let msg = '';
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: 'http://localhost:5173/atualizar-senha',
@@ -127,17 +127,16 @@ export const AuthProvider = ({ children }) => {
       if (error) {
         throw new Error(error.message);
       }
-      msg = 'E-mail enviado com sucesso';
-      showToast('send-reset-password-email-success', 'success', msg);
+      setMessage('E-mail enviado com sucesso');
+      showToast('send-reset-password-email-success', 'success', message);
       navigate('/entrar');
     } catch (error) {
-      msg = 'Ocorreu um erro ao enviar o e-mail, tente novamente';
-      showToast('send-reset-password-email-error', 'error', msg);
+      setMessage('Ocorreu um erro ao enviar o e-mail, tente novamente');
+      showToast('send-reset-password-email-error', 'error', message);
     }
   };
 
   const verifyEmail = async (email) => {
-    let msg;
     try {
       const { data, error } = await supabase.from('usuarios').select('email');
       if (error) {
@@ -147,17 +146,16 @@ export const AuthProvider = ({ children }) => {
       if (emailExist) {
         await sendResetPasswordEmail(email);
       } else {
-        msg = 'E-mail não encontrado na base de dados';
-        showToast('verify-email-error', 'error', msg);
+        setMessage('E-mail não encontrado na base de dados');
+        showToast('verify-email-error', 'error', message);
       }
     } catch (error) {
-      msg = 'Ocorreu um erro ao verificar seu e-mail, tente novamente';
-      showToast('send-reset-password-email-error', 'error', msg);
+      setMessage('Ocorreu um erro ao verificar seu e-mail, tente novamente');
+      showToast('send-reset-password-email-error', 'error', message);
     }
   };
 
   const updatePassword = async (pass) => {
-    let msg;
     try {
       const { error } = await supabase.auth.updateUser({
         password: pass,
@@ -165,15 +163,15 @@ export const AuthProvider = ({ children }) => {
       if (error) {
         throw new Error(error.message);
       }
-      msg = 'Senha atualizada com sucesso';
-      showToast('update-password-success', 'success', msg);
+      setMessage('Senha atualizada com sucesso');
+      showToast('update-password-success', 'success', message);
       localStorage.clear();
       setSessionUser(null);
       setRecoveryPass(false);
       navigate('/entrar');
     } catch (error) {
-      msg = 'Ocorreu um erro ao alterar a senha, tente novamente';
-      showToast('update-password-error', 'error', msg);
+      setMessage('Ocorreu um erro ao alterar a senha, tente novamente');
+      showToast('update-password-error', 'error', message);
     }
   };
 
