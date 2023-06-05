@@ -13,6 +13,7 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ForgotPassWord from './pages/ForgotPassword';
 import UpdatePassword from './pages/UpdatePassword';
+import UserProfile from './pages/UserProfile';
 import ErrorPage from './pages/ErrorPage';
 
 const router = createBrowserRouter([
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: '/atualizar-senha',
         element: <UpdatePassword />,
+      },
+      {
+        path: '/perfil',
+        element: <UserProfile />,
       },
     ],
   },
