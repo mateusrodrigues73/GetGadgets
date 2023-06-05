@@ -4,6 +4,7 @@ import Toast from './styles/Toast';
 
 import { SupabaseProvider } from './contexts/SupabaseProvider';
 import { AuthProvider } from './contexts/AuthProvider';
+import { UserProvider } from './contexts/UserProvider';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -11,10 +12,12 @@ import Footer from './components/Footer';
 const App = () => (
   <SupabaseProvider>
     <AuthProvider>
-      <Toast />
-      <Header />
-      <Outlet />
-      <Footer />
+      <UserProvider>
+        <Toast />
+        <Header />
+        <Outlet />
+        <Footer />
+      </UserProvider>
     </AuthProvider>
   </SupabaseProvider>
 );
