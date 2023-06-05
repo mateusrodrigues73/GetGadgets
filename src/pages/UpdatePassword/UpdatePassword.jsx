@@ -26,7 +26,7 @@ const UpdatePassword = () => {
   const [messageId, setMessageId] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { updatePassword } = useContext(AuthContext);
+  const { updatePassword, setSessionUser } = useContext(AuthContext);
   const { confirmacao } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -45,13 +45,14 @@ const UpdatePassword = () => {
   };
 
   useEffect(() => {
+    setSessionUser(null);
     if (error) {
       showToast(
         'update-pass-validate-error',
         'error',
         'Link inválido ou expirado, tente enviar outro e-mail'
       );
-      navigate('/');
+      navigate('/recuperar-senha');
     } else if (!confirmacao || confirmacao !== 'validar-senha') {
       navigate('/');
     }

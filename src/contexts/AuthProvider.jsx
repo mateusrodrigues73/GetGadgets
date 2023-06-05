@@ -228,6 +228,7 @@ export const AuthProvider = ({ children }) => {
 
   const authContextValue = {
     sessionUser,
+    setSessionUser,
     signIn,
     signUp,
     signOut,
