@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   const { supabase } = useContext(SupabaseContext);
   const [sessionUser, setSessionUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(null);
   const [recoveryPass, setRecoveryPass] = useState(false);
   const navigate = useNavigate();
 
@@ -78,14 +78,18 @@ export const AuthProvider = ({ children }) => {
         throw new Error(error.message);
       }
       await storeUser(data.user.id, userData);
-      setMessage(
-        `Sucesso, um e-mail de confirmação foi enviado para: ${userData.email}`
-      );
-      showToast('sign-up-success', 'success', message);
+      setMessage({
+        id: 'sign-up-success',
+        type: 'success',
+        msg: `Sucesso, um e-mail de confirmação foi enviado para: ${userData.email}`,
+      });
       navigate('/entrar');
     } catch (error) {
-      setMessage('Um erro ocorreu durante o cadastro, tente novamente');
-      showToast('sign-in-error', 'error', message);
+      setMessage({
+        id: 'sign-up-error',
+        type: 'error',
+        msg: 'Um erro ocorreu durante o cadastro! Tente novamente',
+      });
     }
   };
 
@@ -103,19 +107,33 @@ export const AuthProvider = ({ children }) => {
         }
         const user = await getUser(data.user.id);
         setSessionUser(user);
-        setMessage('Login bem sucedido');
-        showToast('sign-in-success', 'success', message);
+        setMessage({
+          id: 'sign-in-success',
+          type: 'success',
+          msg: 'Login bem sucedido',
+        });
         navigate('/');
       }
     } catch (error) {
       if (error.message === 'Invalid login credentials') {
-        setMessage('Credenciais de login inválidas!');
+        setMessage({
+          id: 'sign-in-error',
+          type: 'error',
+          msg: 'Credenciais de login inválidas!',
+        });
       } else if (error.message === 'Email not confirmed') {
-        setMessage('Você deve confirmar seu e-mail antes de continuar!');
+        setMessage({
+          id: 'sign-in-error',
+          type: 'error',
+          msg: 'Você deve confirmar seu e-mail antes de continuar!',
+        });
       } else {
-        setMessage('Um erro ocorreu durante o login, tente novamente');
+        setMessage({
+          id: 'sign-in-error',
+          type: 'error',
+          msg: 'Um erro ocorreu durante o login! Tente novamente',
+        });
       }
-      showToast('sign-in-error', 'error', message);
     }
   };
 
@@ -127,12 +145,18 @@ export const AuthProvider = ({ children }) => {
       if (error) {
         throw new Error(error.message);
       }
-      setMessage('E-mail enviado com sucesso');
-      showToast('send-reset-password-email-success', 'success', message);
+      setMessage({
+        id: 'send-reset-password-email-success',
+        type: 'success',
+        msg: 'E-mail de confirmação enviado com sucesso',
+      });
       navigate('/entrar');
     } catch (error) {
-      setMessage('Ocorreu um erro ao enviar o e-mail, tente novamente');
-      showToast('send-reset-password-email-error', 'error', message);
+      setMessage({
+        id: 'send-reset-password-email-error',
+        type: 'error',
+        msg: 'Ocorreu um erro ao enviar o e-mail! Tente novamente',
+      });
     }
   };
 
@@ -146,12 +170,18 @@ export const AuthProvider = ({ children }) => {
       if (emailExist) {
         await sendResetPasswordEmail(email);
       } else {
-        setMessage('E-mail não encontrado na base de dados');
-        showToast('verify-email-error', 'error', message);
+        setMessage({
+          id: 'verify-email-error',
+          type: 'error',
+          msg: 'E-mail não encontrado na base de dados!',
+        });
       }
     } catch (error) {
-      setMessage('Ocorreu um erro ao verificar seu e-mail, tente novamente');
-      showToast('send-reset-password-email-error', 'error', message);
+      setMessage({
+        id: 'send-reset-password-email-error',
+        type: 'error',
+        msg: 'Ocorreu um erro ao verificar seu e-mail! Tente novamente',
+      });
     }
   };
 
@@ -163,15 +193,21 @@ export const AuthProvider = ({ children }) => {
       if (error) {
         throw new Error(error.message);
       }
-      setMessage('Senha atualizada com sucesso');
-      showToast('update-password-success', 'success', message);
+      setMessage({
+        id: 'update-password-success',
+        type: 'ersuccessror',
+        msg: 'Senha atualizada com sucesso',
+      });
       localStorage.clear();
       setSessionUser(null);
       setRecoveryPass(false);
       navigate('/entrar');
     } catch (error) {
-      setMessage('Ocorreu um erro ao alterar a senha, tente novamente');
-      showToast('update-password-error', 'error', message);
+      setMessage({
+        id: 'update-password-error',
+        type: 'error',
+        msg: 'Ocorreu um erro ao alterar a senha! Tente novamente',
+      });
     }
   };
 
@@ -189,6 +225,13 @@ export const AuthProvider = ({ children }) => {
     getUserSession();
     confirmRecoveryPassword();
   }, []);
+
+  useEffect(() => {
+    if (message !== null) {
+      showToast(message.id, message.type, message.msg);
+      setMessage(null);
+    }
+  }, [message]);
 
   const authContextValue = {
     sessionUser,
