@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
   const [sessionUser, setSessionUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
-  const [recoveryPass, setRecoveryPass] = useState(false);
   const navigate = useNavigate();
 
   const getUser = async (id) => {
@@ -144,7 +143,7 @@ export const AuthProvider = ({ children }) => {
   const sendResetPasswordEmail = async (email) => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'http://localhost:5173/atualizar-senha',
+        redirectTo: 'http://localhost:5173/atualizar-senha/validar-senha',
       });
       if (error) {
         throw new Error(error.message);
@@ -199,12 +198,11 @@ export const AuthProvider = ({ children }) => {
       }
       setMessage({
         id: 'update-password-success',
-        type: 'ersuccessror',
+        type: 'success',
         msg: 'Senha atualizada com sucesso',
       });
       localStorage.clear();
       setSessionUser(null);
-      setRecoveryPass(false);
       navigate('/entrar');
     } catch (error) {
       setMessage({
@@ -217,17 +215,8 @@ export const AuthProvider = ({ children }) => {
 
   const signOut = () => supabase.auth.signOut();
 
-  const confirmRecoveryPassword = async () => {
-    supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') {
-        setRecoveryPass(true);
-      }
-    });
-  };
-
   useEffect(() => {
     getUserSession();
-    confirmRecoveryPassword();
   }, []);
 
   useEffect(() => {
@@ -239,7 +228,6 @@ export const AuthProvider = ({ children }) => {
 
   const authContextValue = {
     sessionUser,
-    recoveryPass,
     signIn,
     signUp,
     signOut,

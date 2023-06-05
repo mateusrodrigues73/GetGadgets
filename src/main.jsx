@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         element: <ForgotPassWord />,
       },
       {
-        path: '/atualizar-senha',
+        path: '/atualizar-senha/:confirmacao?',
         element: <UpdatePassword />,
       },
       {
