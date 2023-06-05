@@ -56,7 +56,7 @@ const Header = () => {
               Faça seu login <br /> ou cadastre-se
             </LinkWithIcon>
           ) : (
-            <LinkWithIcon to="/">
+            <LinkWithIcon to="/perfil">
               Seu perfil de <br /> usuário
             </LinkWithIcon>
           )}
