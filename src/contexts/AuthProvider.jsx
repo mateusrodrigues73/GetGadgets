@@ -43,9 +43,13 @@ export const AuthProvider = ({ children }) => {
   const getUserSession = async () => {
     setLoading(true);
     let user;
-    const { data } = await supabase.auth.getUser();
-    if (data.user) {
-      user = await getUser(data.user.id);
+    if (localStorage.length > 0) {
+      const { data } = await supabase.auth.getUser();
+      if (data.user) {
+        user = await getUser(data.user.id);
+      } else {
+        user = null;
+      }
     } else {
       user = null;
     }
