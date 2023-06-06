@@ -143,7 +143,8 @@ export const AuthProvider = ({ children }) => {
   const sendResetPasswordEmail = async (email) => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'http://localhost:5173/atualizar-senha/validar-senha',
+        redirectTo:
+          'http://getgadgets.netlify.app/atualizar-senha/validar-senha',
       });
       if (error) {
         throw new Error(error.message);
