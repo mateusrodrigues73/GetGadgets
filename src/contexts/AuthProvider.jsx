@@ -74,7 +74,8 @@ export const AuthProvider = ({ children }) => {
         email: userData.email,
         password: userData.senha,
         options: {
-          emailRedirectTo: 'http://localhost:5173/entrar/validar-email',
+          emailRedirectTo:
+            'https://getgadgets.netlify.app/entrar/validar-email',
         },
       });
       if (error) {
