@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -21,12 +22,12 @@ const Breadcrumbs = ({ linksString, actualPage }) => {
     <LinksContainer>
       <LinksWrapper>
         {links.map(({ key, value }) => (
-          <>
+          <React.Fragment key={key}>
             <Links key={key} to={key}>
               {value}
             </Links>
             <RightIcon />
-          </>
+          </React.Fragment>
         ))}
         <ActualPage>{actualPage}</ActualPage>
       </LinksWrapper>
