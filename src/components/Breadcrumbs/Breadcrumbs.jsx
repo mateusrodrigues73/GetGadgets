@@ -1,8 +1,14 @@
 import PropTypes from 'prop-types';
 
-import { LinksContainer, Links } from './Breadcrumbs.styles';
+import {
+  LinksContainer,
+  LinksWrapper,
+  Links,
+  ActualPage,
+  RightIcon,
+} from './Breadcrumbs.styles';
 
-const Breadcrumbs = ({ linksString }) => {
+const Breadcrumbs = ({ linksString, actualPage }) => {
   const pairsLinks = linksString.split('|');
   const links = [];
 
@@ -13,17 +19,24 @@ const Breadcrumbs = ({ linksString }) => {
 
   return (
     <LinksContainer>
-      {links.map(({ key, value }) => (
-        <Links key={key} to={key}>
-          {value}
-        </Links>
-      ))}
+      <LinksWrapper>
+        {links.map(({ key, value }) => (
+          <>
+            <Links key={key} to={key}>
+              {value}
+            </Links>
+            <RightIcon />
+          </>
+        ))}
+        <ActualPage>{actualPage}</ActualPage>
+      </LinksWrapper>
     </LinksContainer>
   );
 };
 
 Breadcrumbs.propTypes = {
   linksString: PropTypes.string.isRequired,
+  actualPage: PropTypes.string.isRequired,
 };
 
 export default Breadcrumbs;
