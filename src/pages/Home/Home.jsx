@@ -1,23 +1,11 @@
-import { useContext } from 'react';
+import HomeContainer from './Home.styles';
 
-import GradientButton from '../../components/GradientButton';
+import SectionTitle from '../../components/SectionTitle';
 
-import { AuthContext } from '../../contexts/AuthProvider';
-
-const Home = () => {
-  const { signOut } = useContext(AuthContext);
-
-  return (
-    <div>
-      <h1>Home</h1>
-      <GradientButton
-        width="220px"
-        height="25px"
-        text="Logout"
-        onClick={signOut}
-      />
-    </div>
-  );
-};
+const Home = () => (
+  <HomeContainer>
+    <SectionTitle title="adicionaremos produtos em breve" />
+  </HomeContainer>
+);
 
 export default Home;
