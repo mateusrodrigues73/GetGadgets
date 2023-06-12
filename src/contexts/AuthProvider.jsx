@@ -215,7 +215,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signOut = () => supabase.auth.signOut();
+  const signOut = () => {
+    supabase.auth.signOut();
+    setSessionUser(null);
+    navigate('/entrar');
+  };
 
   useEffect(() => {
     getUserSession();
