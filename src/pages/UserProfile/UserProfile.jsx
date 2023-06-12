@@ -17,7 +17,7 @@ import GradientButton from '../../components/GradientButton';
 import CautionButton from '../../components/CautionButton';
 import Loader from '../../components/Loader';
 
-import showToast from '../../utils/ShowToasts';
+import showToast from '../../utils/showToasts';
 
 import validate from './UserProfileValidateInputs';
 
