@@ -16,8 +16,6 @@ import showToast from '../../utils/ShowToasts';
 
 import { AuthContext } from '../../contexts/AuthProvider';
 
-// TODO: verificar erros na rota
-
 const ForgotPassWord = () => {
   const [email, setEmail] = useState('');
   const [isValid, setIsValid] = useState(false);
