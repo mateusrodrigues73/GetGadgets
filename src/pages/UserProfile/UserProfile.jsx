@@ -15,13 +15,24 @@ import Breadcrumbs from '../../components/Breadcrumbs';
 import SectionTitle from '../../components/SectionTitle';
 import GradientButton from '../../components/GradientButton';
 import CautionButton from '../../components/CautionButton';
+import Loader from '../../components/Loader';
+
+import showToast from '../../utils/ShowToasts';
+
+import validate from './UserProfileValidateInputs';
 
 import { AuthContext } from '../../contexts/AuthProvider';
+import { UserContext } from '../../contexts/UserProvider';
 
 const UserProfile = () => {
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [messageId, setMessageId] = useState('');
+  const [isValid, setIsValid] = useState(false);
   const { sessionUser } = useContext(AuthContext);
+  const { updateUser } = useContext(UserContext);
   const linksString = '/\\Home';
 
   const handleNameChange = (event) => {
@@ -30,6 +41,42 @@ const UserProfile = () => {
 
   const handleLastNameChange = (event) => {
     setSobrenome(event.target.value);
+  };
+
+  const updateName = async () => {
+    if (sessionUser.nome !== nome) {
+      if (isValid) {
+        setIsLoading(true);
+        await updateUser({ nome }, sessionUser.id);
+        setIsLoading(false);
+      } else {
+        showToast(messageId, 'warn', message);
+      }
+    } else {
+      showToast(
+        'update-name-validate-warn',
+        'warn',
+        'Insira um nome diferente do atual!'
+      );
+    }
+  };
+
+  const updateLastName = async () => {
+    if (sessionUser.sobrenome !== sobrenome) {
+      if (isValid) {
+        setIsLoading(true);
+        await updateUser({ sobrenome }, sessionUser.id);
+        setIsLoading(false);
+      } else {
+        showToast(messageId, 'warn', message);
+      }
+    } else {
+      showToast(
+        'update-lastname-validate-warn',
+        'warn',
+        'Insira um sobrenome diferente do atual!'
+      );
+    }
   };
 
   const changePicture = () => {
@@ -53,7 +100,11 @@ const UserProfile = () => {
       setNome(sessionUser.nome);
       setSobrenome(sessionUser.sobrenome);
     }
-  }, []);
+  }, [sessionUser]);
+
+  useEffect(() => {
+    setIsValid(validate(nome, sobrenome, setMessage, setMessageId));
+  }, [nome, sobrenome]);
 
   return (
     <>
@@ -74,7 +125,7 @@ const UserProfile = () => {
         <InputContainer>
           <InputName>Nome:</InputName>
           <Input type="text" value={nome} onChange={handleNameChange} />
-          <EditIcon />
+          <EditIcon onClick={updateName} />
         </InputContainer>
         <InputContainer>
           <InputName>Sobrenome:</InputName>
@@ -83,7 +134,7 @@ const UserProfile = () => {
             value={sobrenome}
             onChange={handleLastNameChange}
           />
-          <EditIcon />
+          <EditIcon onClick={updateLastName} />
         </InputContainer>
         <GradientButton
           width="377px"
@@ -106,6 +157,7 @@ const UserProfile = () => {
           icon
         />
       </ProfileContainer>
+      {isLoading && <Loader />}
     </>
   );
 };
