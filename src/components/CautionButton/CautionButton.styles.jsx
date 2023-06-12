@@ -15,7 +15,8 @@ export const Button = styled.button`
   &:hover {
     cursor: pointer;
     font-size: 20px;
-    outline: 2px solid ${({ theme }) => theme.colors.contrastDark};
+    outline: 2px solid ${({ theme }) => theme.colors.secondaryLight};
+    color: ${({ theme }) => theme.colors.secondaryLight};
   }
 
   &:active {
