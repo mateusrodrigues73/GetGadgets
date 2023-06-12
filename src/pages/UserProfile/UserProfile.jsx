@@ -1,3 +1,5 @@
+import { useState, useEffect, useContext } from 'react';
+
 import {
   ProfileContainer,
   UserIconContainer,
@@ -14,8 +16,21 @@ import SectionTitle from '../../components/SectionTitle';
 import GradientButton from '../../components/GradientButton';
 import CautionButton from '../../components/CautionButton';
 
+import { AuthContext } from '../../contexts/AuthProvider';
+
 const UserProfile = () => {
-  const string = '/\\Home';
+  const [nome, setNome] = useState('');
+  const [sobrenome, setSobrenome] = useState('');
+  const { sessionUser } = useContext(AuthContext);
+  const linksString = '/\\Home';
+
+  const handleNameChange = (event) => {
+    setNome(event.target.value);
+  };
+
+  const handleLastNameChange = (event) => {
+    setSobrenome(event.target.value);
+  };
 
   const changePicture = () => {
     // TODO: implementar função para alterar foto do usuário
@@ -33,9 +48,16 @@ const UserProfile = () => {
     // TODO: implementar função para deslogar usuário
   };
 
+  useEffect(() => {
+    if (sessionUser) {
+      setNome(sessionUser.nome);
+      setSobrenome(sessionUser.sobrenome);
+    }
+  }, []);
+
   return (
     <>
-      <Breadcrumbs linksString={string} actualPage="Perfil" />
+      <Breadcrumbs linksString={linksString} actualPage="Perfil" />
       <SectionTitle title="Seus dados" />
       <ProfileContainer>
         <UserIconContainer>
@@ -51,17 +73,16 @@ const UserProfile = () => {
         </UserIconContainer>
         <InputContainer>
           <InputName>Nome:</InputName>
-          <Input />
+          <Input type="text" value={nome} onChange={handleNameChange} />
           <EditIcon />
         </InputContainer>
         <InputContainer>
           <InputName>Sobrenome:</InputName>
-          <Input />
-          <EditIcon />
-        </InputContainer>
-        <InputContainer>
-          <InputName>E-mail:</InputName>
-          <Input />
+          <Input
+            type="text"
+            value={sobrenome}
+            onChange={handleLastNameChange}
+          />
           <EditIcon />
         </InputContainer>
         <GradientButton
@@ -85,7 +106,6 @@ const UserProfile = () => {
           icon
         />
       </ProfileContainer>
-      <SectionTitle title="Seus endereços" />
     </>
   );
 };
