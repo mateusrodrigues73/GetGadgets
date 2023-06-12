@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
       id: data[0].id,
       nome: data[0].nome,
       sobrenome: data[0].sobrenome,
-      email: data[0].nome,
+      email: data[0].email,
       estatus: data[0].estatus,
       imagem: data[0].imagem,
       administrador: data[0].administrador,
