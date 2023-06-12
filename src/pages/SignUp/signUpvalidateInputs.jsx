@@ -7,7 +7,7 @@ const validate = (
   setMessage,
   setMessageId
 ) => {
-  const nomeRegex = /^[A-Za-z]{3,}(?:\s[A-Za-z]{3,})*$/;
+  const nomeRegex = /^[\p{L}]+(?:[\s][\p{L}]+)*$/u;
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const senhaRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -30,7 +30,7 @@ const validate = (
     return false;
   }
 
-  if (sobrenome.length >= 50) {
+  if (sobrenome.length >= 70) {
     setMessageId('sobrenome-validate-length-warn');
     setMessage('Sobrenome deve ter menos de 50 caracteres!');
     return false;

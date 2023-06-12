@@ -1,5 +1,5 @@
 const validate = (nome, sobrenome, setMessage, setMessageId) => {
-  const nomeRegex = /^[A-Za-z]{3,}(?:\s[A-Za-z]{3,})*$/;
+  const nomeRegex = /^[\p{L}]+(?:[\s][\p{L}]+)*$/u;
 
   if (nome === '') {
     setMessageId('cadastrar-fields-validate-warn');
