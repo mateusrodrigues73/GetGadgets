@@ -17,13 +17,13 @@ export const LinksWrapper = styled.div`
 
 export const ActualPage = styled.span`
   color: ${({ theme }) => theme.colors.neutralWith};
-  font-family: ${({ theme }) => theme.fonts.title};
+  font-family: ${({ theme }) => theme.fonts.heading};
   font-size: 16px;
 `;
 
 export const Links = styled(Link)`
   color: ${({ theme }) => theme.colors.contrastLight};
-  font-family: ${({ theme }) => theme.fonts.body};
+  font-family: ${({ theme }) => theme.fonts.heading};
   font-size: 16px;
   text-decoration: none;
   padding-left: 2px;
