@@ -81,14 +81,17 @@ const UserProfile = () => {
 
   const changePicture = () => {
     // TODO: implementar função para alterar foto do usuário
+    showToast('changePicture-warn', 'warn', 'Em breve!');
   };
 
   const changePassword = () => {
     // TODO: implementar função para alterar senha do usuário
+    showToast('changePassword-warn', 'warn', 'Em breve!');
   };
 
   const deleteProfile = () => {
     // TODO: implementar função para deletar perfil do usuário
+    showToast('deleteProfile-warn', 'warn', 'Em breve!');
   };
 
   useEffect(() => {
