@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import PreLoader from '../components/PreLoader';
 
-import showToast from '../utils/ShowToasts';
+import showToast from '../utils/showToasts';
 
 import { SupabaseContext } from './SupabaseProvider';
 

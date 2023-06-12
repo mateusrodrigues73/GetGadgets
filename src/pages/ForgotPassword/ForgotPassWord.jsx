@@ -12,7 +12,7 @@ import AuthLink from '../../components/AuthLink';
 import GradientButton from '../../components/GradientButton';
 import Loader from '../../components/Loader';
 
-import showToast from '../../utils/ShowToasts';
+import showToast from '../../utils/showToasts';
 
 import { AuthContext } from '../../contexts/AuthProvider';
 

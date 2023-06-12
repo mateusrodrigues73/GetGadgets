@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { SupabaseContext } from './SupabaseProvider';
 import { AuthContext } from './AuthProvider';
 
-import showToast from '../utils/ShowToasts';
+import showToast from '../utils/showToasts';
 
 export const UserContext = createContext({});
 
