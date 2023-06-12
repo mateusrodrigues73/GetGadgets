@@ -16,7 +16,6 @@ export const Button = styled.button`
     cursor: pointer;
     font-size: 20px;
     outline: 2px solid ${({ theme }) => theme.colors.secondaryLight};
-    color: ${({ theme }) => theme.colors.secondaryLight};
   }
 
   &:active {
