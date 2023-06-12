@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 
 import { Button, DeleteIcon } from './CautionButton.styles';
 
-const CautionButton = ({ width, height, text, onClick }) => (
+const CautionButton = ({ width, height, text, onClick, icon }) => (
   <Button width={width} height={height} onClick={onClick}>
-    <DeleteIcon />
+    {icon ? <DeleteIcon /> : null}
     {text}
   </Button>
 );
@@ -14,6 +14,7 @@ CautionButton.propTypes = {
   height: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+  icon: PropTypes.bool.isRequired,
 };
 
 export default CautionButton;
