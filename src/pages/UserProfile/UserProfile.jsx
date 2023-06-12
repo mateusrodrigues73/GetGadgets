@@ -31,7 +31,7 @@ const UserProfile = () => {
   const [message, setMessage] = useState('');
   const [messageId, setMessageId] = useState('');
   const [isValid, setIsValid] = useState(false);
-  const { sessionUser } = useContext(AuthContext);
+  const { sessionUser, signOut } = useContext(AuthContext);
   const { updateUser } = useContext(UserContext);
   const linksString = '/\\Home';
 
@@ -91,10 +91,6 @@ const UserProfile = () => {
     // TODO: implementar função para deletar perfil do usuário
   };
 
-  const logOut = () => {
-    // TODO: implementar função para deslogar usuário
-  };
-
   useEffect(() => {
     if (sessionUser) {
       setNome(sessionUser.nome);
@@ -146,7 +142,7 @@ const UserProfile = () => {
           width="377px"
           height="25px"
           text="Sair"
-          onClick={logOut}
+          onClick={signOut}
           icon={false}
         />
         <CautionButton
