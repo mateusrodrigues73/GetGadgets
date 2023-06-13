@@ -2,8 +2,6 @@ import PropTypes from 'prop-types';
 
 import { Button, DeleteIcon } from './CautionButton.styles';
 
-// TODO: alterar método de verificação da prop icon
-
 const CautionButton = ({ width, height, text, onClick, icon }) => (
   <Button width={width} height={height} onClick={onClick}>
     {icon && <DeleteIcon />}
