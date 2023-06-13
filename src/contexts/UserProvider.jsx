@@ -13,12 +13,12 @@ export const UserProvider = ({ children }) => {
   const { sessionUser, setSessionUser } = useContext(AuthContext);
   const [message, setMessage] = useState(null);
 
-  const updateUser = async (values, id) => {
+  const updateUser = async (values) => {
     try {
       const { data, error } = await supabase
         .from('usuarios')
         .update(values)
-        .eq('id', id)
+        .eq('id', sessionUser.id)
         .select();
       if (error) {
         throw new Error(error.message);
@@ -57,6 +57,33 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const uploadPicture = async (image) => {
+    try {
+      const { data, error } = await supabase.storage
+        .from('avatar')
+        .upload(`${sessionUser.id}/image`, image, {
+          upsert: true,
+        });
+      if (error) {
+        throw new Error(error.message);
+      }
+      const baseUrl = `https://apovoiknbwujzmlwpvzo.supabase.co/storage/v1/object/public/avatar/`;
+      const imageUrl = `${baseUrl}${data.path}`;
+      await updateUser({ imagem: imageUrl });
+      setMessage({
+        id: 'upload-picture-success',
+        type: 'success',
+        msg: `Imagem enviada com sucesso`,
+      });
+    } catch (error) {
+      setMessage({
+        id: 'upload-picture-error',
+        type: 'error',
+        msg: 'Um erro ocorreu ao enviar a imagem! Tente novamente',
+      });
+    }
+  };
+
   useEffect(() => {
     if (message !== null) {
       showToast(message.id, message.type, message.msg);
@@ -66,6 +93,7 @@ export const UserProvider = ({ children }) => {
 
   const userContextValue = {
     updateUser,
+    uploadPicture,
   };
 
   return (
