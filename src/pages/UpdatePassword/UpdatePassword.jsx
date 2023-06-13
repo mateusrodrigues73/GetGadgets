@@ -74,7 +74,7 @@ const UpdatePassword = () => {
         setValue={setSenha}
         passFocus={setIsFocused}
       />
-      {isFocused ? (
+      {isFocused && (
         <PassInstructionsWrapper>
           <PassInstructions>Senha deve ter:</PassInstructions>
           <PassInstructions>Letras maiúsculas e minúsculas;</PassInstructions>
@@ -83,7 +83,7 @@ const UpdatePassword = () => {
           <PassInstructions>No mínimo 8 caracteres;</PassInstructions>
           <PassInstructions>Nenhum espaço em branco.</PassInstructions>
         </PassInstructionsWrapper>
-      ) : null}
+      )}
       <AuthPassInput
         placeholder="Confirme sua senha"
         setValue={setConfirmeSenha}

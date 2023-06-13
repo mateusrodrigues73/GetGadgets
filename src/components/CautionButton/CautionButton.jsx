@@ -6,7 +6,7 @@ import { Button, DeleteIcon } from './CautionButton.styles';
 
 const CautionButton = ({ width, height, text, onClick, icon }) => (
   <Button width={width} height={height} onClick={onClick}>
-    {icon ? <DeleteIcon /> : null}
+    {icon && <DeleteIcon />}
     {text}
   </Button>
 );
