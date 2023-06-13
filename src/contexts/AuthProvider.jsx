@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
+  const storageKey = 'sb-apovoiknbwujzmlwpvzo-auth-token';
 
   const getUser = async (id) => {
     const { data, error } = await supabase
@@ -42,7 +43,18 @@ export const AuthProvider = ({ children }) => {
   const getUserSession = async () => {
     setLoading(true);
     let user;
-    if (localStorage.length > 0) {
+    if (sessionStorage.getItem(storageKey) !== null) {
+      localStorage.clear();
+      const value = sessionStorage.getItem(storageKey);
+      localStorage.setItem(storageKey, value);
+      const { data } = await supabase.auth.getUser();
+      if (data.user) {
+        user = await getUser(data.user.id);
+      } else {
+        user = null;
+      }
+      localStorage.clear();
+    } else if (localStorage.getItem(storageKey) !== null) {
       const { data } = await supabase.auth.getUser();
       if (data.user) {
         user = await getUser(data.user.id);
@@ -97,6 +109,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const changeStorage = () => {
+    const value = localStorage.getItem(storageKey);
+    sessionStorage.setItem(storageKey, value);
+    localStorage.clear();
+  };
+
   const signIn = async (email, password, keepLogin) => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -107,7 +125,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error(error.message);
       } else {
         if (!keepLogin) {
-          localStorage.clear();
+          changeStorage();
         }
         const user = await getUser(data.user.id);
         setSessionUser(user);
