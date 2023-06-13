@@ -18,6 +18,7 @@ import CautionButton from '../../components/CautionButton';
 import Loader from '../../components/Loader';
 
 import showToast from '../../utils/showToasts';
+import imageValidate from '../../utils/ImageValidate';
 
 import validate from './UserProfileValidateInputs';
 
@@ -32,7 +33,7 @@ const UserProfile = () => {
   const [messageId, setMessageId] = useState('');
   const [isValid, setIsValid] = useState(false);
   const { sessionUser, signOut } = useContext(AuthContext);
-  const { updateUser } = useContext(UserContext);
+  const { updateUser, uploadPicture } = useContext(UserContext);
   const linksString = '/\\Home';
 
   const handleNameChange = (event) => {
@@ -47,7 +48,7 @@ const UserProfile = () => {
     if (sessionUser.nome !== nome) {
       if (isValid) {
         setIsLoading(true);
-        await updateUser({ nome }, sessionUser.id);
+        await updateUser({ nome });
         setIsLoading(false);
       } else {
         showToast(messageId, 'warn', message);
@@ -65,7 +66,7 @@ const UserProfile = () => {
     if (sessionUser.sobrenome !== sobrenome) {
       if (isValid) {
         setIsLoading(true);
-        await updateUser({ sobrenome }, sessionUser.id);
+        await updateUser({ sobrenome });
         setIsLoading(false);
       } else {
         showToast(messageId, 'warn', message);
@@ -80,8 +81,18 @@ const UserProfile = () => {
   };
 
   const changePicture = () => {
-    // TODO: implementar função para alterar foto do usuário
-    showToast('changePicture-warn', 'warn', 'Em breve!');
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (imageValidate(file)) {
+        setIsLoading(true);
+        await uploadPicture(file);
+        setIsLoading(false);
+      }
+    });
+    fileInput.click();
   };
 
   const changePassword = () => {
