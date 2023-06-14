@@ -38,6 +38,12 @@ export const UserIcon = styled(UserOutlined)`
   margin-bottom: 10px;
 `;
 
+export const UserImage = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+`;
+
 export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
