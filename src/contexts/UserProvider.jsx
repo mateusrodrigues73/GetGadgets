@@ -10,7 +10,8 @@ export const UserContext = createContext({});
 
 export const UserProvider = ({ children }) => {
   const { supabase } = useContext(SupabaseContext);
-  const { sessionUser, setSessionUser } = useContext(AuthContext);
+  const { sessionUser, setSessionUser, saveLocalStorage, deleteLocalStorage } =
+    useContext(AuthContext);
   const [message, setMessage] = useState(null);
 
   const updateUser = async (values) => {
@@ -59,6 +60,7 @@ export const UserProvider = ({ children }) => {
 
   const uploadPicture = async (image) => {
     try {
+      saveLocalStorage();
       const { data, error } = await supabase.storage
         .from('avatar')
         .upload(`${sessionUser.id}/image`, image, {
@@ -67,6 +69,7 @@ export const UserProvider = ({ children }) => {
       if (error) {
         throw new Error(error.message);
       }
+      deleteLocalStorage();
       const baseUrl = `https://apovoiknbwujzmlwpvzo.supabase.co/storage/v1/object/public/avatar/`;
       const imageUrl = `${baseUrl}${data.path}`;
       await updateUser({ imagem: imageUrl });
@@ -76,6 +79,7 @@ export const UserProvider = ({ children }) => {
         msg: `Imagem enviada com sucesso`,
       });
     } catch (error) {
+      deleteLocalStorage();
       setMessage({
         id: 'upload-picture-error',
         type: 'error',
