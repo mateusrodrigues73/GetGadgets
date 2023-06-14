@@ -58,17 +58,24 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const deleteImage = async (folder, imageUrl) => {
+    const lastSlashIndex = imageUrl.lastIndexOf('/');
+    const fileName = imageUrl.substring(lastSlashIndex + 1);
+    await supabase.storage.from('avatar').remove([`${folder}/${fileName}`]);
+  };
+
   const uploadPicture = async (image) => {
     try {
       saveLocalStorage();
       const { data, error } = await supabase.storage
         .from('avatar')
-        .upload(`${sessionUser.id}/image`, image, {
+        .upload(`${sessionUser.id}/${image.name}`, image, {
           upsert: true,
         });
       if (error) {
         throw new Error(error.message);
       }
+      await deleteImage(sessionUser.id, sessionUser.imagem);
       deleteLocalStorage();
       const baseUrl = `https://apovoiknbwujzmlwpvzo.supabase.co/storage/v1/object/public/avatar/`;
       const imageUrl = `${baseUrl}${data.path}`;
