@@ -5,6 +5,7 @@ import {
   UserIconContainer,
   UserIconWrapper,
   UserIcon,
+  UserImage,
   InputContainer,
   InputName,
   Input,
@@ -123,7 +124,11 @@ const UserProfile = () => {
       <ProfileContainer>
         <UserIconContainer>
           <UserIconWrapper>
-            <UserIcon />
+            {sessionUser.imagem === 'no_image' ? (
+              <UserIcon />
+            ) : (
+              <UserImage src={sessionUser.imagem} alt="Imagem de perfil" />
+            )}
           </UserIconWrapper>
           <GradientButton
             width="170px"
