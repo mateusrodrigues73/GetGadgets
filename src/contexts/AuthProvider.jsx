@@ -235,8 +235,23 @@ export const AuthProvider = ({ children }) => {
 
   const signOut = () => {
     supabase.auth.signOut();
+    sessionStorage.clear();
     setSessionUser(null);
     navigate('/entrar');
+  };
+
+  const saveLocalStorage = () => {
+    if (sessionStorage.getItem(storageKey) !== null) {
+      localStorage.clear();
+      const value = sessionStorage.getItem(storageKey);
+      localStorage.setItem(storageKey, value);
+    }
+  };
+
+  const deleteLocalStorage = () => {
+    if (sessionStorage.getItem(storageKey) !== null) {
+      localStorage.clear();
+    }
   };
 
   useEffect(() => {
@@ -258,6 +273,8 @@ export const AuthProvider = ({ children }) => {
     signOut,
     verifyEmail,
     updatePassword,
+    saveLocalStorage,
+    deleteLocalStorage,
   };
 
   return (
