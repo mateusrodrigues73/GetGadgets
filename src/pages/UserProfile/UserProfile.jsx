@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   ProfileContainer,
@@ -36,6 +37,7 @@ const UserProfile = () => {
   const [isValid, setIsValid] = useState(false);
   const { sessionUser, signOut } = useContext(AuthContext);
   const { updateUser, uploadPicture, deletePicture } = useContext(UserContext);
+  const navigate = useNavigate();
   const linksString = '/\\Home';
 
   const handleNameChange = (event) => {
@@ -117,6 +119,8 @@ const UserProfile = () => {
     if (sessionUser) {
       setNome(sessionUser.nome);
       setSobrenome(sessionUser.sobrenome);
+    } else {
+      navigate('/entrar');
     }
   }, [sessionUser]);
 
@@ -125,73 +129,75 @@ const UserProfile = () => {
   }, [nome, sobrenome]);
 
   return (
-    <>
-      <Breadcrumbs linksString={linksString} actualPage="Perfil" />
-      <SectionTitle title="Seus dados" />
-      <ProfileContainer>
-        <UserIconContainer>
-          <UserIconWrapper>
-            {sessionUser.imagem === 'no_image' ? (
-              <UserIcon />
-            ) : (
-              <UserImage src={sessionUser.imagem} alt="Imagem de perfil" />
-            )}
-          </UserIconWrapper>
-          <UserIconButtonsContainer>
-            <GradientButton
-              width="170px"
-              height="25px"
-              text="Enviar foto"
-              onClick={changePicture}
-            />
-            {sessionUser.imagem !== 'no_image' && (
-              <CautionButton
+    sessionUser && (
+      <>
+        <Breadcrumbs linksString={linksString} actualPage="Perfil" />
+        <SectionTitle title="Seus dados" />
+        <ProfileContainer>
+          <UserIconContainer>
+            <UserIconWrapper>
+              {sessionUser.imagem === 'no_image' ? (
+                <UserIcon />
+              ) : (
+                <UserImage src={sessionUser.imagem} alt="Imagem de perfil" />
+              )}
+            </UserIconWrapper>
+            <UserIconButtonsContainer>
+              <GradientButton
                 width="170px"
                 height="25px"
-                text="Deletar foto"
-                onClick={removePicture}
-                icon
+                text="Enviar foto"
+                onClick={changePicture}
               />
-            )}
-          </UserIconButtonsContainer>
-        </UserIconContainer>
-        <InputContainer>
-          <InputName>Nome:</InputName>
-          <Input type="text" value={nome} onChange={handleNameChange} />
-          <EditIcon onClick={updateName} />
-        </InputContainer>
-        <InputContainer>
-          <InputName>Sobrenome:</InputName>
-          <Input
-            type="text"
-            value={sobrenome}
-            onChange={handleLastNameChange}
+              {sessionUser.imagem !== 'no_image' && (
+                <CautionButton
+                  width="170px"
+                  height="25px"
+                  text="Deletar foto"
+                  onClick={removePicture}
+                  icon
+                />
+              )}
+            </UserIconButtonsContainer>
+          </UserIconContainer>
+          <InputContainer>
+            <InputName>Nome:</InputName>
+            <Input type="text" value={nome} onChange={handleNameChange} />
+            <EditIcon onClick={updateName} />
+          </InputContainer>
+          <InputContainer>
+            <InputName>Sobrenome:</InputName>
+            <Input
+              type="text"
+              value={sobrenome}
+              onChange={handleLastNameChange}
+            />
+            <EditIcon onClick={updateLastName} />
+          </InputContainer>
+          <GradientButton
+            width="377px"
+            height="25px"
+            text="Alterar senha"
+            onClick={changePassword}
           />
-          <EditIcon onClick={updateLastName} />
-        </InputContainer>
-        <GradientButton
-          width="377px"
-          height="25px"
-          text="Alterar senha"
-          onClick={changePassword}
-        />
-        <CautionButton
-          width="377px"
-          height="25px"
-          text="Sair"
-          onClick={signOut}
-          icon={false}
-        />
-        <CautionButton
-          width="377px"
-          height="25px"
-          text="Deletar conta"
-          onClick={deleteProfile}
-          icon
-        />
-      </ProfileContainer>
-      {isLoading && <Loader />}
-    </>
+          <CautionButton
+            width="377px"
+            height="25px"
+            text="Sair"
+            onClick={signOut}
+            icon={false}
+          />
+          <CautionButton
+            width="377px"
+            height="25px"
+            text="Deletar conta"
+            onClick={deleteProfile}
+            icon
+          />
+        </ProfileContainer>
+        {isLoading && <Loader />}
+      </>
+    )
   );
 };
 
