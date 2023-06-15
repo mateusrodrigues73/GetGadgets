@@ -13,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ::-moz-placeholder {
-    opacity:  1;1 
+    opacity:  1;
   }
 
 `;
