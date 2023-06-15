@@ -6,7 +6,7 @@ export const UpdatePassContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.secondaryDark};
   border-radius: 30px 0px;
   box-shadow: 8px 8px 4px 1px rgba(15, 14, 14, 0.5);
-  margin-bottom: 9%;
+  margin-bottom: ${window.innerHeight - 650}px;
   padding: 33px;
   display: flex;
   flex-direction: column;
