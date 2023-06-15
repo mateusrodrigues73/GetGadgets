@@ -44,6 +44,14 @@ export const UserImage = styled.img`
   border-radius: 50px;
 `;
 
+export const UserIconButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 15px;
+`;
+
 export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
