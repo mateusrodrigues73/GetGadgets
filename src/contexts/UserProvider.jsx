@@ -95,6 +95,27 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const deletePicture = async () => {
+    try {
+      saveLocalStorage();
+      await deleteImage(sessionUser.id, sessionUser.imagem);
+      deleteLocalStorage();
+      await updateUser({ imagem: 'no_image' });
+      setMessage({
+        id: 'delete-picture-success',
+        type: 'success',
+        msg: `Imagem excluída com sucesso`,
+      });
+    } catch (error) {
+      deleteLocalStorage();
+      setMessage({
+        id: 'delete-picture-error',
+        type: 'error',
+        msg: 'Um erro ocorreu ao excluir a imagem! Tente novamente',
+      });
+    }
+  };
+
   useEffect(() => {
     if (message !== null) {
       showToast(message.id, message.type, message.msg);
@@ -105,6 +126,7 @@ export const UserProvider = ({ children }) => {
   const userContextValue = {
     updateUser,
     uploadPicture,
+    deletePicture,
   };
 
   return (
