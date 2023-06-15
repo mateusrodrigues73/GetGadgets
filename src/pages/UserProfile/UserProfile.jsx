@@ -6,6 +6,7 @@ import {
   UserIconWrapper,
   UserIcon,
   UserImage,
+  UserIconButtonsContainer,
   InputContainer,
   InputName,
   Input,
@@ -34,7 +35,7 @@ const UserProfile = () => {
   const [messageId, setMessageId] = useState('');
   const [isValid, setIsValid] = useState(false);
   const { sessionUser, signOut } = useContext(AuthContext);
-  const { updateUser, uploadPicture } = useContext(UserContext);
+  const { updateUser, uploadPicture, deletePicture } = useContext(UserContext);
   const linksString = '/\\Home';
 
   const handleNameChange = (event) => {
@@ -96,6 +97,12 @@ const UserProfile = () => {
     fileInput.click();
   };
 
+  const removePicture = async () => {
+    setIsLoading(true);
+    await deletePicture();
+    setIsLoading(false);
+  };
+
   const changePassword = () => {
     // TODO: implementar função para alterar senha do usuário
     showToast('changePassword-warn', 'warn', 'Em breve!');
@@ -130,12 +137,23 @@ const UserProfile = () => {
               <UserImage src={sessionUser.imagem} alt="Imagem de perfil" />
             )}
           </UserIconWrapper>
-          <GradientButton
-            width="170px"
-            height="25px"
-            text="Enviar foto"
-            onClick={changePicture}
-          />
+          <UserIconButtonsContainer>
+            <GradientButton
+              width="170px"
+              height="25px"
+              text="Enviar foto"
+              onClick={changePicture}
+            />
+            {sessionUser.imagem !== 'no_image' && (
+              <CautionButton
+                width="170px"
+                height="25px"
+                text="Deletar foto"
+                onClick={removePicture}
+                icon
+              />
+            )}
+          </UserIconButtonsContainer>
         </UserIconContainer>
         <InputContainer>
           <InputName>Nome:</InputName>
