@@ -21,7 +21,7 @@ import CautionButton from '../../components/CautionButton';
 import Loader from '../../components/Loader';
 
 import showToast from '../../utils/showToasts';
-import imageValidate from '../../utils/ImageValidate';
+import imageValidate from '../../utils/imageValidate';
 
 import validate from './UserProfileValidateInputs';
 
