@@ -34,6 +34,7 @@ export const UserProvider = ({ children }) => {
         administrador: data[0].administrador,
         mediaAvaliacoes: data[0].media_avaliacoes,
         totalAvaliacoes: data[0].total_avaliacoes,
+        ativo: data[0].ativo,
       };
       if (user.nome !== sessionUser.nome) {
         setMessage({
@@ -49,12 +50,14 @@ export const UserProvider = ({ children }) => {
         });
       }
       setSessionUser(user);
+      return true;
     } catch (error) {
       setMessage({
         id: 'update-user-error',
         type: 'error',
         msg: 'Um erro ocorreu ao atualizar seu perfil! Tente novamente',
       });
+      return false;
     }
   };
 
@@ -79,12 +82,14 @@ export const UserProvider = ({ children }) => {
       deleteLocalStorage();
       const baseUrl = `https://apovoiknbwujzmlwpvzo.supabase.co/storage/v1/object/public/avatar/`;
       const imageUrl = `${baseUrl}${data.path}`;
-      await updateUser({ imagem: imageUrl });
-      setMessage({
-        id: 'upload-picture-success',
-        type: 'success',
-        msg: `Imagem enviada com sucesso`,
-      });
+      const update = await updateUser({ imagem: imageUrl });
+      if (update) {
+        setMessage({
+          id: 'upload-picture-success',
+          type: 'success',
+          msg: `Imagem enviada com sucesso`,
+        });
+      }
     } catch (error) {
       deleteLocalStorage();
       setMessage({
@@ -100,18 +105,39 @@ export const UserProvider = ({ children }) => {
       saveLocalStorage();
       await deleteImage(sessionUser.id, sessionUser.imagem);
       deleteLocalStorage();
-      await updateUser({ imagem: 'no_image' });
-      setMessage({
-        id: 'delete-picture-success',
-        type: 'success',
-        msg: `Imagem excluída com sucesso`,
-      });
+      const update = await updateUser({ imagem: 'no_image' });
+      if (update) {
+        setMessage({
+          id: 'delete-picture-success',
+          type: 'success',
+          msg: `Imagem excluída com sucesso`,
+        });
+      }
     } catch (error) {
       deleteLocalStorage();
       setMessage({
         id: 'delete-picture-error',
         type: 'error',
         msg: 'Um erro ocorreu ao excluir a imagem! Tente novamente',
+      });
+    }
+  };
+
+  const softDeleteUser = async () => {
+    try {
+      const update = await updateUser({ ativo: false });
+      if (update) {
+        setMessage({
+          id: 'delete-user-success',
+          type: 'success',
+          msg: `Sua conta foi excluída com sucesso`,
+        });
+      }
+    } catch (error) {
+      setMessage({
+        id: 'delete-user-error',
+        type: 'error',
+        msg: 'Um erro ocorreu ao excluir sua conta!',
       });
     }
   };
@@ -127,6 +153,7 @@ export const UserProvider = ({ children }) => {
     updateUser,
     uploadPicture,
     deletePicture,
+    softDeleteUser,
   };
 
   return (
