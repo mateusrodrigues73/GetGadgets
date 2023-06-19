@@ -18,6 +18,7 @@ import Breadcrumbs from '../../components/Breadcrumbs';
 import SectionTitle from '../../components/SectionTitle';
 import GradientButton from '../../components/GradientButton';
 import CautionButton from '../../components/CautionButton';
+import Alert from '../../components/Alert/Alert';
 import Loader from '../../components/Loader';
 
 import showToast from '../../utils/showToasts';
@@ -31,6 +32,7 @@ import { UserContext } from '../../contexts/UserProvider';
 const UserProfile = () => {
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
+  const [isAlerting, setIsAlerting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [messageId, setMessageId] = useState('');
@@ -110,9 +112,18 @@ const UserProfile = () => {
     showToast('changePassword-warn', 'warn', 'Em breve!');
   };
 
+  const setAlertTrue = () => {
+    setIsAlerting(true);
+  };
+
   const deleteProfile = () => {
     // TODO: implementar função para deletar perfil do usuário
-    showToast('deleteProfile-warn', 'warn', 'Em breve!');
+    showToast('deleteProfile-warn', 'warn', 'Continuou');
+    setIsAlerting(false);
+  };
+
+  const cancelDeleteProfile = () => {
+    setIsAlerting(false);
   };
 
   useEffect(() => {
@@ -191,10 +202,17 @@ const UserProfile = () => {
             width="377px"
             height="25px"
             text="Deletar conta"
-            onClick={deleteProfile}
+            onClick={setAlertTrue}
             icon
           />
         </ProfileContainer>
+        {isAlerting && (
+          <Alert
+            message="Sua conta será excluída permanentemente! Deseja continuar?"
+            onCancel={cancelDeleteProfile}
+            onContinue={deleteProfile}
+          />
+        )}
         {isLoading && <Loader />}
       </>
     )
