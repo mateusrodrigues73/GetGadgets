@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }) => {
       administrador: data[0].administrador,
       mediaAvaliacoes: data[0].media_avaliacoes,
       totalAvaliacoes: data[0].total_avaliacoes,
+      ativo: data[0].ativo,
     };
     return user;
   };
@@ -124,10 +125,13 @@ export const AuthProvider = ({ children }) => {
       if (error) {
         throw new Error(error.message);
       } else {
+        const user = await getUser(data.user.id);
+        if (!user.ativo) {
+          throw new Error('Invalid login credentials');
+        }
         if (!keepLogin) {
           changeStorage();
         }
-        const user = await getUser(data.user.id);
         setSessionUser(user);
         setMessage({
           id: 'sign-in-success',
@@ -137,6 +141,7 @@ export const AuthProvider = ({ children }) => {
         navigate('/');
       }
     } catch (error) {
+      setSessionUser(null);
       if (error.message === 'Invalid login credentials') {
         setMessage({
           id: 'sign-in-error',
