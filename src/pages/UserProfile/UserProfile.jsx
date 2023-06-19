@@ -33,12 +33,14 @@ const UserProfile = () => {
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
   const [isAlerting, setIsAlerting] = useState(false);
+  const [alert, setAlert] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [messageId, setMessageId] = useState('');
   const [isValid, setIsValid] = useState(false);
   const { sessionUser, signOut } = useContext(AuthContext);
-  const { updateUser, uploadPicture, deletePicture } = useContext(UserContext);
+  const { updateUser, uploadPicture, deletePicture, softDeleteUser } =
+    useContext(UserContext);
   const navigate = useNavigate();
   const linksString = '/\\Home';
 
@@ -112,14 +114,17 @@ const UserProfile = () => {
     showToast('changePassword-warn', 'warn', 'Em breve!');
   };
 
-  const setAlertTrue = () => {
+  const alertDeleteProfile = () => {
+    setAlert('Sua conta será excluída permanentemente! Deseja continuar?');
     setIsAlerting(true);
   };
 
-  const deleteProfile = () => {
-    // TODO: implementar função para deletar perfil do usuário
-    showToast('deleteProfile-warn', 'warn', 'Continuou');
+  const deleteProfile = async () => {
     setIsAlerting(false);
+    setIsLoading(true);
+    await softDeleteUser();
+    setIsLoading(false);
+    signOut();
   };
 
   const cancelDeleteProfile = () => {
@@ -202,13 +207,13 @@ const UserProfile = () => {
             width="377px"
             height="25px"
             text="Deletar conta"
-            onClick={setAlertTrue}
+            onClick={alertDeleteProfile}
             icon
           />
         </ProfileContainer>
         {isAlerting && (
           <Alert
-            message="Sua conta será excluída permanentemente! Deseja continuar?"
+            message={alert}
             onCancel={cancelDeleteProfile}
             onContinue={deleteProfile}
           />
