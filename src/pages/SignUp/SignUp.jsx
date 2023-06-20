@@ -5,7 +5,7 @@ import {
   SignUpWrapper,
   PassInstructionsWrapper,
   PassInstructions,
-} from './SIgnUp.styles';
+} from './SignUp.styles';
 
 import AuthTitle from '../../components/AuthTitle';
 import AuthInput from '../../components/AuthInput';
