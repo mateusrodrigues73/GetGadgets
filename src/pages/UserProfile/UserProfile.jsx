@@ -110,8 +110,7 @@ const UserProfile = () => {
   };
 
   const changePassword = () => {
-    // TODO: implementar função para alterar senha do usuário
-    showToast('changePassword-warn', 'warn', 'Em breve!');
+    navigate('/atualizar-senha/trocar-senha');
   };
 
   const alertDeleteProfile = () => {
