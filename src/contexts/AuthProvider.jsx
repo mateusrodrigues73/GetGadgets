@@ -18,6 +18,20 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const storageKey = 'sb-apovoiknbwujzmlwpvzo-auth-token';
 
+  const saveLocalStorage = () => {
+    if (sessionStorage.getItem(storageKey) !== null) {
+      localStorage.clear();
+      const value = sessionStorage.getItem(storageKey);
+      localStorage.setItem(storageKey, value);
+    }
+  };
+
+  const deleteLocalStorage = () => {
+    if (sessionStorage.getItem(storageKey) !== null) {
+      localStorage.clear();
+    }
+  };
+
   const getUser = async (id) => {
     const { data, error } = await supabase
       .from('usuarios')
@@ -168,7 +182,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo:
-          'http://getgadgets.netlify.app/atualizar-senha/validar-senha',
+          'https://getgadgets.netlify.app/atualizar-senha/validar-senha',
       });
       if (error) {
         throw new Error(error.message);
@@ -213,11 +227,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const updatePassword = async (pass) => {
+  const signOut = () => {
+    supabase.auth.signOut();
+    sessionStorage.clear();
+    setSessionUser(null);
+    navigate('/entrar');
+  };
+
+  const updatePassword = async (pass, logout) => {
     try {
+      saveLocalStorage();
       const { error } = await supabase.auth.updateUser({
         password: pass,
       });
+      deleteLocalStorage();
       if (error) {
         throw new Error(error.message);
       }
@@ -226,36 +249,21 @@ export const AuthProvider = ({ children }) => {
         type: 'success',
         msg: 'Senha atualizada com sucesso',
       });
-      localStorage.clear();
-      setSessionUser(null);
-      navigate('/entrar');
+      if (logout) {
+        signOut();
+      } else {
+        navigate('/perfil');
+      }
     } catch (error) {
+      deleteLocalStorage();
+      if (logout) {
+        signOut();
+      }
       setMessage({
         id: 'update-password-error',
         type: 'error',
         msg: 'Ocorreu um erro ao alterar a senha! Tente novamente',
       });
-    }
-  };
-
-  const signOut = () => {
-    supabase.auth.signOut();
-    sessionStorage.clear();
-    setSessionUser(null);
-    navigate('/entrar');
-  };
-
-  const saveLocalStorage = () => {
-    if (sessionStorage.getItem(storageKey) !== null) {
-      localStorage.clear();
-      const value = sessionStorage.getItem(storageKey);
-      localStorage.setItem(storageKey, value);
-    }
-  };
-
-  const deleteLocalStorage = () => {
-    if (sessionStorage.getItem(storageKey) !== null) {
-      localStorage.clear();
     }
   };
 
