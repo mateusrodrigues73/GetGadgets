@@ -24,6 +24,7 @@ const UpdatePassword = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [message, setMessage] = useState('');
   const [messageId, setMessageId] = useState('');
+  const [logout, setLogout] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { updatePassword, setSessionUser } = useContext(AuthContext);
@@ -37,7 +38,7 @@ const UpdatePassword = () => {
   const atualizar = async () => {
     if (isValid) {
       setIsLoading(true);
-      await updatePassword(senha);
+      await updatePassword(senha, logout);
       setIsLoading(false);
     } else {
       showToast(messageId, 'warn', message);
@@ -45,21 +46,22 @@ const UpdatePassword = () => {
   };
 
   useEffect(() => {
-    setSessionUser(null);
     if (error) {
       showToast(
         'update-pass-validate-error',
         'error',
-        'Link inválido ou expirado, tente enviar outro e-mail'
+        'Link inválido ou expirado! Tente enviar outro e-mail'
       );
       navigate('/recuperar-senha');
-    } else if (!confirmacao || confirmacao !== 'validar-senha') {
+    } else if (confirmacao === 'validar-senha') {
+      localStorage.clear();
+      setSessionUser(null);
+      setLogout(true);
+    } else if (confirmacao === 'trocar-senha') {
+      setLogout(false);
+    } else {
       navigate('/');
     }
-
-    return () => {
-      localStorage.clear();
-    };
   }, []);
 
   useEffect(() => {
