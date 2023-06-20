@@ -9,6 +9,7 @@ import {
 
 import AuthTitle from '../../components/AuthTitle';
 import AuthPassInput from '../../components/AuthPassInput';
+import AuthLink from '../../components/AuthLink/AuthLink';
 import GradientButton from '../../components/GradientButton';
 import Loader from '../../components/Loader';
 
@@ -96,6 +97,9 @@ const UpdatePassword = () => {
         text="Atualizar"
         onClick={atualizar}
       />
+      {confirmacao === 'trocar-senha' && (
+        <AuthLink text="Voltar" to="/perfil" />
+      )}
       {isLoading && <Loader />}
     </UpdatePassContainer>
   );
