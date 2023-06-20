@@ -78,7 +78,9 @@ const SignUp = () => {
         <PassInstructionsWrapper>
           <PassInstructions>Senha deve ter:</PassInstructions>
           <PassInstructions>Letras maiúsculas e minúsculas;</PassInstructions>
-          <PassInstructions>Pelo menos um caractere especial;</PassInstructions>
+          <PassInstructions>
+            Pelo menos um caractere especial (@ $!%*?&);
+          </PassInstructions>
           <PassInstructions>Pelo menos um dígito numérico;</PassInstructions>
           <PassInstructions>No mínimo 8 caracteres;</PassInstructions>
           <PassInstructions>Nenhum espaço em branco.</PassInstructions>

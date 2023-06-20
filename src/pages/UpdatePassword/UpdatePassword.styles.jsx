@@ -17,7 +17,7 @@ export const UpdatePassContainer = styled.div`
 `;
 
 export const PassInstructionsWrapper = styled.div`
-  width: 280px;
+  width: 330px;
   background-color: ${({ theme }) => theme.colors.secondaryDark};
   border-radius: 30px 0px;
   padding-left: 20px;
