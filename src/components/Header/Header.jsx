@@ -47,7 +47,7 @@ const Header = () => {
             <LinkItem to="/">Fóruns</LinkItem>
             <LinkItem to="/">Seu histórico</LinkItem>
             <LinkItem to="/">Busca avançada</LinkItem>
-            <LinkItem to="/">Seus anúncios</LinkItem>
+            <LinkItem to="/seus-anuncios">Seus anúncios</LinkItem>
           </LinksContainer>
         </SearchLinksContainer>
         <LinkIconContainer>
