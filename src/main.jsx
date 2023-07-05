@@ -15,6 +15,7 @@ import ForgotPassWord from './pages/ForgotPassword';
 import UpdatePassword from './pages/UpdatePassword';
 import UserProfile from './pages/UserProfile';
 import UserProducts from './pages/UserProducts/UserProducts';
+import ProductAdPosting from './pages/ProductAdPosting';
 import ErrorPage from './pages/ErrorPage';
 
 const router = createBrowserRouter([
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: '/seus-anuncios',
         element: <UserProducts />,
+      },
+      {
+        path: '/anunciar-produto',
+        element: <ProductAdPosting />,
       },
     ],
   },
