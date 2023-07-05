@@ -8,7 +8,7 @@ const UserProducts = () => {
   const navigate = useNavigate();
 
   const criarAnuncio = () => {
-    navigate('/cadastrar-anuncio');
+    navigate('/anunciar-produto');
   };
 
   return (
