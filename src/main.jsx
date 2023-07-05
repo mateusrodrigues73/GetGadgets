@@ -14,6 +14,7 @@ import SignUp from './pages/SignUp';
 import ForgotPassWord from './pages/ForgotPassword';
 import UpdatePassword from './pages/UpdatePassword';
 import UserProfile from './pages/UserProfile';
+import UserProducts from './pages/UserProducts/UserProducts';
 import ErrorPage from './pages/ErrorPage';
 
 const router = createBrowserRouter([
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: '/perfil',
         element: <UserProfile />,
+      },
+      {
+        path: '/seus-anuncios',
+        element: <UserProducts />,
       },
     ],
   },
