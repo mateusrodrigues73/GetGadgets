@@ -20,7 +20,7 @@ export const Title = styled.h1`
   color: ${({ theme }) => theme.colors.neutralWith};
 `;
 
-export const Input = styled.input`
+export const SelectInput = styled.input`
   width: 100%;
   height: 30px;
   background-color: ${({ theme }) => theme.colors.secondaryLight};
@@ -36,4 +36,29 @@ export const Input = styled.input`
     background-color: ${({ theme }) => theme.colors.primary};
     cursor: pointer;
   }
+`;
+
+export const CategoriesPickerContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
+export const CategoriesPickerWrapper = styled.div`
+  width: 550px;
+  background-color: ${({ theme }) => theme.colors.secondaryDark};
+  border-radius: 30px 0px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 1rem;
 `;
