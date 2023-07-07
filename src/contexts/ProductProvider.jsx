@@ -34,7 +34,7 @@ export const ProductProvider = ({ children }) => {
   const productContextValue = { categorias };
 
   return (
-    <ProductContext.Provider value={{ productContextValue }}>
+    <ProductContext.Provider value={productContextValue}>
       {children}
     </ProductContext.Provider>
   );
