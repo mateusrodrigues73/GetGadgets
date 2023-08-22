@@ -15,7 +15,7 @@ import LinkButton from '../LinkButton';
 
 import { ProductContext } from '../../contexts/ProductProvider';
 
-const ProductFormCategory = ({ currentStep }) => {
+const ProductFormCategory = ({ currentStep, totalSteps }) => {
   const [categoria, setCategoria] = useState('Selecione uma categoria');
   const [pickCategories, setPickCategories] = useState(false);
   const { categorias } = useContext(ProductContext);
@@ -51,7 +51,7 @@ const ProductFormCategory = ({ currentStep }) => {
   return (
     <>
       <PostingContainer>
-        <ProgressBar currentStep={currentStep} />
+        <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
         <Title>Selecione a categoria do produto</Title>
         <SelectInput
           type="text"
@@ -70,6 +70,7 @@ const ProductFormCategory = ({ currentStep }) => {
 
 ProductFormCategory.propTypes = {
   currentStep: PropTypes.number.isRequired,
+  totalSteps: PropTypes.number.isRequired,
 };
 
 export default ProductFormCategory;

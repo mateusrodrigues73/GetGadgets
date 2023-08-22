@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 
 import { StepsContainer, ActualStep, Step } from './ProgressBar.styles';
 
-export const ProgressBar = ({ currentStep }) => (
+export const ProgressBar = ({ currentStep, totalSteps }) => (
   <StepsContainer>
-    {Array.from({ length: 6 }).map((_, index) =>
+    {Array.from({ length: totalSteps }).map((_, index) =>
       index + 1 === currentStep ? <ActualStep /> : <Step />
     )}
   </StepsContainer>
@@ -12,6 +12,7 @@ export const ProgressBar = ({ currentStep }) => (
 
 ProgressBar.propTypes = {
   currentStep: PropTypes.number.isRequired,
+  totalSteps: PropTypes.number.isRequired,
 };
 
 export default ProgressBar;

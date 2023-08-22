@@ -14,7 +14,7 @@ const ProductAdPosting = () => {
   return (
     <>
       <Breadcrumbs linksString={linksString} actualPage="Cadastrar anúncio" />
-      <ProductFormCategory currentStep={1} />
+      <ProductFormCategory currentStep={1} totalSteps={6} />
     </>
   );
 };
