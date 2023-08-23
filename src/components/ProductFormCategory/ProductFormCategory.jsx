@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -15,13 +15,12 @@ import ProgressBar from '../ProgressBar';
 import LinkButton from '../OrangeButton';
 import HelpIcon from '../HelpIcon';
 
-import { ProductContext } from '../../contexts/ProductProvider';
+import productCategories from '../../data/productCategories';
+import categoryMessageTip from '../../data/adPostingMessagesTips';
 
 const ProductFormCategory = ({ currentStep, totalSteps }) => {
   const [categoria, setCategoria] = useState('Selecione uma categoria');
   const [pickCategories, setPickCategories] = useState(false);
-  const { categorias } = useContext(ProductContext);
-  const { categoryMessageTip } = useContext(ProductContext);
 
   const changeCategory = () => {
     setPickCategories(true);
@@ -35,7 +34,7 @@ const ProductFormCategory = ({ currentStep, totalSteps }) => {
   const showCategories = () => (
     <CategoriesPickerContainer>
       <CategoriesPickerWrapper>
-        {categorias.map((category) => (
+        {productCategories.map((category) => (
           <SelectInput
             key={category.categoria}
             type="text"
