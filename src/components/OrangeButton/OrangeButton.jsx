@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import Button from './LinkButton.styles';
+import Button from './OrangeButton.styles';
 
 export const LinkButton = ({ text, action }) => (
   <Button onClick={action}>{text}</Button>

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Button = styled.button`
   border: none;
-  background-color: ${({ theme }) => theme.colors.secondaryDark};
+  background-color: transparent;
   color: ${({ theme }) => theme.colors.contrastLight};
   font-size: 14px;
   font-family: ${({ theme }) => theme.fonts.heading};
