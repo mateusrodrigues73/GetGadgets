@@ -14,6 +14,12 @@ export const PostingContainer = styled.div`
   margin-bottom: 50px;
 `;
 
+export const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  column-gap: 15px;
+`;
+
 export const Title = styled.h1`
   font-family: ${({ theme }) => theme.fonts.heading};
   font-size: 20px;

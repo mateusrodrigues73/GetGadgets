@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import {
   PostingContainer,
+  TitleContainer,
   Title,
   SelectInput,
   CategoriesPickerContainer,
@@ -11,7 +12,8 @@ import {
 } from './ProductFormCategory.styles';
 
 import ProgressBar from '../ProgressBar';
-import LinkButton from '../LinkButton';
+import LinkButton from '../OrangeButton';
+import HelpIcon from '../HelpIcon';
 
 import { ProductContext } from '../../contexts/ProductProvider';
 
@@ -19,6 +21,7 @@ const ProductFormCategory = ({ currentStep, totalSteps }) => {
   const [categoria, setCategoria] = useState('Selecione uma categoria');
   const [pickCategories, setPickCategories] = useState(false);
   const { categorias } = useContext(ProductContext);
+  const { categoryMessageTip } = useContext(ProductContext);
 
   const changeCategory = () => {
     setPickCategories(true);
@@ -52,7 +55,10 @@ const ProductFormCategory = ({ currentStep, totalSteps }) => {
     <>
       <PostingContainer>
         <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
-        <Title>Selecione a categoria do produto</Title>
+        <TitleContainer>
+          <Title>Selecione a categoria do produto</Title>
+          <HelpIcon message={categoryMessageTip} />
+        </TitleContainer>
         <SelectInput
           type="text"
           readOnly
