@@ -13,6 +13,7 @@ export const ProductProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const { supabase } = useContext(SupabaseContext);
   const { sessionUser } = useContext(AuthContext);
+  const posting = {};
 
   const getLastProducts = async () => {
     setLoading(true);
@@ -49,7 +50,7 @@ export const ProductProvider = ({ children }) => {
     getLastProducts();
   }, [sessionUser]);
 
-  const productContextValue = { lastProducts };
+  const productContextValue = { lastProducts, posting };
 
   return (
     <ProductContext.Provider value={productContextValue}>
