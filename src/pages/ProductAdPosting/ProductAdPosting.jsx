@@ -1,20 +1,32 @@
-// import { useState, useContext } from 'react';
+import { useState } from 'react';
 
 import ProductFormCategory from '../../components/ProductFormCategory';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 
-// import { ProductContext } from '../../contexts/ProductProvider';
-// import { AuthContext } from '../../contexts/AuthProvider';
-
 const ProductAdPosting = () => {
   // const { sessionUser } = useContext(AuthContext);
+  const [actualStep, setActualStep] = useState(1);
   const linksString = '/\\Home|/seus-anuncios\\Seus anúncios';
+
+  // TODO: fixar eslint-disable-next-line
+  // eslint-disable-next-line consistent-return
+  const showForm = () => {
+    if (actualStep === 1) {
+      return (
+        <ProductFormCategory
+          currentStep={1}
+          totalSteps={6}
+          setActualStep={setActualStep}
+        />
+      );
+    }
+  };
 
   return (
     <>
       <Breadcrumbs linksString={linksString} actualPage="Cadastrar anúncio" />
-      <ProductFormCategory currentStep={1} totalSteps={6} />
+      {showForm()}
     </>
   );
 };
