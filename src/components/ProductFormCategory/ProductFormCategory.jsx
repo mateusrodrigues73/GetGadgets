@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -18,9 +18,14 @@ import HelpIcon from '../HelpIcon';
 import productCategories from '../../data/productCategories';
 import categoryMessageTip from '../../data/adPostingMessagesTips';
 
-const ProductFormCategory = ({ currentStep, totalSteps }) => {
+import showToast from '../../utils/showToasts';
+
+import { ProductContext } from '../../contexts/ProductProvider';
+
+const ProductFormCategory = ({ currentStep, totalSteps, setActualStep }) => {
   const [categoria, setCategoria] = useState('Selecione uma categoria');
   const [pickCategories, setPickCategories] = useState(false);
+  const { posting } = useContext(ProductContext);
 
   const changeCategory = () => {
     setPickCategories(true);
@@ -28,6 +33,7 @@ const ProductFormCategory = ({ currentStep, totalSteps }) => {
 
   const chooseCategory = (category) => {
     setCategoria(`${category.categoria}: ${category.descricao}`);
+    posting.category = category.categoria;
     setPickCategories(false);
   };
 
@@ -47,7 +53,15 @@ const ProductFormCategory = ({ currentStep, totalSteps }) => {
   );
 
   const next = () => {
-    // TODO: implementar função para avanlçar para o proximo componente
+    if (categoria === 'Selecione uma categoria') {
+      showToast(
+        'product-form-category-warn',
+        'warn',
+        'Por favor, selecione uma categoria'
+      );
+    } else {
+      setActualStep(2);
+    }
   };
 
   return (
@@ -76,6 +90,7 @@ const ProductFormCategory = ({ currentStep, totalSteps }) => {
 ProductFormCategory.propTypes = {
   currentStep: PropTypes.number.isRequired,
   totalSteps: PropTypes.number.isRequired,
+  setActualStep: PropTypes.func.isRequired,
 };
 
 export default ProductFormCategory;
