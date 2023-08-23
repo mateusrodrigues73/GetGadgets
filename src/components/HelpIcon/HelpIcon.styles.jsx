@@ -46,6 +46,6 @@ export const MessageWrapper = styled.div`
 
 export const Message = styled.p`
   font-family: ${({ theme }) => theme.fonts.body};
-  font-size: 14px;
+  font-size: 16px;
   color: ${({ theme }) => theme.colors.neutralWith};
 `;
