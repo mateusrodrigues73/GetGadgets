@@ -5,7 +5,11 @@ import { StepsContainer, ActualStep, Step } from './ProgressBar.styles';
 export const ProgressBar = ({ currentStep, totalSteps }) => (
   <StepsContainer>
     {Array.from({ length: totalSteps }).map((_, index) =>
-      index + 1 === currentStep ? <ActualStep /> : <Step />
+      index + 1 === currentStep ? (
+        <ActualStep key={index} />
+      ) : (
+        <Step key={index} />
+      )
     )}
   </StepsContainer>
 );
