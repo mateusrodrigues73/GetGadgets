@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import {
+  PostingWrapper,
   PostingContainer,
   TitleContainer,
   Title,
@@ -73,8 +74,8 @@ const ProductFormCategory = ({ currentStep, totalSteps, setActualStep }) => {
   }, []);
 
   return (
-    <>
-      <PostingContainer>
+    <PostingContainer height={359}>
+      <PostingWrapper>
         <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
         <TitleContainer>
           <Title>Selecione a categoria do produto</Title>
@@ -89,9 +90,9 @@ const ProductFormCategory = ({ currentStep, totalSteps, setActualStep }) => {
         <LinkButtonContainer>
           <OrangeButton text="Próximo" action={next} />
         </LinkButtonContainer>
-      </PostingContainer>
+      </PostingWrapper>
       {pickCategories && showCategories()}
-    </>
+    </PostingContainer>
   );
 };
 

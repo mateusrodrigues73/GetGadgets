@@ -2,6 +2,15 @@ import styled from 'styled-components';
 
 export const PostingContainer = styled.div`
   margin: 0 auto;
+  width: 100%;
+  height: ${({ height }) => window.innerHeight - height}px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const PostingWrapper = styled.div`
+  margin: 0 auto;
   width: 590px;
   background-color: ${({ theme }) => theme.colors.secondaryDark};
   border-radius: 20px 0px;

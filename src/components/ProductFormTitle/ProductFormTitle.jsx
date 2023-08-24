@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import {
   PostingContainer,
+  PostingWrapper,
   TitleContainer,
   Title,
   Input,
@@ -58,22 +59,24 @@ const ProductFormTitle = ({ currentStep, totalSteps, setActualStep }) => {
   }, []);
 
   return (
-    <PostingContainer>
-      <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
-      <TitleContainer>
-        <Title>Selecione o título do anúncio</Title>
-        <HelpIcon message={titleMessageTip} />
-      </TitleContainer>
-      <Input
-        type="text"
-        placeholder="Título"
-        value={title}
-        onChange={handleTitleChange}
-      />
-      <LinkButtonContainer>
-        <OrangeButton action={previous} text="Anterior" />
-        <OrangeButton action={next} text="Próximo" />
-      </LinkButtonContainer>
+    <PostingContainer height={359}>
+      <PostingWrapper>
+        <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
+        <TitleContainer>
+          <Title>Selecione o título do anúncio</Title>
+          <HelpIcon message={titleMessageTip} />
+        </TitleContainer>
+        <Input
+          type="text"
+          placeholder="Título"
+          value={title}
+          onChange={handleTitleChange}
+        />
+        <LinkButtonContainer>
+          <OrangeButton action={previous} text="Anterior" />
+          <OrangeButton action={next} text="Próximo" />
+        </LinkButtonContainer>
+      </PostingWrapper>
     </PostingContainer>
   );
 };
