@@ -45,6 +45,7 @@ export const MessageWrapper = styled.div`
 `;
 
 export const Message = styled.p`
+  white-space: pre-line;
   font-family: ${({ theme }) => theme.fonts.body};
   font-size: 16px;
   color: ${({ theme }) => theme.colors.neutralWith};
