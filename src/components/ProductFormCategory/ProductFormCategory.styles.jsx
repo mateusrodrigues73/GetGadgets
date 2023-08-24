@@ -17,7 +17,7 @@ export const PostingContainer = styled.div`
 export const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 15px;
+  column-gap: 10px;
 `;
 
 export const Title = styled.h1`
