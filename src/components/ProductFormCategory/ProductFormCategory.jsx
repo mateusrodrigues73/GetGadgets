@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -12,11 +12,11 @@ import {
 } from './ProductFormCategory.styles';
 
 import ProgressBar from '../ProgressBar';
-import LinkButton from '../OrangeButton';
+import OrangeButton from '../OrangeButton';
 import HelpIcon from '../HelpIcon';
 
 import productCategories from '../../data/productCategories';
-import categoryMessageTip from '../../data/adPostingMessagesTips';
+import { categoryMessageTip } from '../../data/adPostingMessagesTips';
 
 import showToast from '../../utils/showToasts';
 
@@ -33,7 +33,7 @@ const ProductFormCategory = ({ currentStep, totalSteps, setActualStep }) => {
 
   const chooseCategory = (category) => {
     setCategoria(`${category.categoria}: ${category.descricao}`);
-    posting.category = category.categoria;
+    posting.category = category;
     setPickCategories(false);
   };
 
@@ -64,6 +64,14 @@ const ProductFormCategory = ({ currentStep, totalSteps, setActualStep }) => {
     }
   };
 
+  useEffect(() => {
+    if (posting.category) {
+      setCategoria(
+        `${posting.category.categoria}: ${posting.category.descricao}`
+      );
+    }
+  }, []);
+
   return (
     <>
       <PostingContainer>
@@ -79,7 +87,7 @@ const ProductFormCategory = ({ currentStep, totalSteps, setActualStep }) => {
           onClick={changeCategory}
         />
         <LinkButtonContainer>
-          <LinkButton text="Próximo" action={next} />
+          <OrangeButton text="Próximo" action={next} />
         </LinkButtonContainer>
       </PostingContainer>
       {pickCategories && showCategories()}
