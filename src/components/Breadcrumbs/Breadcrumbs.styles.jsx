@@ -5,7 +5,6 @@ import { RightOutlined } from '@ant-design/icons';
 export const LinksContainer = styled.div`
   margin: 0 auto;
   max-width: 1200px;
-  margin-bottom: 30px;
 `;
 
 export const LinksWrapper = styled.div`
