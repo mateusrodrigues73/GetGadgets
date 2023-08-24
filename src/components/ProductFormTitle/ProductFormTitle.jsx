@@ -38,7 +38,7 @@ const ProductFormTitle = ({ currentStep, totalSteps, setActualStep }) => {
       posting.title = title;
       setActualStep(currentStep + 1);
     } else {
-      showToast('product-form-title-warn', 'error', 'Título inválido!');
+      showToast('product-form-title-warn', 'warn', 'Título inválido!');
     }
   };
 
