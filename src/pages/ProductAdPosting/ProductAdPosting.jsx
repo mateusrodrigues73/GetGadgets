@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
 import ProductFormCategory from '../../components/ProductFormCategory';
-import ProductFormTitle from '../../components/ProductFormTitle/ProductFormTitle';
+import ProductFormTitle from '../../components/ProductFormTitle';
+import ProductFormData from '../../components/ProductFormData';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 
@@ -26,6 +27,15 @@ const ProductAdPosting = () => {
       return (
         <ProductFormTitle
           currentStep={2}
+          totalSteps={6}
+          setActualStep={setActualStep}
+        />
+      );
+    }
+    if (actualStep === 3) {
+      return (
+        <ProductFormData
+          currentStep={3}
           totalSteps={6}
           setActualStep={setActualStep}
         />
