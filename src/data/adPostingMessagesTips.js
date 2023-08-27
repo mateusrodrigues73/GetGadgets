@@ -13,10 +13,9 @@ export const titleMessageTip = `
 `;
 
 export const specsMessageTip = `
-  Nesta seção, você pode fornecer detalhes específicos sobre o seu produto. Quanto mais informações precisas você fornecer, mais confiança isso irá gerar nos compradores.
-  Aqui estão algumas dicas para incluir nas especificações:
-  - Detalhes técnicos relevantes.
-  - Condição do produto (novo, usado, recondicionado, etc.).
-  - Inclua todos os acessórios ou itens adicionais incluídos.
-  - Seja transparente sobre qualquer defeito ou desgaste.
+  Nesta seção, você pode fornecer detalhes sobre as especificações do seu produto, podendo incluir entre 3 e 10 especificações. Opte por incluir as especificações que achar mais importantes para o produto no qual você que anunciar.
+  Exemplo de especificações para uma SmartTV:
+  - Resolução: UHD 4k
+  - Tamanho: 50 polegadas
+  - Tamanho do cabo de alimentação: 1,5 metros
 `;
