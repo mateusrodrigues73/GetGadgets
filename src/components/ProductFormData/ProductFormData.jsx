@@ -10,7 +10,6 @@ import {
 } from './ProductFormData.styles';
 
 import ProgressBar from '../ProgressBar';
-import HelpIcon from '../HelpIcon';
 import OrangeButton from '../OrangeButton';
 
 import showToast from '../../utils/showToasts';
@@ -123,7 +122,6 @@ export const ProductFormData = ({ currentStep, totalSteps, setActualStep }) => {
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <TitleContainer>
         <Title> Descreva os dados do produto</Title>
-        <HelpIcon message="123" />
       </TitleContainer>
       <Input
         type="text"
