@@ -29,6 +29,8 @@ import validate from './UserProfileValidateInputs';
 import { AuthContext } from '../../contexts/AuthProvider';
 import { UserContext } from '../../contexts/UserProvider';
 
+// TODO: corrigir avizo de sobrenome vazio
+
 const UserProfile = () => {
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
