@@ -16,7 +16,6 @@ const ProductCard = ({ image, title, price }) => {
   return (
     <ProductContainer>
       <ProductImage src={image} alt={title} />
-
       <TilleContainer>
         <Title>{title}</Title>
       </TilleContainer>
