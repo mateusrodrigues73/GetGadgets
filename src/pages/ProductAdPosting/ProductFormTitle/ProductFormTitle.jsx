@@ -9,15 +9,15 @@ import {
   LinkButtonContainer,
 } from './ProductFormTitle.styles';
 
-import ProgressBar from '../ProgressBar';
-import HelpIcon from '../HelpIcon';
-import OrangeButton from '../OrangeButton';
+import ProgressBar from '../../../components/ProgressBar';
+import HelpIcon from '../../../components/HelpIcon';
+import OrangeButton from '../../../components/OrangeButton';
 
-import { titleMessageTip } from '../../data/adPostingMessagesTips';
+import { titleMessageTip } from '../../../data/adPostingMessagesTips';
 
-import showToast from '../../utils/showToasts';
+import showToast from '../../../utils/showToasts';
 
-import { ProductContext } from '../../contexts/ProductProvider';
+import { ProductContext } from '../../../contexts/ProductProvider';
 
 const ProductFormTitle = ({ currentStep, totalSteps, setActualStep }) => {
   const [isValid, setIsvalid] = useState(false);

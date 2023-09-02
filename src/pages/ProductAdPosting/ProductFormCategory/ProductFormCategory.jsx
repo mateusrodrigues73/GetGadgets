@@ -11,16 +11,16 @@ import {
   LinkButtonContainer,
 } from './ProductFormCategory.styles';
 
-import ProgressBar from '../ProgressBar';
-import OrangeButton from '../OrangeButton';
-import HelpIcon from '../HelpIcon';
+import ProgressBar from '../../../components/ProgressBar';
+import OrangeButton from '../../../components/OrangeButton';
+import HelpIcon from '../../../components/HelpIcon';
 
-import productCategories from '../../data/productCategories';
-import { categoryMessageTip } from '../../data/adPostingMessagesTips';
+import productCategories from '../../../data/productCategories';
+import { categoryMessageTip } from '../../../data/adPostingMessagesTips';
 
-import showToast from '../../utils/showToasts';
+import showToast from '../../../utils/showToasts';
 
-import { ProductContext } from '../../contexts/ProductProvider';
+import { ProductContext } from '../../../contexts/ProductProvider';
 
 const ProductFormCategory = ({ currentStep, totalSteps, setActualStep }) => {
   const [categoria, setCategoria] = useState('Selecione uma categoria');

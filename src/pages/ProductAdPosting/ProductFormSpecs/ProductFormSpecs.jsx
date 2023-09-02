@@ -15,16 +15,16 @@ import {
   LinkButtonContainer,
 } from './ProductFormSpecs.styles';
 
-import ProgressBar from '../ProgressBar';
-import HelpIcon from '../HelpIcon';
-import GradientButton from '../GradientButton';
-import OrangeButton from '../OrangeButton';
+import ProgressBar from '../../../components/ProgressBar';
+import HelpIcon from '../../../components/HelpIcon';
+import GradientButton from '../../../components/GradientButton';
+import OrangeButton from '../../../components/OrangeButton';
 
-import showToast from '../../utils/showToasts';
+import showToast from '../../../utils/showToasts';
 
-import { specsMessageTip } from '../../data/adPostingMessagesTips';
+import { specsMessageTip } from '../../../data/adPostingMessagesTips';
 
-import { ProductContext } from '../../contexts/ProductProvider';
+import { ProductContext } from '../../../contexts/ProductProvider';
 
 const ProductFormSpecs = ({ currentStep, totalSteps, setActualStep }) => {
   const [spec, setSpec] = useState('');

@@ -12,17 +12,17 @@ import {
   LinkButtonContainer,
 } from './ProductFormImages.styles';
 
-import ProgressBar from '../ProgressBar';
-import HelpIcon from '../HelpIcon';
-import GradientButton from '../GradientButton';
-import OrangeButton from '../OrangeButton';
+import ProgressBar from '../../../components/ProgressBar';
+import HelpIcon from '../../../components/HelpIcon';
+import GradientButton from '../../../components/GradientButton';
+import OrangeButton from '../../../components/OrangeButton';
 
-import { imagesMessageTip } from '../../data/adPostingMessagesTips';
+import { imagesMessageTip } from '../../../data/adPostingMessagesTips';
 
-import showToast from '../../utils/showToasts';
-import imageValidate from '../../utils/imageValidate';
+import showToast from '../../../utils/showToasts';
+import imageValidate from '../../../utils/imageValidate';
 
-import { ProductContext } from '../../contexts/ProductProvider';
+import { ProductContext } from '../../../contexts/ProductProvider';
 
 const ProductFormImages = ({ currentStep, totalSteps, setActualStep }) => {
   const [images, setImages] = useState([]);

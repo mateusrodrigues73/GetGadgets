@@ -9,14 +9,14 @@ import {
   LinkButtonContainer,
 } from './ProductFormData.styles';
 
-import ProgressBar from '../ProgressBar';
-import OrangeButton from '../OrangeButton';
+import ProgressBar from '../../../components/ProgressBar';
+import OrangeButton from '../../../components/OrangeButton';
 
-import showToast from '../../utils/showToasts';
+import showToast from '../../../utils/showToasts';
 
 import validate from './productFormDataValidateInputs';
 
-import { ProductContext } from '../../contexts/ProductProvider';
+import { ProductContext } from '../../../contexts/ProductProvider';
 
 export const ProductFormData = ({ currentStep, totalSteps, setActualStep }) => {
   const [brand, setBrand] = useState('');

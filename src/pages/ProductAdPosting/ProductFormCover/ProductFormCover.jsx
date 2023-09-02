@@ -9,16 +9,16 @@ import {
   LinkButtonContainer,
 } from './ProductFormCover.styles';
 
-import ProgressBar from '../ProgressBar';
-import HelpIcon from '../HelpIcon';
-import GradientButton from '../GradientButton';
-import OrangeButton from '../OrangeButton';
+import ProgressBar from '../../../components/ProgressBar';
+import HelpIcon from '../../../components/HelpIcon';
+import GradientButton from '../../../components/GradientButton';
+import OrangeButton from '../../../components/OrangeButton';
 
-import { coverImageMessageTip } from '../../data/adPostingMessagesTips';
+import { coverImageMessageTip } from '../../../data/adPostingMessagesTips';
 
-import imageValidate from '../../utils/imageValidate';
+import imageValidate from '../../../utils/imageValidate';
 
-import { ProductContext } from '../../contexts/ProductProvider';
+import { ProductContext } from '../../../contexts/ProductProvider';
 
 const ProductFormCover = ({ currentStep, totalSteps, setActualStep }) => {
   const [coverImage, setCoverImage] = useState(null);
