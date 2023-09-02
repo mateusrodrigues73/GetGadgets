@@ -16,6 +16,7 @@ import OrangeButton from '../../../components/OrangeButton';
 
 import { coverImageMessageTip } from '../../../data/adPostingMessagesTips';
 
+import showToast from '../../../utils/showToasts';
 import imageValidate from '../../../utils/imageValidate';
 
 import { ProductContext } from '../../../contexts/ProductProvider';
@@ -43,8 +44,16 @@ const ProductFormCover = ({ currentStep, totalSteps, setActualStep }) => {
   };
 
   const next = () => {
-    posting.cover = coverImage;
-    setActualStep(currentStep + 1);
+    if (!coverImage) {
+      showToast(
+        'product-form-cover-noun-warn',
+        'warn',
+        'Por favor selecione uma imagem para a capa do seu anúncio'
+      );
+    } else {
+      posting.cover = coverImage;
+      setActualStep(currentStep + 1);
+    }
   };
 
   useEffect(() => {
