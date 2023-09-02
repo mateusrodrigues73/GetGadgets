@@ -70,11 +70,6 @@ const ProductFormSpecs = ({ currentStep, totalSteps, setActualStep }) => {
       } else {
         specs.push(spec);
         setSpec('');
-        showToast(
-          'product-form-specs-add-success',
-          'success',
-          'Especificação adicionada com sucesso'
-        );
       }
     } else {
       showToast(messageId, 'warn', message);
