@@ -78,7 +78,7 @@ const ProductFormImages = ({ currentStep, totalSteps, setActualStep }) => {
 
   const next = () => {
     posting.images = images;
-    // setActualStep(currentStep + 1);
+    setActualStep(currentStep + 1);
   };
 
   useEffect(() => {}, [imageTrigger]);
