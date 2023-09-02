@@ -5,6 +5,7 @@ import ProductFormTitle from '../../components/ProductFormTitle';
 import ProductFormData from '../../components/ProductFormData';
 import ProductFormSpecs from '../../components/ProductFormSpecs';
 import ProductFormCover from '../../components/ProductFormCover';
+import ProductFormImages from '../../components/ProductFormImages';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 
@@ -56,6 +57,15 @@ const ProductAdPosting = () => {
       return (
         <ProductFormCover
           currentStep={5}
+          totalSteps={6}
+          setActualStep={setActualStep}
+        />
+      );
+    }
+    if (actualStep === 6) {
+      return (
+        <ProductFormImages
+          currentStep={6}
           totalSteps={6}
           setActualStep={setActualStep}
         />
