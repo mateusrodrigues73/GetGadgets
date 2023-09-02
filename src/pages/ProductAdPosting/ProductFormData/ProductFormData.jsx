@@ -29,11 +29,21 @@ export const ProductFormData = ({ currentStep, totalSteps, setActualStep }) => {
   const { posting } = useContext(ProductContext);
 
   const handleBrandChange = (event) => {
-    setBrand(event.target.value);
+    const { value } = event.target;
+    if (value.length > 50) {
+      event.preventDefault();
+      return;
+    }
+    setBrand(value);
   };
 
   const handleModelChange = (event) => {
-    setModel(event.target.value);
+    const { value } = event.target;
+    if (value.length > 50) {
+      event.preventDefault();
+      return;
+    }
+    setModel(value);
   };
 
   const handlePriceChange = (event) => {

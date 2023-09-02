@@ -25,7 +25,12 @@ const ProductFormTitle = ({ currentStep, totalSteps, setActualStep }) => {
   const { posting } = useContext(ProductContext);
 
   const handleTitleChange = (event) => {
-    setTitle(event.target.value);
+    const { value } = event.target;
+    if (value.length > 80) {
+      event.preventDefault();
+      return;
+    }
+    setTitle(value);
   };
 
   const previous = () => {
