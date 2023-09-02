@@ -24,6 +24,12 @@ export const coverImageMessageTip = `
   A imagem de capa do seu anúncio será a primeira impressão que os compradores terão do seu produto, portanto, recomendamos que a imagem seja informativa e atraente.
   Requisitos para a imagem da capa do produto:
   - A imagem da capa deve estar nos formatos PNG ou JPEG.
-  - O tamanho da imagem não deve exceder 1MB
+  - O tamanho da imagem não deve exceder 1MB.
   - (opcional): Recomendamos que a imagem tenha um fundo branco. Isso ajudará a destacar seu produto.
+`;
+
+export const imagesMessageTip = `
+  As imagens do anúncio servem para detalhar seu produto para possíveis compradores. Embora não seja obrigatório, incluir fotos é altamente recomendável para que seu produto gere mais confiança para os clientes. São permitidos um total de 5 imagens, elas devem atender os seguintes requisitos:
+  - As imagens devem estar nos formatos PNG ou JPEG.
+  - O tamanho das imagens não deve exceder 1MB.
 `;
