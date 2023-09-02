@@ -6,6 +6,7 @@ import ProductFormData from './ProductFormData';
 import ProductFormSpecs from './ProductFormSpecs';
 import ProductFormCover from './ProductFormCover';
 import ProductFormImages from './ProductFormImages';
+import ProductFormRevision from './ProductFormRevision';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 
@@ -44,6 +45,7 @@ const ProductAdPosting = () => {
       totalSteps={6}
       setActualStep={setActualStep}
     />,
+    <ProductFormRevision setActualStep={setActualStep} />,
   ];
 
   const showForm = () => formSteps[actualStep - 1];
