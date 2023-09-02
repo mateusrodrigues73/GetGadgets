@@ -70,7 +70,6 @@ export const ProductFormData = ({ currentStep, totalSteps, setActualStep }) => {
     posting.data.brand = brand;
     posting.data.model = model;
     posting.data.price = price;
-    posting.data.price = price;
     posting.data.quantity = quantity;
     setActualStep(currentStep - 1);
   };
