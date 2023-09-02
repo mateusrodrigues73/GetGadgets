@@ -31,7 +31,7 @@ const ProductFormSpecs = ({ currentStep, totalSteps, setActualStep }) => {
   const [specs, setSpecs] = useState([]);
   const [message, setMessage] = useState('');
   const [messageId, setMessageId] = useState('');
-  const [deleteTrigger, setDeleteTrigger] = useState(false);
+  const [specTrigger, setSpecTrigger] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const { posting } = useContext(ProductContext);
 
@@ -69,7 +69,7 @@ const ProductFormSpecs = ({ currentStep, totalSteps, setActualStep }) => {
         );
       } else {
         specs.push(spec);
-        setSpec('');
+        setSpecTrigger(!specTrigger);
       }
     } else {
       showToast(messageId, 'warn', message);
@@ -78,7 +78,7 @@ const ProductFormSpecs = ({ currentStep, totalSteps, setActualStep }) => {
 
   const deleteSpec = (index) => {
     specs.splice(index, 1);
-    setDeleteTrigger(!deleteTrigger);
+    setSpecTrigger(!specTrigger);
   };
 
   const renderSpecs = () => (
@@ -118,7 +118,7 @@ const ProductFormSpecs = ({ currentStep, totalSteps, setActualStep }) => {
     setIsValid(validateSpec);
   }, [spec, specs.length]);
 
-  useEffect(() => {}, [deleteTrigger]);
+  useEffect(() => {}, [specTrigger]);
 
   useEffect(() => {
     if (posting.specs !== undefined) {
