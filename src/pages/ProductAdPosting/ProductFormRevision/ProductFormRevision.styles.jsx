@@ -32,6 +32,7 @@ export const DataWrapper = styled.div`
   border-radius: 10px 0px;
   background-color: ${({ theme }) => theme.colors.secondaryLight};
   padding: 5px 15px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: flex-start;
