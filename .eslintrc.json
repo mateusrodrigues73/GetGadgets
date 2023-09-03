@@ -31,6 +31,8 @@
         "no-restricted-exports": "off",
         "react/function-component-definition": "off",
         "react/jsx-no-constructed-context-values": "off",
-        "react/no-array-index-key" : "off"
+        "react/no-array-index-key": "off",
+        "no-await-in-loop": "off",
+        "no-restricted-syntax": "off"
     }
 }
