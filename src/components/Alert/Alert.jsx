@@ -9,7 +9,6 @@ import {
 
 import AuthTitle from '../AuthTitle';
 import GradientButton from '../GradientButton';
-import CautionButton from '../CautionButton';
 
 const Alert = ({ message, onCancel, onContinue }) => {
   const cancel = () => {
@@ -32,12 +31,11 @@ const Alert = ({ message, onCancel, onContinue }) => {
             text="Cancelar"
             onClick={cancel}
           />
-          <CautionButton
+          <GradientButton
             width="150px"
             height="25px"
             text="Continuar"
             onClick={proceed}
-            icon
           />
         </ButtonsContainer>
       </AlertWrapper>
