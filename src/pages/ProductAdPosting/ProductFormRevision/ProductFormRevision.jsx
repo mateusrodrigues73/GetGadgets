@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import SectionTitle from '../../../components/SectionTitle';
@@ -16,14 +16,33 @@ import {
 
 import GradientButton from '../../../components/GradientButton';
 import CautionButton from '../../../components/CautionButton';
+import Alert from '../../../components/Alert';
+import Loader from '../../../components/Loader';
 
 import { ProductContext } from '../../../contexts/ProductProvider';
 
 const ProductFormRevision = ({ setActualStep }) => {
-  const { posting } = useContext(ProductContext);
+  const [isAlerting, setIsAlerting] = useState(false);
+  const [alert, setAlert] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { posting, insertNewProduct } = useContext(ProductContext);
 
-  const addPosting = () => {
-    // TODO: salvar anúncio na base de dados
+  // TODO: ir para páginas de anúncios do usuário após o cadastro bem sucedido do anúncio
+
+  const insertProduct = async () => {
+    setIsAlerting(false);
+    setIsLoading(true);
+    await insertNewProduct();
+    setIsLoading(false);
+  };
+
+  const cancelInsertProduct = () => {
+    setIsAlerting(false);
+  };
+
+  const alertInsertProduct = () => {
+    setAlert('Deseja cadastrar o anúncio?');
+    setIsAlerting(true);
   };
 
   const backToForm = () => {
@@ -84,7 +103,7 @@ const ProductFormRevision = ({ setActualStep }) => {
           width="100%"
           height="30px"
           text="Cadastrar anúncio"
-          onClick={addPosting}
+          onClick={alertInsertProduct}
         />
         <CautionButton
           width="100%"
@@ -94,6 +113,14 @@ const ProductFormRevision = ({ setActualStep }) => {
           icon={false}
         />
       </DataContainer>
+      {isAlerting && (
+        <Alert
+          message={alert}
+          onCancel={cancelInsertProduct}
+          onContinue={insertProduct}
+        />
+      )}
+      {isLoading && <Loader />}
     </>
   );
 };
