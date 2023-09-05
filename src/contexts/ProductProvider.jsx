@@ -12,6 +12,7 @@ export const ProductContext = createContext({});
 
 export const ProductProvider = ({ children }) => {
   const [lastProducts, setLastproducts] = useState(null);
+  const [userPostings, setUserPostings] = useState(null);
   const [loading, setLoading] = useState(true);
   const { supabase } = useContext(SupabaseContext);
   const { sessionUser, saveLocalStorage, deleteLocalStorage } =
@@ -123,6 +124,26 @@ export const ProductProvider = ({ children }) => {
     deleteLocalStorage();
   };
 
+  const getUserPostings = async () => {
+    setLoading(true);
+    saveLocalStorage();
+    try {
+      const { data, error } = await supabase
+        .from('produtos')
+        .select('*, produto_informacoes(*), produto_imagens(*)')
+        .eq('id_usuario', sessionUser.id)
+        .order('created_at', { ascending: true });
+      if (error) {
+        throw new Error(error);
+      }
+      setUserPostings(data.length > 0 ? data : null);
+    } catch (error) {
+      setUserPostings(null);
+    }
+    deleteLocalStorage();
+    setLoading(false);
+  };
+
   const getLastProducts = async () => {
     setLoading(true);
     try {
@@ -133,20 +154,20 @@ export const ProductProvider = ({ children }) => {
           .neq('id_usuario', sessionUser.id)
           .order('created_at', { ascending: false })
           .limit(10);
-        setLastproducts(error ? null : data);
         if (error) {
           throw new Error(error);
         }
+        setLastproducts(error ? null : data);
       } else {
         const { data, error } = await supabase
           .from('produtos')
           .select('*, produto_imagens(*)')
           .order('created_at', { ascending: false })
           .limit(10);
-        setLastproducts(error ? null : data);
         if (error) {
           throw new Error(error);
         }
+        setLastproducts(error ? null : data);
       }
     } catch (error) {
       return;
@@ -156,9 +177,15 @@ export const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     getLastProducts();
+    getUserPostings();
   }, [sessionUser]);
 
-  const productContextValue = { insertNewProduct, lastProducts, posting };
+  const productContextValue = {
+    lastProducts,
+    posting,
+    userPostings,
+    insertNewProduct,
+  };
 
   return (
     <ProductContext.Provider value={productContextValue}>
