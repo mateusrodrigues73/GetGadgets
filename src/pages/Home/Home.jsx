@@ -14,14 +14,15 @@ const Home = () => {
     <>
       <SectionTitle title="Mais recentes" />
       <ProductsContainer>
-        {lastProducts.map((produto) => (
-          <ProductCard
-            key={produto.id}
-            title={produto.titulo}
-            image={produto.produto_imagens[0].capa}
-            price={produto.preco}
-          />
-        ))}
+        {lastProducts &&
+          lastProducts.map((produto) => (
+            <ProductCard
+              key={produto.id}
+              title={produto.titulo}
+              image={produto.produto_imagens[0].capa}
+              price={produto.preco}
+            />
+          ))}
       </ProductsContainer>
     </>
   );
