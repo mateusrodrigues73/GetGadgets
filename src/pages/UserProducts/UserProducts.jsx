@@ -1,23 +1,37 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Container from './Userproducts.styles';
+import {
+  PageContainer,
+  PostingsContainer,
+  PostingContainer,
+  PostingImage,
+  TilleContainer,
+  Title,
+} from './Userproducts.styles';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 import SectionTitle from '../../components/SectionTitle';
-// import GradientButton from '../../components/GradientButton';
+import AddButton from '../../components/AddButton';
+import GradientButton from '../../components/GradientButton';
+import PagesNav from '../../components/PagesNav';
 import Alert from '../../components/Alert';
 
 import { AuthContext } from '../../contexts/AuthProvider';
 import { ProductContext } from '../../contexts/ProductProvider';
 
 const UserProducts = () => {
+  const [currentPage, setCurrentPage] = useState(1);
   const [isLogged, setIsLogged] = useState(false);
   const [isAlerting, setIsAlerting] = useState(false);
   const [alert, setAlert] = useState('');
   const linksString = '/\\Home';
   const { sessionUser } = useContext(AuthContext);
   const { userPostings } = useContext(ProductContext);
+  const adsPerPage = 7;
+  const totalPages = userPostings
+    ? Math.ceil(userPostings.length / adsPerPage)
+    : null;
   const navigate = useNavigate();
 
   const goToLogin = () => {
@@ -29,9 +43,47 @@ const UserProducts = () => {
     setIsAlerting(false);
   };
 
-  // const criarAnuncio = () => {
-  //   navigate('/anunciar-produto');
-  // };
+  const AddPosting = () => {
+    navigate('/anunciar-produto');
+  };
+
+  const editPosting = () => {};
+
+  const previousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const renderPostings = () => {
+    const startIndex = (currentPage - 1) * adsPerPage;
+    const endIndex = startIndex + adsPerPage;
+    const adsToRender = userPostings.slice(startIndex, endIndex);
+
+    return adsToRender.map((posting) => (
+      <PostingContainer key={posting.id}>
+        <PostingImage
+          src={posting.produto_imagens[0].capa}
+          alt={posting.titulo}
+        />
+        <TilleContainer>
+          <Title>{posting.titulo}</Title>
+        </TilleContainer>
+        <GradientButton
+          width="255px"
+          height="25px"
+          text="Editar anúncio"
+          onClick={editPosting}
+        />
+      </PostingContainer>
+    ));
+  };
 
   useEffect(() => {
     if (!sessionUser) {
@@ -48,15 +100,41 @@ const UserProducts = () => {
     <>
       <Breadcrumbs linksString={linksString} actualPage="Seus anúncios" />
       {!isLogged && (
-        <Container>
+        <PageContainer>
           <SectionTitle title="Você deve estar logado para ver seus anúncios" />
-        </Container>
+        </PageContainer>
       )}
       {isLogged && userPostings && (
-        <SectionTitle title="Você possui anúncios cadastrados" />
+        <>
+          <PostingsContainer>
+            <AddButton
+              width="285px"
+              height="400px"
+              text="Adicionar anúncio"
+              onClick={AddPosting}
+            />
+            {renderPostings()}
+          </PostingsContainer>
+          {userPostings.length > 7 && (
+            <PagesNav
+              currentPage={currentPage}
+              totalPages={totalPages}
+              goPrevious={previousPage}
+              goNext={nextPage}
+            />
+          )}
+        </>
       )}
       {isLogged && !userPostings && (
-        <SectionTitle title="Você não possui nenhum anúncio cadastrado" />
+        <PageContainer>
+          <SectionTitle title="Você não possui nenhum anúncio cadastrado" />
+          <AddButton
+            width="285px"
+            height="383px"
+            text="Adicionar anúncio"
+            onClick={AddPosting}
+          />
+        </PageContainer>
       )}
       {isAlerting && (
         <Alert message={alert} onCancel={cancel} onContinue={goToLogin} />
