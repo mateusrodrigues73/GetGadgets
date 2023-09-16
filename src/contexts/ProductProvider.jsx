@@ -19,6 +19,26 @@ export const ProductProvider = ({ children }) => {
     useContext(AuthContext);
   const posting = {};
 
+  const getUserPostings = async () => {
+    setLoading(true);
+    saveLocalStorage();
+    try {
+      const { data, error } = await supabase
+        .from('produtos')
+        .select('*, produto_informacoes(*), produto_imagens(*)')
+        .eq('id_usuario', sessionUser.id)
+        .order('created_at', { ascending: true });
+      if (error) {
+        throw new Error(error);
+      }
+      setUserPostings(data.length > 0 ? data : null);
+    } catch (error) {
+      setUserPostings(null);
+    }
+    deleteLocalStorage();
+    setLoading(false);
+  };
+
   const insertSpecs = async (productId, specs) => {
     for (const spec of specs) {
       const { error } = await supabase
@@ -114,34 +134,18 @@ export const ProductProvider = ({ children }) => {
         'success',
         `Anúncio cadastrado com sucesso`
       );
+      getUserPostings();
+      deleteLocalStorage();
+      return true;
     } catch (error) {
       showToast(
         'insert-product-error',
         'error',
         `Um erro ocorreu ao cadastrar seu anúncio! tente novamente`
       );
+      deleteLocalStorage();
+      return false;
     }
-    deleteLocalStorage();
-  };
-
-  const getUserPostings = async () => {
-    setLoading(true);
-    saveLocalStorage();
-    try {
-      const { data, error } = await supabase
-        .from('produtos')
-        .select('*, produto_informacoes(*), produto_imagens(*)')
-        .eq('id_usuario', sessionUser.id)
-        .order('created_at', { ascending: true });
-      if (error) {
-        throw new Error(error);
-      }
-      setUserPostings(data.length > 0 ? data : null);
-    } catch (error) {
-      setUserPostings(null);
-    }
-    deleteLocalStorage();
-    setLoading(false);
   };
 
   const getLastProducts = async () => {

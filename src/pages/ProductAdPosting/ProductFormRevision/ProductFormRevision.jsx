@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import SectionTitle from '../../../components/SectionTitle';
@@ -26,14 +27,16 @@ const ProductFormRevision = ({ setActualStep }) => {
   const [alert, setAlert] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { posting, insertNewProduct } = useContext(ProductContext);
-
-  // TODO: ir para páginas de anúncios do usuário após o cadastro bem sucedido do anúncio
+  const navigate = useNavigate();
 
   const insertProduct = async () => {
     setIsAlerting(false);
     setIsLoading(true);
-    await insertNewProduct();
+    const status = await insertNewProduct();
     setIsLoading(false);
+    if (status) {
+      navigate('/seus-anuncios');
+    }
   };
 
   const cancelInsertProduct = () => {
