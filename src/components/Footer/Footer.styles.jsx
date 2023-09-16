@@ -8,16 +8,17 @@ import {
 
 export const FooterContainer = styled.div`
   width: 100%;
-  height: 164px;
   background-color: ${({ theme }) => theme.colors.secondaryDark};
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
 `;
 
 export const FooterWrapper = styled.div`
-  width: 1200px;
+  min-width: 1200px;
   background-color: ${({ theme }) => theme.colors.secondaryDark};
   display: flex;
   flex-direction: row;
@@ -30,15 +31,6 @@ export const SectionTitle = styled.div`
   font-size: 20px;
   color: ${({ theme }) => theme.colors.neutralWith};
   text-align: center;
-`;
-
-export const SocialContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 285px;
-  height: 133px;
-  row-gap: 2rem;
-  padding-top: 5px;
 `;
 
 export const SocialIconsContainer = styled.div`
@@ -113,7 +105,6 @@ export const LinksColumn = styled.div`
   align-items: center;
   align-content: flex-start;
   row-gap: 11px;
-  margin-top: 17px;
 `;
 
 export const FooterLink = styled(Link)`

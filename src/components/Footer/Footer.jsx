@@ -1,8 +1,6 @@
 import {
   FooterContainer,
   FooterWrapper,
-  SectionTitle,
-  SocialContainer,
   SocialIconsContainer,
   FacebookIcon,
   InstagramIcon,
@@ -16,19 +14,15 @@ import {
 const Footer = () => (
   <FooterContainer>
     <FooterWrapper>
-      <SocialContainer>
-        <SectionTitle>Nossas redes sociais</SectionTitle>
-        <SocialIconsContainer>
-          <FacebookIcon />
-          <InstagramIcon />
-          <TwitterIcon />
-        </SocialIconsContainer>
-      </SocialContainer>
+      <SocialIconsContainer>
+        <FacebookIcon />
+        <InstagramIcon />
+        <TwitterIcon />
+      </SocialIconsContainer>
       <LinksContainer>
-        <SectionTitle>Navegue pelo site</SectionTitle>
         <LinksWrapper>
           <LinksColumn>
-            <FooterLink to="/">seus anúncios</FooterLink>
+            <FooterLink to="/seus-anuncios">seus anúncios</FooterLink>
             <FooterLink to="/">seus histórico</FooterLink>
             <FooterLink to="/">fóruns</FooterLink>
           </LinksColumn>
@@ -41,7 +35,6 @@ const Footer = () => (
         </LinksWrapper>
       </LinksContainer>
       <LinksContainer>
-        <SectionTitle>Termos e políticas</SectionTitle>
         <LinksColumn>
           <FooterLink to="/">termos de publicação</FooterLink>
           <FooterLink to="/">termos de serviço</FooterLink>
