@@ -69,7 +69,7 @@ const ProductFormSpecs = ({ currentStep, totalSteps, setActualStep }) => {
         );
       } else {
         specs.push(spec);
-        setSpecTrigger(!specTrigger);
+        setSpec('');
       }
     } else {
       showToast(messageId, 'warn', message);
@@ -116,7 +116,7 @@ const ProductFormSpecs = ({ currentStep, totalSteps, setActualStep }) => {
 
   useEffect(() => {
     setIsValid(validateSpec);
-  }, [spec, specs.length]);
+  }, [spec]);
 
   useEffect(() => {}, [specTrigger]);
 
