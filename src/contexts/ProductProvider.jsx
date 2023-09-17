@@ -1,4 +1,5 @@
 import { useState, createContext, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import PreLoader from '../components/PreLoader';
@@ -18,6 +19,7 @@ export const ProductProvider = ({ children }) => {
   const { sessionUser, saveLocalStorage, deleteLocalStorage } =
     useContext(AuthContext);
   const posting = {};
+  const navigate = useNavigate();
 
   const getUserPostings = async () => {
     setLoading(true);
@@ -25,7 +27,7 @@ export const ProductProvider = ({ children }) => {
     try {
       const { data, error } = await supabase
         .from('produtos')
-        .select('*, produto_informacoes(*), produto_imagens(*)')
+        .select('*, produto_imagens(*), produto_informacoes(*)')
         .eq('id_usuario', sessionUser.id)
         .order('created_at', { ascending: true });
       if (error) {
@@ -37,6 +39,18 @@ export const ProductProvider = ({ children }) => {
     }
     deleteLocalStorage();
     setLoading(false);
+  };
+
+  const getUserPost = (postingId) => {
+    if (sessionUser) {
+      if (userPostings && userPostings.length > 0) {
+        const post = userPostings.find((p) => p.id === postingId);
+        return post || null;
+      }
+      return null;
+    }
+    navigate('/');
+    return null;
   };
 
   const insertSpecs = async (productId, specs) => {
@@ -189,6 +203,7 @@ export const ProductProvider = ({ children }) => {
     posting,
     userPostings,
     insertNewProduct,
+    getUserPost,
   };
 
   return (
