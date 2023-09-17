@@ -47,7 +47,9 @@ const UserProducts = () => {
     navigate('/anunciar-produto');
   };
 
-  const editPosting = () => {};
+  const editPosting = (postingId) => {
+    navigate(`/editar-anuncio/${postingId}`);
+  };
 
   const previousPage = () => {
     if (currentPage > 1) {
@@ -79,7 +81,7 @@ const UserProducts = () => {
           width="255px"
           height="25px"
           text="Editar anúncio"
-          onClick={editPosting}
+          onClick={() => editPosting(posting.id)}
         />
       </PostingContainer>
     ));
