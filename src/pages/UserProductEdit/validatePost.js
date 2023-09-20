@@ -39,15 +39,18 @@ export const validateData = (
 
 export const validateSpec = (spec, setMessage, setMessageId) => {
   const regex = /^(?!.*\s{2})[^\s].{0,48}[^\s]$/;
+
   if (spec === '') {
     setMessage('Por favor preencha o campo de especificação');
     setMessageId('product-spec-field-warn');
     return false;
   }
+
   if (!regex.test(spec)) {
     setMessage('Especificação possui um formato inválido!');
     setMessageId('product-form-specs-validate-warn');
     return false;
   }
+
   return true;
 };
