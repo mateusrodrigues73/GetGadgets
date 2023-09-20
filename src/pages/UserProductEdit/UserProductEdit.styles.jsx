@@ -152,3 +152,54 @@ export const AddSpecInputContainer = styled.div`
   flex-direction: column;
   row-gap: 15px;
 `;
+
+export const CoverImage = styled.img`
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  object-position: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+export const ImagesContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+export const ImagesWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 10px;
+  position: relative;
+  margin-bottom: 15px;
+`;
+
+export const Image = styled.img`
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  object-position: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+export const DeleteImageIcon = styled(DeleteFilled)`
+  font-size: 20px;
+  color: ${({ theme }) => theme.colors.contrastLight};
+  position: absolute;
+  bottom: -25px;
+
+  &:hover {
+    font-size: 24px;
+    cursor: pointer;
+  }
+`;
