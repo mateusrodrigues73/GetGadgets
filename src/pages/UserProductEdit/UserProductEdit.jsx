@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
@@ -20,6 +20,7 @@ import {
 } from './UserProductEdit.styles';
 
 import GradientButton from '../../components/GradientButton';
+import CautionButton from '../../components/CautionButton';
 
 import showToast from '../../utils/showToasts';
 
@@ -39,6 +40,7 @@ const UserProductEdit = () => {
   const [preco, setPreco] = useState(null);
   const [quantidade, setQuantidade] = useState('');
   const [spec, setSpec] = useState('');
+  const [indexSpec, setIndexSpec] = useState(null);
   const [specs, setSpecs] = useState([]);
   const [specTrigger, setSpecTrigger] = useState(false);
   const [loadedData, setLoadedData] = useState(false);
@@ -48,6 +50,7 @@ const UserProductEdit = () => {
   const linksString = '/\\Home|/seus-anuncios\\Seus anúncios';
   const { id } = useParams();
   const postingId = Number(id);
+  const addSpecInputRef = useRef(null);
   const { userPostings, getUserPost } = useContext(ProductContext);
 
   const changeCategory = () => {
@@ -150,8 +153,24 @@ const UserProductEdit = () => {
   };
 
   const deleteSpec = (index) => {
-    specs.splice(index, 1);
-    setSpecTrigger(!specTrigger);
+    if (indexSpec !== null && indexSpec !== index) {
+      showToast(
+        'post-delit-spec-before-edit-warn',
+        'warn',
+        'Você deve finalizar e edição da informação atual antes de excluir outra'
+      );
+    } else {
+      specs.splice(index, 1);
+      setIndexSpec(null);
+      setSpec('');
+      addSpecInputRef.current.blur();
+      setSpecTrigger(!specTrigger);
+    }
+  };
+
+  const calcelEditSpec = () => {
+    setIndexSpec(null);
+    setSpec('');
   };
 
   const addSpec = () => {
@@ -163,7 +182,12 @@ const UserProductEdit = () => {
           'Você já atingiu o limite de 10 especificações!'
         );
       } else {
-        specs.push(spec);
+        if (indexSpec) {
+          specs[indexSpec] = spec;
+          setIndexSpec(null);
+        } else {
+          specs.push(spec);
+        }
         setSpec('');
         setIsValid(false);
       }
@@ -172,13 +196,24 @@ const UserProductEdit = () => {
     }
   };
 
+  const editSpec = (index) => {
+    setIndexSpec(index);
+    setSpec(specs[index]);
+    addSpecInputRef.current.focus();
+  };
+
   const renderSpecs = () => (
     <SpecsContainer>
       {specs.map((s, index) => (
-        <SpecWrapper key={index}>
+        <SpecWrapper
+          key={index}
+          edit={indexSpec === index ? 1 : 0}
+          onClick={() => editSpec(index)}
+        >
           <SpecText>{s}</SpecText>
           <DeleteIcon
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               deleteSpec(index);
             }}
           />
@@ -194,6 +229,16 @@ const UserProductEdit = () => {
       return;
     }
     setSpec(value);
+    if (indexSpec) {
+      specs[indexSpec] = value;
+    }
+  };
+
+  const isSpecsChanged = () => {
+    if (specs.length !== post.produto_informacoes.length) {
+      return true;
+    }
+    return specs.every((s, i) => s !== post.produto_informacoes[i].informacao);
   };
 
   const updateSpecs = () => {
@@ -204,8 +249,17 @@ const UserProductEdit = () => {
         'Você deve adicionar no mínimo 3 especificações!'
       );
     } else {
-      // TODO: atualizar specs do post na base de dados
-      showToast('succes', 'success', 'success');
+      const specsChanged = isSpecsChanged();
+      if (specsChanged) {
+        // TODO: atualizar specs do post na base de dados
+        showToast('succes', 'success', 'success');
+      } else {
+        showToast(
+          'post-edit-specs-no-edit-warn',
+          'warn',
+          'Nada a ser alterado!'
+        );
+      }
     }
   };
 
@@ -218,6 +272,7 @@ const UserProductEdit = () => {
     setQuantidade(post.quantidade);
     setSpecs(post.produto_informacoes.map((i) => i.informacao));
     setLoadedData(true);
+    setIsValid(false);
   };
 
   useEffect(() => {
@@ -226,11 +281,14 @@ const UserProductEdit = () => {
 
   useEffect(() => {
     if (post !== null) {
+      // TODO: remover console
       // eslint-disable-next-line no-console
       console.log(post);
       loadData();
     }
   }, [post]);
+
+  useEffect(() => {}, [indexSpec]);
 
   useEffect(() => {
     setIsValid(
@@ -309,13 +367,23 @@ const UserProductEdit = () => {
                 placeholder="Adicionar especificação"
                 value={spec}
                 onChange={handleSpecChange}
+                ref={addSpecInputRef}
               />
               <GradientButton
                 width="100%"
                 height="30px"
-                text="Adicionar"
+                text={indexSpec ? 'Editar ' : 'Adicionar'}
                 onClick={addSpec}
               />
+              {indexSpec !== null && (
+                <CautionButton
+                  width="100%"
+                  height="30px"
+                  text="Cancelar"
+                  onClick={calcelEditSpec}
+                  icon={false}
+                />
+              )}
               <GradientButton
                 width="100%"
                 height="30px"
