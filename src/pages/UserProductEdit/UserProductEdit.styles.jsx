@@ -106,9 +106,19 @@ export const SpecWrapper = styled.div`
   display: flex;
   align-items: center;
   padding-left: 15px;
-  background-color: ${({ theme }) => theme.colors.secondaryLight};
+  background-color: ${({ edit }) =>
+    edit === 1
+      ? ({ theme }) => theme.colors.primary
+      : ({ theme }) => theme.colors.secondaryLight};
   border-radius: 10px 0px;
+  border: ${({ edit, theme }) =>
+    edit === 1 ? `1px solid ${theme.colors.neutralWith}` : 'none'};
   position: relative;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primary};
+    cursor: pointer;
+  }
 `;
 
 export const SpecText = styled.p`
