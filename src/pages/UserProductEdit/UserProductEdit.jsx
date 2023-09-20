@@ -17,12 +17,18 @@ import {
   DeleteIcon,
   Line,
   AddSpecInputContainer,
+  CoverImage,
+  ImagesContainer,
+  ImagesWrapper,
+  Image,
+  DeleteImageIcon,
 } from './UserProductEdit.styles';
 
 import GradientButton from '../../components/GradientButton';
 import CautionButton from '../../components/CautionButton';
 
 import showToast from '../../utils/showToasts';
+import imageValidate from '../../utils/imageValidate';
 
 import productCategories from '../../data/productCategories';
 
@@ -42,7 +48,9 @@ const UserProductEdit = () => {
   const [spec, setSpec] = useState('');
   const [indexSpec, setIndexSpec] = useState(null);
   const [specs, setSpecs] = useState([]);
-  const [specTrigger, setSpecTrigger] = useState(false);
+  const [editTrigger, setEditTrigger] = useState(false);
+  const [capa, setCapa] = useState(null);
+  const [imagens, setImagens] = useState(null);
   const [loadedData, setLoadedData] = useState(false);
   const [message, setMessage] = useState('');
   const [messageId, setMessageId] = useState('');
@@ -164,7 +172,7 @@ const UserProductEdit = () => {
       setIndexSpec(null);
       setSpec('');
       addSpecInputRef.current.blur();
-      setSpecTrigger(!specTrigger);
+      setEditTrigger(!editTrigger);
     }
   };
 
@@ -263,6 +271,104 @@ const UserProductEdit = () => {
     }
   };
 
+  const changeCover = () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (imageValidate(file)) {
+        setCapa(file);
+      }
+    });
+    fileInput.click();
+  };
+
+  const changeImage = (index) => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (imageValidate(file)) {
+        imagens[index] = file;
+        setEditTrigger(!editTrigger);
+      }
+    });
+    fileInput.click();
+  };
+
+  const deleteImage = (index) => {
+    imagens.splice(index, 1);
+    setEditTrigger(!editTrigger);
+  };
+
+  const addImage = () => {
+    if (imagens.length < 5) {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (imageValidate(file)) {
+          imagens.push(file);
+          setEditTrigger(!editTrigger);
+        }
+      });
+      fileInput.click();
+    } else {
+      showToast(
+        'product-form-specs-limit-warn',
+        'warn',
+        'Você já atingiu o limite de 5 imagens!'
+      );
+    }
+  };
+
+  const renderImages = () => (
+    <ImagesContainer>
+      {imagens.map((i, index) => (
+        <ImagesWrapper key={index}>
+          <Image
+            src={typeof i === 'string' ? i : URL.createObjectURL(i)}
+            alt={`Imagem ${i + 1}`}
+            onClick={() => changeImage(index)}
+          />
+          <DeleteImageIcon
+            onClick={() => {
+              deleteImage(index);
+            }}
+          />
+        </ImagesWrapper>
+      ))}
+    </ImagesContainer>
+  );
+
+  const updateImages = () => {
+    const postImages = post.produto_imagens[0];
+    const initialCover = postImages.capa;
+    const initialImages = [
+      postImages.imagem1,
+      postImages.imagem2,
+      postImages.imagem3,
+      postImages.imagem4,
+      postImages.imagem5,
+    ].filter((image) => image !== null);
+    const coverChanged = initialCover !== capa;
+    const imagesChanged =
+      JSON.stringify(initialImages) !== JSON.stringify(imagens);
+    if (!coverChanged && !imagesChanged) {
+      showToast(
+        'post-edit-images-no-edit-warn',
+        'warn',
+        'Nada a ser alterado!'
+      );
+    } else {
+      // TODO: atualizar imagens do post na base de dados
+      showToast('succes', 'success', 'success');
+    }
+  };
+
   const loadData = () => {
     setCategoria(post.categoria);
     setTitulo(post.titulo);
@@ -271,6 +377,16 @@ const UserProductEdit = () => {
     setPreco(post.preco);
     setQuantidade(post.quantidade);
     setSpecs(post.produto_informacoes.map((i) => i.informacao));
+    const postImages = post.produto_imagens[0];
+    const arrayOfImages = [
+      postImages.imagem1,
+      postImages.imagem2,
+      postImages.imagem3,
+      postImages.imagem4,
+      postImages.imagem5,
+    ].filter((image) => image !== null);
+    setImagens(arrayOfImages);
+    setCapa(postImages.capa);
     setLoadedData(true);
     setIsValid(false);
   };
@@ -391,6 +507,35 @@ const UserProductEdit = () => {
                 onClick={updateSpecs}
               />
             </AddSpecInputContainer>
+          </DataContainer>
+          <DataContainer>
+            <Title>Capa do anúncio</Title>
+            {capa && (
+              <CoverImage
+                src={
+                  typeof capa === 'string' ? capa : URL.createObjectURL(capa)
+                }
+                alt="Capa do anúncio"
+                onClick={changeCover}
+              />
+            )}
+            <Title>Imagens do produto</Title>
+            {imagens && imagens.length === 0 && (
+              <Title>Seu produto não possui imagens</Title>
+            )}
+            {imagens && imagens.length > 0 && renderImages()}
+            <GradientButton
+              width="100%"
+              height="30px"
+              text="Adicionar imagem"
+              onClick={addImage}
+            />
+            <GradientButton
+              width="100%"
+              height="30px"
+              text="Salvar alterações"
+              onClick={updateImages}
+            />
           </DataContainer>
         </>
       )}
