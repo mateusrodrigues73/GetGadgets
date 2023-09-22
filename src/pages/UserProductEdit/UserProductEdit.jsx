@@ -66,6 +66,7 @@ const UserProductEdit = () => {
     updatePostData,
     updatePostSpecs,
     updatePostCover,
+    deletePostImage,
     postToast,
     setPostToast,
   } = useContext(ProductContext);
@@ -320,9 +321,13 @@ const UserProductEdit = () => {
     fileInput.click();
   };
 
-  const deleteImage = (index) => {
-    imagens.splice(index, 1);
-    setEditTrigger(!editTrigger);
+  const deleteImage = async (data, imageUrl) => {
+    const key = Object.keys(data)[0];
+    const nullData = data;
+    nullData[key] = null;
+    setIsLoading(true);
+    await deletePostImage(nullData, imageUrl, postingId);
+    setIsLoading(false);
   };
 
   const addImage = () => {
@@ -349,20 +354,23 @@ const UserProductEdit = () => {
 
   const renderImages = () => (
     <ImagesContainer>
-      {imagens.map((i, index) => (
-        <ImagesWrapper key={index}>
-          <Image
-            src={typeof i === 'string' ? i : URL.createObjectURL(i)}
-            alt={`Imagem ${i + 1}`}
-            onClick={() => changeImage(index)}
-          />
-          <DeleteImageIcon
-            onClick={() => {
-              deleteImage(index);
-            }}
-          />
-        </ImagesWrapper>
-      ))}
+      {imagens.map(
+        (i, index) =>
+          Object.values(i)[0] !== null && (
+            <ImagesWrapper key={index}>
+              <Image
+                src={Object.values(i)[0]}
+                alt={`Imagem ${index + 1}`}
+                onClick={() => changeImage(index)}
+              />
+              <DeleteImageIcon
+                onClick={() => {
+                  deleteImage(i, Object.values(i)[0]);
+                }}
+              />
+            </ImagesWrapper>
+          )
+      )}
     </ImagesContainer>
   );
 
@@ -401,13 +409,20 @@ const UserProductEdit = () => {
     setSpecs(post.produto_informacoes.map((i) => i.informacao));
     const postImages = post.produto_imagens[0];
     const arrayOfImages = [
-      postImages.imagem1,
-      postImages.imagem2,
-      postImages.imagem3,
-      postImages.imagem4,
-      postImages.imagem5,
+      { imagem1: postImages.imagem1 },
+      { imagem2: postImages.imagem2 },
+      { imagem3: postImages.imagem3 },
+      { imagem4: postImages.imagem4 },
+      { imagem5: postImages.imagem5 },
     ].filter((image) => image !== null);
-    setImagens(arrayOfImages);
+    const isAllImagesNull = arrayOfImages.every(
+      (item, index) => item[`imagem${index + 1}`] === null
+    );
+    if (isAllImagesNull) {
+      setImagens(null);
+    } else {
+      setImagens(arrayOfImages);
+    }
     setCapa(postImages.capa);
     setLoadedData(true);
     setIsValid(false);
@@ -544,10 +559,8 @@ const UserProductEdit = () => {
               />
             )}
             <Title>Imagens do produto</Title>
-            {imagens && imagens.length === 0 && (
-              <Title>Seu produto não possui imagens</Title>
-            )}
-            {imagens && imagens.length > 0 && renderImages()}
+            {imagens === null && <Title>Seu produto não possui imagens</Title>}
+            {imagens !== null && imagens.length > 0 && renderImages()}
             <GradientButton
               width="100%"
               height="30px"

@@ -287,6 +287,36 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const deletePostImage = async (value, imageUrl, productId) => {
+    saveLocalStorage();
+    const splitedUrl = imageUrl.split('/');
+    const fileName = splitedUrl[splitedUrl.length - 1];
+    try {
+      await deleteImage(`${sessionUser.id}/${productId}`, fileName);
+      const updateResult = await updatePostImages(value, productId);
+      if (!updateResult) {
+        throw new Error();
+      }
+      const toast = {
+        id: 'delete-product-image-success',
+        type: 'success',
+        message: 'Imagem excluída com sucesso',
+      };
+      setPostToast(toast);
+      getUserPostings();
+      deleteLocalStorage();
+      return true;
+    } catch (error) {
+      showToast(
+        'delete-product-iamge-error',
+        'error',
+        'Um erro ocorreu ao excluir sua imagem! Tente novamente'
+      );
+      deleteLocalStorage();
+      return false;
+    }
+  };
+
   const getLastProducts = async () => {
     setLoading(true);
     try {
@@ -332,6 +362,7 @@ export const ProductProvider = ({ children }) => {
     updatePostData,
     updatePostSpecs,
     updatePostCover,
+    deletePostImage,
     postToast,
     setPostToast,
   };
