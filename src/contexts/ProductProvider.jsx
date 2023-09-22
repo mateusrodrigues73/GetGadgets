@@ -14,6 +14,7 @@ export const ProductContext = createContext({});
 export const ProductProvider = ({ children }) => {
   const [lastProducts, setLastproducts] = useState(null);
   const [userPostings, setUserPostings] = useState(null);
+  const [postToast, setPostToast] = useState(null);
   const [loading, setLoading] = useState(true);
   const { supabase } = useContext(SupabaseContext);
   const { sessionUser, saveLocalStorage, deleteLocalStorage } =
@@ -162,6 +163,70 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const updatePostData = async (values) => {
+    saveLocalStorage();
+    try {
+      const { error } = await supabase
+        .from('produtos')
+        .update(values)
+        .eq('id_usuario', sessionUser.id);
+      if (error) {
+        throw new Error(error.message);
+      }
+      const toast = {
+        id: 'update-product-data-success',
+        type: 'success',
+        message: 'Dados do anúncio alterados alterados com sucesso',
+      };
+      setPostToast(toast);
+      getUserPostings();
+      deleteLocalStorage();
+      return true;
+    } catch (error) {
+      showToast(
+        'update-product-data-error',
+        'error',
+        'Um erro ocorreu ao atualizar seu anúncio! Tente novamente'
+      );
+      deleteLocalStorage();
+      return false;
+    }
+  };
+
+  const updatePostSpecs = async (values, productId) => {
+    saveLocalStorage();
+    try {
+      const { error } = await supabase
+        .from('produto_informacoes')
+        .delete()
+        .eq('produto_id', productId);
+      if (error) {
+        throw new Error(error.message);
+      }
+      const result = await insertSpecs(productId, values);
+      if (!result) {
+        throw new Error();
+      }
+      const toast = {
+        id: 'update-product-specs-success',
+        type: 'success',
+        message: 'Informações do anúncio alteradas alterados com sucesso',
+      };
+      setPostToast(toast);
+      getUserPostings();
+      deleteLocalStorage();
+      return true;
+    } catch (error) {
+      showToast(
+        'update-product-specs-error',
+        'error',
+        'Um erro ocorreu ao atualizar seu anúncio! Tente novamente'
+      );
+      deleteLocalStorage();
+      return false;
+    }
+  };
+
   const getLastProducts = async () => {
     setLoading(true);
     try {
@@ -204,6 +269,10 @@ export const ProductProvider = ({ children }) => {
     userPostings,
     insertNewProduct,
     getUserPost,
+    updatePostData,
+    updatePostSpecs,
+    postToast,
+    setPostToast,
   };
 
   return (

@@ -1,9 +1,6 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Breadcrumbs from '../../components/Breadcrumbs';
-import Loader from '../../components/Loader';
-
 import {
   DataContainer,
   Title,
@@ -24,8 +21,10 @@ import {
   DeleteImageIcon,
 } from './UserProductEdit.styles';
 
+import Breadcrumbs from '../../components/Breadcrumbs';
 import GradientButton from '../../components/GradientButton';
 import CautionButton from '../../components/CautionButton';
+import Loader from '../../components/Loader';
 
 import showToast from '../../utils/showToasts';
 import imageValidate from '../../utils/imageValidate';
@@ -51,15 +50,24 @@ const UserProductEdit = () => {
   const [editTrigger, setEditTrigger] = useState(false);
   const [capa, setCapa] = useState(null);
   const [imagens, setImagens] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [loadedData, setLoadedData] = useState(false);
   const [message, setMessage] = useState('');
   const [messageId, setMessageId] = useState('');
   const [isValid, setIsValid] = useState(false);
+  const [isValidSpecs, setIsValidSpecs] = useState(false);
   const linksString = '/\\Home|/seus-anuncios\\Seus anúncios';
   const { id } = useParams();
   const postingId = Number(id);
   const addSpecInputRef = useRef(null);
-  const { userPostings, getUserPost } = useContext(ProductContext);
+  const {
+    userPostings,
+    getUserPost,
+    updatePostData,
+    updatePostSpecs,
+    postToast,
+    setPostToast,
+  } = useContext(ProductContext);
 
   const changeCategory = () => {
     setPickCategories(true);
@@ -142,8 +150,9 @@ const UserProductEdit = () => {
     setQuantidade(inputValue);
   };
 
-  const updateData = () => {
+  const updateData = async () => {
     if (
+      post.categoria === categoria &&
       post.titulo === titulo &&
       post.modelo === modelo &&
       post.marca === marca &&
@@ -152,8 +161,17 @@ const UserProductEdit = () => {
     ) {
       showToast('post-edit-data-equal-warn', 'warn', 'Nada a ser alterado!');
     } else if (isValid) {
-      // TODO: atualizar dados do post na base de dados
-      showToast('succes', 'success', 'success');
+      const postData = {
+        categoria,
+        titulo,
+        marca,
+        modelo,
+        preco,
+        quantidade,
+      };
+      setIsLoading(true);
+      await updatePostData(postData);
+      setIsLoading(false);
       setIsValid(false);
     } else {
       showToast(messageId, 'warn', message);
@@ -182,7 +200,7 @@ const UserProductEdit = () => {
   };
 
   const addSpec = () => {
-    if (isValid) {
+    if (isValidSpecs) {
       if (specs.length === 10) {
         showToast(
           'post-edit-specs-max-warn',
@@ -197,7 +215,7 @@ const UserProductEdit = () => {
           specs.push(spec);
         }
         setSpec('');
-        setIsValid(false);
+        setIsValidSpecs(false);
       }
     } else {
       showToast(messageId, 'warn', message);
@@ -249,7 +267,7 @@ const UserProductEdit = () => {
     return specs.every((s, i) => s !== post.produto_informacoes[i].informacao);
   };
 
-  const updateSpecs = () => {
+  const updateSpecs = async () => {
     if (specs.length < 3) {
       showToast(
         'post-edit-specs-min-warn',
@@ -259,8 +277,9 @@ const UserProductEdit = () => {
     } else {
       const specsChanged = isSpecsChanged();
       if (specsChanged) {
-        // TODO: atualizar specs do post na base de dados
-        showToast('succes', 'success', 'success');
+        setIsLoading(true);
+        await updatePostSpecs(specs, postingId);
+        setIsLoading(false);
       } else {
         showToast(
           'post-edit-specs-no-edit-warn',
@@ -393,6 +412,10 @@ const UserProductEdit = () => {
 
   useEffect(() => {
     setPost(getUserPost(postingId));
+    if (postToast) {
+      showToast(postToast.id, postToast.type, postToast.message);
+      setPostToast(null);
+    }
   }, [userPostings]);
 
   useEffect(() => {
@@ -418,10 +441,10 @@ const UserProductEdit = () => {
         setMessageId
       )
     );
-  }, [titulo, marca, modelo, preco, quantidade]);
+  }, [categoria, titulo, marca, modelo, preco, quantidade]);
 
   useEffect(() => {
-    setIsValid(validateSpec(spec, setMessage, setMessageId));
+    setIsValidSpecs(validateSpec(spec, setMessage, setMessageId));
   }, [spec]);
 
   return (
@@ -541,6 +564,7 @@ const UserProductEdit = () => {
       )}
       {pickCategories && showCategories()}
       {!loadedData && <Loader />}
+      {isLoading && <Loader />}
     </>
   );
 };
