@@ -227,6 +227,66 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const deleteImage = async (folder, fileName) => {
+    await supabase.storage.from('produtos').remove([`${folder}/${fileName}`]);
+  };
+
+  const updatePostImages = async (values, productId) => {
+    const { error } = await supabase
+      .from('produto_imagens')
+      .update(values)
+      .eq('id_produto', productId)
+      .select();
+    if (error) {
+      return false;
+    }
+    return true;
+  };
+
+  const updatePostCover = async (file, coverUrl, productId) => {
+    saveLocalStorage();
+    const splitedUrl = coverUrl.split('/');
+    const oldFileName = splitedUrl[splitedUrl.length - 1];
+    try {
+      await deleteImage(`${sessionUser.id}/${productId}`, oldFileName);
+      const { error } = await supabase.storage
+        .from('produtos')
+        .upload(`${sessionUser.id}/${productId}/capa-${file.name}`, file, {
+          cacheControl: '3600',
+          upsert: true,
+        });
+      const baseUrl = `https://apovoiknbwujzmlwpvzo.supabase.co/storage/v1/object/public/produtos/`;
+      const imageUrl = `${baseUrl}${sessionUser.id}/${productId}/capa-${file.name}`;
+      const updateResult = await updatePostImages(
+        { capa: imageUrl },
+        productId
+      );
+      if (!updateResult) {
+        throw new Error();
+      }
+      if (error) {
+        throw new Error(error.message);
+      }
+      const toast = {
+        id: 'update-product-cover-success',
+        type: 'success',
+        message: 'Capa do anúncio alterada com sucesso',
+      };
+      setPostToast(toast);
+      getUserPostings();
+      deleteLocalStorage();
+      return true;
+    } catch (error) {
+      showToast(
+        'update-product-cover-error',
+        'error',
+        'Um erro ocorreu ao atualizar seu anúncio! Tente novamente'
+      );
+      deleteLocalStorage();
+      return false;
+    }
+  };
+
   const getLastProducts = async () => {
     setLoading(true);
     try {
@@ -271,6 +331,7 @@ export const ProductProvider = ({ children }) => {
     getUserPost,
     updatePostData,
     updatePostSpecs,
+    updatePostCover,
     postToast,
     setPostToast,
   };

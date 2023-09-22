@@ -65,6 +65,7 @@ const UserProductEdit = () => {
     getUserPost,
     updatePostData,
     updatePostSpecs,
+    updatePostCover,
     postToast,
     setPostToast,
   } = useContext(ProductContext);
@@ -290,14 +291,16 @@ const UserProductEdit = () => {
     }
   };
 
-  const changeCover = () => {
+  const changeCover = async () => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
     fileInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (imageValidate(file)) {
-        setCapa(file);
+        setIsLoading(true);
+        await updatePostCover(file, capa, postingId);
+        setIsLoading(false);
       }
     });
     fileInput.click();
@@ -535,9 +538,7 @@ const UserProductEdit = () => {
             <Title>Capa do anúncio</Title>
             {capa && (
               <CoverImage
-                src={
-                  typeof capa === 'string' ? capa : URL.createObjectURL(capa)
-                }
+                src={capa}
                 alt="Capa do anúncio"
                 onClick={changeCover}
               />
