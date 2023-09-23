@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   DataContainer,
@@ -24,6 +24,7 @@ import {
 import Breadcrumbs from '../../components/Breadcrumbs';
 import GradientButton from '../../components/GradientButton';
 import CautionButton from '../../components/CautionButton';
+import Alert from '../../components/Alert';
 import Loader from '../../components/Loader';
 
 import showToast from '../../utils/showToasts';
@@ -50,6 +51,8 @@ const UserProductEdit = () => {
   const [editTrigger, setEditTrigger] = useState(false);
   const [capa, setCapa] = useState(null);
   const [imagens, setImagens] = useState(null);
+  const [alert, setAlert] = useState('');
+  const [isAlerting, setIsAlerting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loadedData, setLoadedData] = useState(false);
   const [message, setMessage] = useState('');
@@ -60,13 +63,17 @@ const UserProductEdit = () => {
   const { id } = useParams();
   const postingId = Number(id);
   const addSpecInputRef = useRef(null);
+  const navigate = useNavigate();
   const {
     userPostings,
     getUserPost,
     updatePostData,
     updatePostSpecs,
     updatePostCover,
+    uploadPostImage,
+    updatePostImage,
     deletePostImage,
+    deletePost,
     postToast,
     setPostToast,
   } = useContext(ProductContext);
@@ -196,6 +203,7 @@ const UserProductEdit = () => {
     }
   };
 
+  // TODO: voltar ao estado anterior
   const calcelEditSpec = () => {
     setIndexSpec(null);
     setSpec('');
@@ -307,15 +315,16 @@ const UserProductEdit = () => {
     fileInput.click();
   };
 
-  const changeImage = (index) => {
+  const changeImage = (image) => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
     fileInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (imageValidate(file)) {
-        imagens[index] = file;
-        setEditTrigger(!editTrigger);
+        setIsLoading(true);
+        await updatePostImage(file, image, postingId);
+        setIsLoading(false);
       }
     });
     fileInput.click();
@@ -331,15 +340,19 @@ const UserProductEdit = () => {
   };
 
   const addImage = () => {
-    if (imagens.length < 5) {
+    if (
+      imagens === null ||
+      !imagens.every((item) => Object.values(item)[0] !== null)
+    ) {
       const fileInput = document.createElement('input');
       fileInput.type = 'file';
       fileInput.accept = 'image/*';
       fileInput.addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (imageValidate(file)) {
-          imagens.push(file);
-          setEditTrigger(!editTrigger);
+          setIsLoading(true);
+          await uploadPostImage(file, imagens, postingId);
+          setIsLoading(false);
         }
       });
       fileInput.click();
@@ -361,7 +374,7 @@ const UserProductEdit = () => {
               <Image
                 src={Object.values(i)[0]}
                 alt={`Imagem ${index + 1}`}
-                onClick={() => changeImage(index)}
+                onClick={() => changeImage(i)}
               />
               <DeleteImageIcon
                 onClick={() => {
@@ -374,29 +387,27 @@ const UserProductEdit = () => {
     </ImagesContainer>
   );
 
-  const updateImages = () => {
-    const postImages = post.produto_imagens[0];
-    const initialCover = postImages.capa;
-    const initialImages = [
-      postImages.imagem1,
-      postImages.imagem2,
-      postImages.imagem3,
-      postImages.imagem4,
-      postImages.imagem5,
-    ].filter((image) => image !== null);
-    const coverChanged = initialCover !== capa;
-    const imagesChanged =
-      JSON.stringify(initialImages) !== JSON.stringify(imagens);
-    if (!coverChanged && !imagesChanged) {
-      showToast(
-        'post-edit-images-no-edit-warn',
-        'warn',
-        'Nada a ser alterado!'
-      );
-    } else {
-      // TODO: atualizar imagens do post na base de dados
-      showToast('succes', 'success', 'success');
-    }
+  const alertDeletePost = async () => {
+    setAlert(
+      'Tem certeza que deseja excluir seu anúncio? Esta ação é permanente'
+    );
+    setIsAlerting(true);
+  };
+
+  const hardDeletePost = async () => {
+    setIsAlerting(false);
+    setIsLoading(true);
+    await deletePost(postingId);
+    setIsLoading(false);
+  };
+
+  const cancelDeletePost = () => {
+    setIsAlerting(false);
+    setAlert('');
+  };
+
+  const goBack = () => {
+    navigate('/seus-anuncios');
   };
 
   const loadData = () => {
@@ -438,9 +449,6 @@ const UserProductEdit = () => {
 
   useEffect(() => {
     if (post !== null) {
-      // TODO: remover console
-      // eslint-disable-next-line no-console
-      console.log(post);
       loadData();
     }
   }, [post]);
@@ -567,14 +575,31 @@ const UserProductEdit = () => {
               text="Adicionar imagem"
               onClick={addImage}
             />
-            <GradientButton
+          </DataContainer>
+          <DataContainer>
+            <CautionButton
               width="100%"
               height="30px"
-              text="Salvar alterações"
-              onClick={updateImages}
+              text="Deletar anúncio"
+              onClick={alertDeletePost}
+              icon
+            />
+            <CautionButton
+              width="100%"
+              height="30px"
+              text="Voltar"
+              onClick={goBack}
+              icon={false}
             />
           </DataContainer>
         </>
+      )}
+      {isAlerting && (
+        <Alert
+          message={alert}
+          onCancel={cancelDeletePost}
+          onContinue={hardDeletePost}
+        />
       )}
       {pickCategories && showCategories()}
       {!loadedData && <Loader />}

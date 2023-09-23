@@ -273,14 +273,129 @@ export const ProductProvider = ({ children }) => {
         message: 'Capa do anúncio alterada com sucesso',
       };
       setPostToast(toast);
-      getUserPostings();
       deleteLocalStorage();
+      getUserPostings();
       return true;
     } catch (error) {
       showToast(
         'update-product-cover-error',
         'error',
-        'Um erro ocorreu ao atualizar seu anúncio! Tente novamente'
+        'Um erro ocorreu ao atualizar a capa do anúncio! Tente novamente'
+      );
+      deleteLocalStorage();
+      return false;
+    }
+  };
+
+  const updatePostImage = async (file, data, productId) => {
+    saveLocalStorage();
+    const key = Object.keys(data);
+    const imageX = key[0];
+    const imageUrl = data[imageX];
+    const splitedUrl = imageUrl.split('/');
+    const oldFileName = splitedUrl[splitedUrl.length - 1];
+    try {
+      await deleteImage(`${sessionUser.id}/${productId}`, oldFileName);
+      const { error } = await supabase.storage
+        .from('produtos')
+        .upload(`${sessionUser.id}/${productId}/${imageX}-${file.name}`, file, {
+          cacheControl: '3600',
+          upsert: true,
+        });
+      if (error) {
+        throw new Error(error.message);
+      }
+      const baseUrl = `https://apovoiknbwujzmlwpvzo.supabase.co/storage/v1/object/public/produtos/`;
+      const newUrl = `${baseUrl}${sessionUser.id}/${productId}/${imageX}-${file.name}`;
+      const newData = { [imageX]: newUrl };
+      const updateResult = await updatePostImages(newData, productId);
+      if (!updateResult) {
+        throw new Error();
+      }
+      const toast = {
+        id: 'update-product-image-success',
+        type: 'success',
+        message: 'Imagem do anúncio alterada com sucesso',
+      };
+      deleteLocalStorage();
+      setPostToast(toast);
+      getUserPostings();
+      return true;
+    } catch (error) {
+      showToast(
+        'update-product-image-error',
+        'error',
+        'Um erro ocorreu ao atualizar a imagem! Tente novamente'
+      );
+      deleteLocalStorage();
+      return false;
+    }
+  };
+
+  const uploadPostImage = async (file, data, productId) => {
+    saveLocalStorage();
+    try {
+      if (data === null) {
+        const { error } = await supabase.storage
+          .from('produtos')
+          .upload(`${sessionUser.id}/${productId}/imagem1-${file.name}`, file, {
+            upsert: true,
+          });
+        if (error) {
+          throw new Error(error);
+        }
+        const baseUrl = `https://apovoiknbwujzmlwpvzo.supabase.co/storage/v1/object/public/produtos/`;
+        const imageUrl = `${baseUrl}${sessionUser.id}/${productId}/imagem1-${file.name}`;
+        const updateResult = await updatePostImages(
+          { imagem1: imageUrl },
+          productId
+        );
+        if (!updateResult) {
+          throw new Error();
+        }
+      } else {
+        let nextImagePosition = 1;
+        for (const item of data) {
+          if (item[`imagem${nextImagePosition}`] === null) {
+            break;
+          }
+          nextImagePosition += 1;
+        }
+        const { error } = await supabase.storage
+          .from('produtos')
+          .upload(
+            `${sessionUser.id}/${productId}/imagem${nextImagePosition}-${file.name}`,
+            file,
+            {
+              upsert: true,
+            }
+          );
+        if (error) {
+          throw new Error(error);
+        }
+        const baseUrl = `https://apovoiknbwujzmlwpvzo.supabase.co/storage/v1/object/public/produtos/`;
+        const imageUrl = `${baseUrl}${sessionUser.id}/${productId}/imagem${nextImagePosition}-${file.name}`;
+        const newData = {};
+        newData[`imagem${nextImagePosition}`] = imageUrl;
+        const updateResult = await updatePostImages(newData, productId);
+        if (!updateResult) {
+          throw new Error();
+        }
+      }
+      const toast = {
+        id: 'upload-product-image-success',
+        type: 'success',
+        message: 'Imagem adicionada com sucesso',
+      };
+      setPostToast(toast);
+      getUserPostings();
+      deleteLocalStorage();
+      return true;
+    } catch (error) {
+      showToast(
+        'upload-product-image-error',
+        'error',
+        'Um erro ocorreu ao fazer o upload de sua imagem! Tente novamente'
       );
       deleteLocalStorage();
       return false;
@@ -308,9 +423,56 @@ export const ProductProvider = ({ children }) => {
       return true;
     } catch (error) {
       showToast(
-        'delete-product-iamge-error',
+        'delete-product-image-error',
         'error',
         'Um erro ocorreu ao excluir sua imagem! Tente novamente'
+      );
+      deleteLocalStorage();
+      return false;
+    }
+  };
+
+  const getAllImages = async (path) => {
+    const { data, error } = await supabase.storage.from('produtos').list(path);
+    if (error) {
+      return false;
+    }
+    return data;
+  };
+
+  const deletePost = async (productId) => {
+    saveLocalStorage();
+    try {
+      const path = `${sessionUser.id}/${productId}`;
+      const allImages = await getAllImages(path);
+      if (allImages) {
+        for (const image of allImages) {
+          await deleteImage(path, image.name);
+        }
+        const { error } = await supabase
+          .from('produtos')
+          .delete()
+          .eq('id', productId);
+        if (error) {
+          throw new Error(error);
+        }
+        const toast = {
+          id: 'delete-post-success',
+          type: 'success',
+          message: 'Anúncio excluído com sucesso',
+        };
+        deleteLocalStorage();
+        getUserPostings();
+        setPostToast(toast);
+        navigate('seus-anuncios');
+        return true;
+      }
+      throw new Error();
+    } catch (error) {
+      showToast(
+        'delete-post-error',
+        'error',
+        'Um erro ocorreu ao excluir seu anúncio! Tente novamente'
       );
       deleteLocalStorage();
       return false;
@@ -362,7 +524,10 @@ export const ProductProvider = ({ children }) => {
     updatePostData,
     updatePostSpecs,
     updatePostCover,
+    uploadPostImage,
+    updatePostImage,
     deletePostImage,
+    deletePost,
     postToast,
     setPostToast,
   };

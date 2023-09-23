@@ -17,6 +17,8 @@ import GradientButton from '../../components/GradientButton';
 import PagesNav from '../../components/PagesNav';
 import Alert from '../../components/Alert';
 
+import showToast from '../../utils/showToasts';
+
 import { AuthContext } from '../../contexts/AuthProvider';
 import { ProductContext } from '../../contexts/ProductProvider';
 
@@ -27,7 +29,7 @@ const UserProducts = () => {
   const [alert, setAlert] = useState('');
   const linksString = '/\\Home';
   const { sessionUser } = useContext(AuthContext);
-  const { userPostings } = useContext(ProductContext);
+  const { userPostings, postToast, setPostToast } = useContext(ProductContext);
   const adsPerPage = 7;
   const totalPages = userPostings
     ? Math.ceil(userPostings.length / adsPerPage)
@@ -95,6 +97,13 @@ const UserProducts = () => {
       setIsAlerting(true);
     } else {
       setIsLogged(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (postToast) {
+      showToast(postToast.id, postToast.type, postToast.message);
+      setPostToast(null);
     }
   }, []);
 
