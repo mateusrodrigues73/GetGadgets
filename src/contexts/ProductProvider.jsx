@@ -144,11 +144,12 @@ export const ProductProvider = ({ children }) => {
       if (!insertImagesResult) {
         throw new Error('Erro ao salvar imagens na base de dados');
       }
-      showToast(
-        'insert-product-success',
-        'success',
-        `Anúncio cadastrado com sucesso`
-      );
+      const toast = {
+        id: 'insert-product-success',
+        type: 'success',
+        message: 'Anúncio cadastrado com sucesso',
+      };
+      setPostToast(toast);
       getUserPostings();
       deleteLocalStorage();
       return true;
