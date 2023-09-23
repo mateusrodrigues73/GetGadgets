@@ -46,6 +46,7 @@ const UserProductEdit = () => {
   const [preco, setPreco] = useState(null);
   const [quantidade, setQuantidade] = useState('');
   const [spec, setSpec] = useState('');
+  const [oldSpec, setOldSpec] = useState('');
   const [indexSpec, setIndexSpec] = useState(null);
   const [specs, setSpecs] = useState([]);
   const [editTrigger, setEditTrigger] = useState(false);
@@ -203,9 +204,10 @@ const UserProductEdit = () => {
     }
   };
 
-  // TODO: voltar ao estado anterior
   const calcelEditSpec = () => {
+    specs[indexSpec] = oldSpec;
     setIndexSpec(null);
+    setOldSpec('');
     setSpec('');
   };
 
@@ -233,6 +235,7 @@ const UserProductEdit = () => {
   };
 
   const editSpec = (index) => {
+    setOldSpec(specs[index]);
     setIndexSpec(index);
     setSpec(specs[index]);
     addSpecInputRef.current.focus();
