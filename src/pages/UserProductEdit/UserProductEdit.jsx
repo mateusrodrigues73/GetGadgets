@@ -274,10 +274,14 @@ const UserProductEdit = () => {
   };
 
   const isSpecsChanged = () => {
-    if (specs.length !== post.produto_informacoes.length) {
+    const originArray = JSON.stringify(
+      post.produto_informacoes.map((i) => i.informacao)
+    );
+    const newArray = JSON.stringify(specs);
+    if (originArray !== newArray) {
       return true;
     }
-    return specs.every((s, i) => s !== post.produto_informacoes[i].informacao);
+    return false;
   };
 
   const updateSpecs = async () => {
