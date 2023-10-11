@@ -12,6 +12,8 @@ import showToast from '../utils/showToasts';
 export const ProductContext = createContext({});
 
 export const ProductProvider = ({ children }) => {
+  const [post, setPost] = useState(null);
+  const [seller, setSeller] = useState(null);
   const [lastProducts, setLastproducts] = useState(null);
   const [userPostings, setUserPostings] = useState(null);
   const [postToast, setPostToast] = useState(null);
@@ -45,8 +47,8 @@ export const ProductProvider = ({ children }) => {
   const getUserPost = (postingId) => {
     if (sessionUser) {
       if (userPostings && userPostings.length > 0) {
-        const post = userPostings.find((p) => p.id === postingId);
-        return post || null;
+        const userPost = userPostings.find((p) => p.id === postingId);
+        return userPost || null;
       }
       return null;
     }
@@ -480,6 +482,40 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const getPost = async (id) => {
+    try {
+      const { data, error } = await supabase
+        .from('produtos')
+        .select('*, produto_imagens(*), produto_informacoes(*)')
+        .eq('id', id);
+      if (error) {
+        throw new Error(error);
+      }
+      setPost(data);
+      return true;
+    } catch (error) {
+      setPost(null);
+      return false;
+    }
+  };
+
+  const getSeller = async (id) => {
+    try {
+      const { data, error } = await supabase
+        .from('usuarios')
+        .select('nome, imagem, media_avaliacoes, total_avaliacoes')
+        .eq('id', id);
+      if (error) {
+        throw new Error(error);
+      }
+      setSeller(data);
+      return true;
+    } catch (error) {
+      setSeller(null);
+      return false;
+    }
+  };
+
   const getLastProducts = async () => {
     setLoading(true);
     try {
@@ -506,6 +542,7 @@ export const ProductProvider = ({ children }) => {
         setLastproducts(error ? null : data);
       }
     } catch (error) {
+      setLoading(false);
       return;
     }
     setLoading(false);
@@ -529,6 +566,10 @@ export const ProductProvider = ({ children }) => {
     updatePostImage,
     deletePostImage,
     deletePost,
+    getPost,
+    getSeller,
+    post,
+    seller,
     postToast,
     setPostToast,
   };

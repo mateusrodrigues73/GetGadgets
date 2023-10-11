@@ -17,6 +17,7 @@ import UserProfile from './pages/UserProfile';
 import UserProducts from './pages/UserProducts';
 import UserProductEdit from './pages/UserProductEdit';
 import ProductAdPosting from './pages/ProductAdPosting';
+import ProductPage from './pages/ProductPage';
 import ErrorPage from './pages/ErrorPage';
 
 const router = createBrowserRouter([
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
       {
         path: '/anunciar-produto',
         element: <ProductAdPosting />,
+      },
+      {
+        path: '/produto/:titulo/:id',
+        element: <ProductPage />,
       },
     ],
   },
