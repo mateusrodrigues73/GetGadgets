@@ -22,7 +22,6 @@ const Home = () => {
               image={produto.produto_imagens[0].capa}
               price={produto.preco}
               postId={produto.id}
-              sellerId={produto.id_usuario}
             />
           ))}
       </ProductsContainer>

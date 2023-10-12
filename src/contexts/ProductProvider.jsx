@@ -12,8 +12,6 @@ import showToast from '../utils/showToasts';
 export const ProductContext = createContext({});
 
 export const ProductProvider = ({ children }) => {
-  const [post, setPost] = useState(null);
-  const [seller, setSeller] = useState(null);
   const [lastProducts, setLastproducts] = useState(null);
   const [userPostings, setUserPostings] = useState(null);
   const [postToast, setPostToast] = useState(null);
@@ -491,10 +489,8 @@ export const ProductProvider = ({ children }) => {
       if (error) {
         throw new Error(error);
       }
-      setPost(data);
-      return true;
+      return data;
     } catch (error) {
-      setPost(null);
       return false;
     }
   };
@@ -508,10 +504,8 @@ export const ProductProvider = ({ children }) => {
       if (error) {
         throw new Error(error);
       }
-      setSeller(data);
-      return true;
+      return data;
     } catch (error) {
-      setSeller(null);
       return false;
     }
   };
@@ -568,8 +562,6 @@ export const ProductProvider = ({ children }) => {
     deletePost,
     getPost,
     getSeller,
-    post,
-    seller,
     postToast,
     setPostToast,
   };
