@@ -63,7 +63,7 @@ const router = createBrowserRouter([
         element: <ProductAdPosting />,
       },
       {
-        path: '/produto/:titulo/:id',
+        path: '/produto/:id',
         element: <ProductPage />,
       },
     ],
