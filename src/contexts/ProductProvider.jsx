@@ -480,6 +480,36 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const addProductToCart = async (productId) => {
+    saveLocalStorage();
+    try {
+      const { error } = await supabase.from('carrinho_de_compras').insert({
+        id_produto: productId,
+        id_usuario: sessionUser.id,
+      });
+      if (error) {
+        throw new Error(error.message);
+      }
+      const toast = {
+        id: 'add-product-to-cart-success',
+        type: 'success',
+        message: 'Produto adicionado no seu carrinho',
+      };
+      setPostToast(toast);
+      navigate('/carrinho-de-compras');
+      deleteLocalStorage();
+      return true;
+    } catch (error) {
+      showToast(
+        'add-product-to-cart-error',
+        'error',
+        'Um erro ocorreu ao adicionar o produto no seu carrinho! tente novamente'
+      );
+      deleteLocalStorage();
+      return false;
+    }
+  };
+
   const getPost = async (id) => {
     try {
       const { data, error } = await supabase
@@ -560,6 +590,7 @@ export const ProductProvider = ({ children }) => {
     updatePostImage,
     deletePostImage,
     deletePost,
+    addProductToCart,
     getPost,
     getSeller,
     postToast,
