@@ -47,7 +47,7 @@ const ProductPage = () => {
   const linksString = '/\\Home';
   const { id } = useParams();
   const { sessionUser, setDispathUrl } = useContext(AuthContext);
-  const { getPost, getSeller } = useContext(ProductContext);
+  const { getPost, getSeller, addProductToCart } = useContext(ProductContext);
   const navigate = useNavigate();
 
   const goToLogin = () => {
@@ -61,12 +61,16 @@ const ProductPage = () => {
     setIsAlerting(false);
   };
 
-  const addToCart = () => {
+  const addToCart = async () => {
     if (!sessionUser) {
       setAlert(
         'Você deve estar logado para adicionar este produto no seu carrinho. Deseja ir para tela de login?'
       );
       setIsAlerting(true);
+    } else {
+      setIsLoading(true);
+      await addProductToCart(id);
+      setIsLoading(false);
     }
   };
 
