@@ -13,6 +13,7 @@ export const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
   const { supabase } = useContext(SupabaseContext);
   const [sessionUser, setSessionUser] = useState(null);
+  const [dispathUrl, setDispathUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
@@ -152,7 +153,13 @@ export const AuthProvider = ({ children }) => {
           type: 'success',
           msg: 'Login bem sucedido',
         });
-        navigate('/');
+        if (dispathUrl) {
+          const url = dispathUrl;
+          setDispathUrl(null);
+          navigate(url);
+        } else {
+          navigate('/');
+        }
       }
     } catch (error) {
       setSessionUser(null);
@@ -281,6 +288,8 @@ export const AuthProvider = ({ children }) => {
   const authContextValue = {
     sessionUser,
     setSessionUser,
+    dispathUrl,
+    setDispathUrl,
     signIn,
     signUp,
     signOut,
