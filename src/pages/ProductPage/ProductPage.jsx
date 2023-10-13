@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   ProductContainer,
@@ -26,10 +26,12 @@ import {
 import Breadcrumbs from '../../components/Breadcrumbs';
 import AddToCartButton from '../../components/AddToCartButton';
 import GradientButton from '../../components/GradientButton';
+import Alert from '../../components/Alert';
 import Loader from '../../components/Loader';
 
 import showToast from '../../utils/showToasts';
 
+import { AuthContext } from '../../contexts/AuthProvider';
 import { ProductContext } from '../../contexts/ProductProvider';
 
 const ProductPage = () => {
@@ -39,13 +41,34 @@ const ProductPage = () => {
   const [sideImages, setSideImages] = useState(null);
   const [specs, setSpecs] = useState(null);
   const [seller, setSeller] = useState(null);
+  const [alert, setAlert] = useState('');
+  const [isAlerting, setIsAlerting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const linksString = '/\\Home';
   const { id } = useParams();
-  // eslint-disable-next-line no-unused-vars
+  const { sessionUser, setDispathUrl } = useContext(AuthContext);
   const { getPost, getSeller } = useContext(ProductContext);
+  const navigate = useNavigate();
 
-  const addToCart = () => {};
+  const goToLogin = () => {
+    setIsAlerting(false);
+    const url = `/produto/${id}`;
+    setDispathUrl(url);
+    navigate('/entrar');
+  };
+
+  const cancel = () => {
+    setIsAlerting(false);
+  };
+
+  const addToCart = () => {
+    if (!sessionUser) {
+      setAlert(
+        'Você deve estar logado para adicionar este produto no seu carrinho. Deseja ir para tela de login?'
+      );
+      setIsAlerting(true);
+    }
+  };
 
   const chatWithSeller = () => {};
 
@@ -199,6 +222,9 @@ const ProductPage = () => {
         </ProductWrapper>
       </ProductContainer>
       {isLoading && <Loader />}
+      {isAlerting && (
+        <Alert message={alert} onCancel={cancel} onContinue={goToLogin} />
+      )}
     </>
   );
 };
