@@ -47,7 +47,8 @@ const ProductPage = () => {
   const linksString = '/\\Home';
   const { id } = useParams();
   const { sessionUser, setDispathUrl } = useContext(AuthContext);
-  const { getPost, getSeller, addProductToCart } = useContext(ProductContext);
+  const { getPost, getSeller, userCartItensIds, addProductToCart } =
+    useContext(ProductContext);
   const navigate = useNavigate();
 
   const goToLogin = () => {
@@ -67,10 +68,12 @@ const ProductPage = () => {
         'Você deve estar logado para adicionar este produto no seu carrinho. Deseja ir para tela de login?'
       );
       setIsAlerting(true);
-    } else {
+    } else if (userCartItensIds && !userCartItensIds.includes(Number(id))) {
       setIsLoading(true);
       await addProductToCart(id);
       setIsLoading(false);
+    } else {
+      navigate('/carrinho-de-compras');
     }
   };
 
