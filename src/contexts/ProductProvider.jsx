@@ -14,6 +14,8 @@ export const ProductContext = createContext({});
 export const ProductProvider = ({ children }) => {
   const [lastProducts, setLastproducts] = useState(null);
   const [userPostings, setUserPostings] = useState(null);
+  const [userCartItens, setUserCartItens] = useState(null);
+  const [userCartItensIds, setUserCartItensIds] = useState(null);
   const [postToast, setPostToast] = useState(null);
   const [loading, setLoading] = useState(true);
   const { supabase } = useContext(SupabaseContext);
@@ -34,12 +36,14 @@ export const ProductProvider = ({ children }) => {
       if (error) {
         throw new Error(error);
       }
+      deleteLocalStorage();
+      setLoading(false);
       setUserPostings(data.length > 0 ? data : null);
     } catch (error) {
+      deleteLocalStorage();
+      setLoading(false);
       setUserPostings(null);
     }
-    deleteLocalStorage();
-    setLoading(false);
   };
 
   const getUserPost = (postingId) => {
@@ -480,36 +484,6 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-  const addProductToCart = async (productId) => {
-    saveLocalStorage();
-    try {
-      const { error } = await supabase.from('carrinho_de_compras').insert({
-        id_produto: productId,
-        id_usuario: sessionUser.id,
-      });
-      if (error) {
-        throw new Error(error.message);
-      }
-      const toast = {
-        id: 'add-product-to-cart-success',
-        type: 'success',
-        message: 'Produto adicionado no seu carrinho',
-      };
-      setPostToast(toast);
-      navigate('/carrinho-de-compras');
-      deleteLocalStorage();
-      return true;
-    } catch (error) {
-      showToast(
-        'add-product-to-cart-error',
-        'error',
-        'Um erro ocorreu ao adicionar o produto no seu carrinho! tente novamente'
-      );
-      deleteLocalStorage();
-      return false;
-    }
-  };
-
   const getPost = async (id) => {
     try {
       const { data, error } = await supabase
@@ -536,6 +510,87 @@ export const ProductProvider = ({ children }) => {
       }
       return data;
     } catch (error) {
+      return false;
+    }
+  };
+
+  const getCartItens = async (ids) => {
+    try {
+      const { data, error } = await supabase
+        .from('produtos')
+        .select('id, titulo, quantidade, preco, produto_imagens(capa)')
+        .in('id', ids);
+      if (error) {
+        throw new Error(error.message);
+      }
+      const cartItens = data.map((item) => ({
+        id: item.id,
+        titulo: item.titulo,
+        quantidade: Number(item.quantidade),
+        preco: item.preco,
+        capa: item.produto_imagens[0].capa,
+      }));
+      return cartItens;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const getProductsCartIds = async () => {
+    setLoading(true);
+    saveLocalStorage();
+    try {
+      const { data, error } = await supabase
+        .from('carrinho_de_compras')
+        .select('id_produto')
+        .eq('id_usuario', sessionUser.id);
+      if (error) {
+        throw new Error(error.message);
+      }
+      const arrayOfIds = data.map((item) => item.id_produto);
+      setUserCartItensIds(arrayOfIds);
+      const cartItens = await getCartItens(arrayOfIds);
+      if (cartItens) {
+        setUserCartItens(cartItens.length > 0 ? cartItens : null);
+      } else {
+        setUserCartItens(null);
+      }
+      setLoading(false);
+      deleteLocalStorage();
+    } catch (error) {
+      setUserCartItens(null);
+      setLoading(false);
+      deleteLocalStorage();
+    }
+  };
+
+  const addProductToCart = async (productId) => {
+    saveLocalStorage();
+    try {
+      const { error } = await supabase.from('carrinho_de_compras').insert({
+        id_produto: productId,
+        id_usuario: sessionUser.id,
+      });
+      if (error) {
+        throw new Error(error.message);
+      }
+      const toast = {
+        id: 'add-product-to-cart-success',
+        type: 'success',
+        message: 'Produto adicionado no seu carrinho',
+      };
+      setPostToast(toast);
+      getProductsCartIds();
+      navigate('/carrinho-de-compras');
+      deleteLocalStorage();
+      return true;
+    } catch (error) {
+      showToast(
+        'add-product-to-cart-error',
+        'error',
+        'Um erro ocorreu ao adicionar o produto no seu carrinho! tente novamente'
+      );
+      deleteLocalStorage();
       return false;
     }
   };
@@ -575,12 +630,17 @@ export const ProductProvider = ({ children }) => {
   useEffect(() => {
     getLastProducts();
     getUserPostings();
+    if (sessionUser) {
+      getProductsCartIds();
+    }
   }, [sessionUser]);
 
   const productContextValue = {
     lastProducts,
     posting,
     userPostings,
+    userCartItens,
+    userCartItensIds,
     insertNewProduct,
     getUserPost,
     updatePostData,
