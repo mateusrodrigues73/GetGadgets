@@ -63,7 +63,7 @@ const Header = () => {
           <UserIcon />
         </LinkIconContainer>
         <LinkIconContainer>
-          <LinkWithIcon to="/">
+          <LinkWithIcon to="/carrinho-de-compras">
             Seu carrinho <br /> de compras
           </LinkWithIcon>
           <ShoppingCarIcon />
