@@ -8,7 +8,7 @@ import {
   PostingImage,
   TilleContainer,
   Title,
-} from './Userproducts.styles';
+} from './UserProducts.styles';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 import SectionTitle from '../../components/SectionTitle';
