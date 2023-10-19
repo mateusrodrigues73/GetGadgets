@@ -38,6 +38,7 @@ const ShoppingCart = () => {
   const [isLogged, setIsLogged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isAlerting, setIsAlerting] = useState(false);
+  const [action, setAction] = useState(null);
   const [alert, setAlert] = useState('');
   const linksString = '/\\Home';
   const { sessionUser, setDispathUrl } = useContext(AuthContext);
@@ -48,16 +49,26 @@ const ShoppingCart = () => {
     postToast,
     setPostToast,
     updateCartIten,
+    deleteCartIten,
+    deleteAllCartItens,
   } = useContext(ProductContext);
   const navigate = useNavigate();
 
-  // TODO: implementar funções para excluir itens do carrinho
+  const deleteCart = () => {
+    setAlert(
+      'Tem certeza que deseja remover todos os produtos do seu carrinho de compras?'
+    );
+    setIsAlerting(true);
+    setAction(2);
+  };
 
-  const deleteCart = () => {};
+  const deleteIten = async (productId) => {
+    setIsLoading(true);
+    await deleteCartIten(productId);
+    setIsLoading(false);
+  };
 
   const buyItens = () => {};
-
-  const deleteCartIten = () => {};
 
   const decrease = async (productId, userQuantity) => {
     if (userQuantity > 1) {
@@ -111,11 +122,18 @@ const ShoppingCart = () => {
     }
   };
 
-  const goToLogin = () => {
-    setIsAlerting(false);
-    const url = '/carrinho-de-compras';
-    setDispathUrl(url);
-    navigate('/entrar');
+  const alertAction = async (option) => {
+    if (option === 1) {
+      setIsAlerting(false);
+      const url = '/carrinho-de-compras';
+      setDispathUrl(url);
+      navigate('/entrar');
+    } else if (option === 2) {
+      setIsLoading(true);
+      await deleteAllCartItens();
+      setIsLoading(false);
+    }
+    setAction(null);
   };
 
   const cancel = () => {
@@ -167,7 +185,7 @@ const ShoppingCart = () => {
             width="120px"
             height="25px"
             text="Remover"
-            onClick={deleteCartIten}
+            onClick={() => deleteIten(iten.id_produto)}
             icon
           />
         </CartItenContainer>
@@ -181,6 +199,7 @@ const ShoppingCart = () => {
         'Você deve estar logado para ver os itens do seu carrinho. Deseja ir para tela de login?'
       );
       setIsAlerting(true);
+      setAction(1);
     } else {
       setIsLogged(true);
     }
@@ -243,7 +262,11 @@ const ShoppingCart = () => {
       )}
       {isLoading && <Loader />}
       {isAlerting && (
-        <Alert message={alert} onCancel={cancel} onContinue={goToLogin} />
+        <Alert
+          message={alert}
+          onCancel={cancel}
+          onContinue={() => alertAction(action)}
+        />
       )}
     </>
   );

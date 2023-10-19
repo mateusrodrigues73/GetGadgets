@@ -593,7 +593,7 @@ export const ProductProvider = ({ children }) => {
       showToast(
         'add-product-to-cart-error',
         'error',
-        'Um erro ocorreu ao adicionar o produto no seu carrinho! tente novamente'
+        'Um erro ocorreu ao adicionar o produto no seu carrinho! Tente novamente'
       );
       deleteLocalStorage();
       return false;
@@ -615,6 +615,62 @@ export const ProductProvider = ({ children }) => {
       }
       return true;
     } catch (error) {
+      return false;
+    }
+  };
+
+  const deleteCartIten = async (productId) => {
+    try {
+      saveLocalStorage();
+      const { error } = await supabase
+        .from('carrinho_de_compras')
+        .delete()
+        .eq('id_produto', productId);
+      deleteLocalStorage();
+      if (error) {
+        throw new Error(error.message);
+      } else {
+        await getProductsCartItens();
+        return true;
+      }
+    } catch (error) {
+      showToast(
+        `delete-cart-iten-error-${productId}`,
+        'error',
+        'Um erro ocorreu ao remover o produto do seu carrinho! Tente novamente'
+      );
+      return false;
+    }
+  };
+
+  const deleteAllCartItens = async () => {
+    try {
+      saveLocalStorage();
+      const { error } = await supabase
+        .from('carrinho_de_compras')
+        .delete()
+        .eq('id_usuario', sessionUser.id);
+      deleteLocalStorage();
+      if (error) {
+        throw new Error(error.message);
+      } else {
+        await getProductsCartItens();
+        const toast = {
+          id: 'delete-all-cart-itens-success',
+          type: 'success',
+          message: 'Produtos removidos do carrinho com sucesso',
+        };
+        setPostToast(toast);
+        return true;
+      }
+    } catch (error) {
+      const toast = {
+        id: `delete-all-cart-itens-error`,
+        type: 'error',
+        message:
+          'Um erro ocorreu ao remover os produtos do seu carrinho! Tente novamente',
+      };
+      setPostToast(toast);
       return false;
     }
   };
@@ -678,6 +734,8 @@ export const ProductProvider = ({ children }) => {
     deletePost,
     addProductToCart,
     updateCartIten,
+    deleteCartIten,
+    deleteAllCartItens,
     getPost,
     getSeller,
     postToast,
