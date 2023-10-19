@@ -1,10 +1,31 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { PageContainer } from '../UserProducts/Userproducts.styles';
+import {
+  PageContainer,
+  CartContainer,
+  ItensContainer,
+  CartItenContainer,
+  ItenImageContainer,
+  ItenImage,
+  ItenTilleContainer,
+  ItenTitle,
+  AmountContainer,
+  MinusIcon,
+  PlusIcon,
+  CartItenPriceContainer,
+  SummaryContainer,
+  SummaryTitle,
+  SummaryDataContainer,
+  SummaryDataWrapper,
+  SummaryPriceContainer,
+  SummaryPrice,
+} from './ShoppingCart.styles';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 import SectionTitle from '../../components/SectionTitle';
+import GradientButton from '../../components/GradientButton';
+import CautionButton from '../../components/CautionButton';
 import Alert from '../../components/Alert';
 import Loader from '../../components/Loader';
 
@@ -15,14 +36,80 @@ import { ProductContext } from '../../contexts/ProductProvider';
 
 const ShoppingCart = () => {
   const [isLogged, setIsLogged] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
   const [isAlerting, setIsAlerting] = useState(false);
   const [alert, setAlert] = useState('');
   const linksString = '/\\Home';
   const { sessionUser, setDispathUrl } = useContext(AuthContext);
-  const { userCartItens, postToast, setPostToast } = useContext(ProductContext);
+  const {
+    userCartItens,
+    cartTotalPrice,
+    cartTotalItens,
+    postToast,
+    setPostToast,
+    updateCartIten,
+  } = useContext(ProductContext);
   const navigate = useNavigate();
+
+  // TODO: implementar funções para excluir itens do carrinho
+
+  const deleteCart = () => {};
+
+  const buyItens = () => {};
+
+  const deleteCartIten = () => {};
+
+  const decrease = async (productId, userQuantity) => {
+    if (userQuantity > 1) {
+      const newQuantity = userQuantity - 1;
+      const iten = {
+        quantidade_usuario: newQuantity,
+      };
+      setIsLoading(true);
+      const result = await updateCartIten(productId, iten);
+      setIsLoading(false);
+      if (!result) {
+        showToast(
+          `decrease-user-quantity-cart-iten-verify-error-${productId}`,
+          'error',
+          'Um erro occoreu ao alterar a quantidade do produto! Tente novamente'
+        );
+      }
+    } else if (userQuantity === 1) {
+      showToast(
+        `decrease-user-quantity-cart-iten-verify-warn-${productId}`,
+        'warn',
+        'Mínimo de 1 iten por produto!'
+      );
+    }
+  };
+
+  const increase = async (productId, userQuantity, totalOfItens) => {
+    if (userQuantity < totalOfItens) {
+      const newQuantity = userQuantity + 1;
+      const iten = {
+        quantidade_usuario: newQuantity,
+      };
+      setIsLoading(true);
+      const result = await updateCartIten(productId, iten);
+      setIsLoading(false);
+      if (!result) {
+        showToast(
+          `increase-user-quantity-cart-iten-verify-error-${productId}`,
+          'error',
+          'Um erro occoreu ao alterar a quantidade do produto! Tente novamente'
+        );
+      }
+    } else if (userQuantity === totalOfItens) {
+      const message =
+        totalOfItens === 1 ? 'exemplar disponível!' : 'exemplares disponíveis!';
+      showToast(
+        `increase-user-quantity-cart-iten-verify-warn-${productId}`,
+        'warn',
+        `Este produto possui apenas ${totalOfItens} ${message}`
+      );
+    }
+  };
 
   const goToLogin = () => {
     setIsAlerting(false);
@@ -35,10 +122,63 @@ const ShoppingCart = () => {
     setIsAlerting(false);
   };
 
+  const renderCartItens = () => (
+    <ItensContainer>
+      {userCartItens.map((iten, index) => (
+        <CartItenContainer key={index}>
+          <ItenImageContainer>
+            <ItenImage src={iten.imagem} alt={iten.titulo} />
+          </ItenImageContainer>
+          <ItenTilleContainer>
+            <ItenTitle>{iten.titulo}</ItenTitle>
+          </ItenTilleContainer>
+          <AmountContainer>
+            <MinusIcon
+              onClick={() => decrease(iten.id_produto, iten.quantidade_usuario)}
+            />
+            <ItenTitle>{`Quantidade: ${iten.quantidade_usuario}`}</ItenTitle>
+            <PlusIcon
+              onClick={() =>
+                increase(
+                  iten.id_produto,
+                  iten.quantidade_usuario,
+                  iten.quantidade_total
+                )
+              }
+            />
+          </AmountContainer>
+          {iten.quantidade_usuario === 1 ? (
+            <CartItenPriceContainer>
+              <ItenTitle>{`Preço: 1 x R$${iten.preco_unitario.toFixed(
+                2
+              )}`}</ItenTitle>
+            </CartItenPriceContainer>
+          ) : (
+            <CartItenPriceContainer>
+              <ItenTitle>{`Preço: ${
+                iten.quantidade_usuario
+              } x R$${iten.preco_unitario.toFixed(2)}`}</ItenTitle>
+              <ItenTitle>{`Total: R${(
+                iten.quantidade_usuario * iten.preco_unitario
+              ).toFixed(2)}`}</ItenTitle>
+            </CartItenPriceContainer>
+          )}
+          <CautionButton
+            width="120px"
+            height="25px"
+            text="Remover"
+            onClick={deleteCartIten}
+            icon
+          />
+        </CartItenContainer>
+      ))}
+    </ItensContainer>
+  );
+
   useEffect(() => {
     if (!sessionUser) {
       setAlert(
-        'Você deve estar logado para ver seus anúncios. Deseja ir para tela de login?'
+        'Você deve estar logado para ver os itens do seu carrinho. Deseja ir para tela de login?'
       );
       setIsAlerting(true);
     } else {
@@ -68,6 +208,38 @@ const ShoppingCart = () => {
         <PageContainer>
           <SectionTitle title="Você não possui nenhum produto no seu carrinho" />
         </PageContainer>
+      )}
+      {isLogged && userCartItens && (
+        <CartContainer>
+          {renderCartItens()}
+          <SummaryContainer>
+            <SummaryTitle>Resumo</SummaryTitle>
+            <SummaryDataContainer>
+              <SummaryDataWrapper>
+                <ItenTitle>{`Total de produtos: ${cartTotalItens}`}</ItenTitle>
+              </SummaryDataWrapper>
+              <SummaryDataWrapper>
+                <ItenTitle>{`Valor total: R$${cartTotalPrice}`}</ItenTitle>
+              </SummaryDataWrapper>
+            </SummaryDataContainer>
+            <SummaryPriceContainer>
+              <SummaryPrice>{`R$${cartTotalPrice}`}</SummaryPrice>
+            </SummaryPriceContainer>
+            <GradientButton
+              width="100%"
+              height="25px"
+              text="Finalizar compra"
+              onClick={buyItens}
+            />
+            <CautionButton
+              width="100%"
+              height="25px"
+              text="Esvaziar carrinho"
+              onClick={deleteCart}
+              icon
+            />
+          </SummaryContainer>
+        </CartContainer>
       )}
       {isLoading && <Loader />}
       {isAlerting && (
