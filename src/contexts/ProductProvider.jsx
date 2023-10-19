@@ -15,6 +15,8 @@ export const ProductProvider = ({ children }) => {
   const [lastProducts, setLastproducts] = useState(null);
   const [userPostings, setUserPostings] = useState(null);
   const [userCartItens, setUserCartItens] = useState(null);
+  const [cartTotalPrice, setCartTotalPrice] = useState(null);
+  const [cartTotalItens, setCartTotalItens] = useState(null);
   const [userCartItensIds, setUserCartItensIds] = useState(null);
   const [postToast, setPostToast] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -514,44 +516,37 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-  const getCartItens = async (ids) => {
-    try {
-      const { data, error } = await supabase
-        .from('produtos')
-        .select('id, titulo, quantidade, preco, produto_imagens(capa)')
-        .in('id', ids);
-      if (error) {
-        throw new Error(error.message);
-      }
-      const cartItens = data.map((item) => ({
-        id: item.id,
-        titulo: item.titulo,
-        quantidade: Number(item.quantidade),
-        preco: item.preco,
-        capa: item.produto_imagens[0].capa,
-      }));
-      return cartItens;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const getProductsCartIds = async () => {
+  const getProductsCartItens = async () => {
     setLoading(true);
     saveLocalStorage();
     try {
       const { data, error } = await supabase
         .from('carrinho_de_compras')
-        .select('id_produto')
+        .select('*')
         .eq('id_usuario', sessionUser.id);
       if (error) {
         throw new Error(error.message);
       }
-      const arrayOfIds = data.map((item) => item.id_produto);
-      setUserCartItensIds(arrayOfIds);
-      const cartItens = await getCartItens(arrayOfIds);
-      if (cartItens) {
-        setUserCartItens(cartItens.length > 0 ? cartItens : null);
+      if (data) {
+        setUserCartItens(data.length > 0 ? data : null);
+        const arrayOfIds = data.map((item) => item.id_produto);
+        setUserCartItensIds(arrayOfIds);
+        let userItens = 0;
+        let totalPrice = 0;
+        data.forEach((iten) => {
+          if (iten.quantidade_total !== null) {
+            const subtotal = iten.preco_unitario * iten.quantidade_usuario;
+            totalPrice += subtotal;
+            userItens += iten.quantidade_usuario;
+          }
+        });
+        totalPrice = parseFloat(totalPrice.toFixed(2));
+        let totalPriceString = totalPrice.toFixed(2);
+        if (totalPrice === parseInt(totalPrice, 10)) {
+          totalPriceString = `${totalPrice.toFixed(0)}.00`;
+        }
+        setCartTotalPrice(totalPriceString);
+        setCartTotalItens(userItens);
       } else {
         setUserCartItens(null);
       }
@@ -567,10 +562,20 @@ export const ProductProvider = ({ children }) => {
   const addProductToCart = async (productId) => {
     saveLocalStorage();
     try {
-      const { error } = await supabase.from('carrinho_de_compras').insert({
-        id_produto: productId,
+      const product = await getPost(productId);
+      const cleanPriceString = product[0].preco.replace(/(R|\$|\s)/g, '');
+      const priceFloat = parseFloat(cleanPriceString);
+      const itenCart = {
         id_usuario: sessionUser.id,
-      });
+        id_produto: productId,
+        quantidade_total: product[0].quantidade,
+        preco_unitario: priceFloat,
+        titulo: product[0].titulo,
+        imagem: product[0].produto_imagens[0].capa,
+      };
+      const { error } = await supabase
+        .from('carrinho_de_compras')
+        .insert(itenCart);
       if (error) {
         throw new Error(error.message);
       }
@@ -580,7 +585,7 @@ export const ProductProvider = ({ children }) => {
         message: 'Produto adicionado no seu carrinho',
       };
       setPostToast(toast);
-      getProductsCartIds();
+      getProductsCartItens();
       navigate('/carrinho-de-compras');
       deleteLocalStorage();
       return true;
@@ -591,6 +596,25 @@ export const ProductProvider = ({ children }) => {
         'Um erro ocorreu ao adicionar o produto no seu carrinho! tente novamente'
       );
       deleteLocalStorage();
+      return false;
+    }
+  };
+
+  const updateCartIten = async (productId, iten) => {
+    try {
+      saveLocalStorage();
+      const { error } = await supabase
+        .from('carrinho_de_compras')
+        .update(iten)
+        .eq('id_produto', productId);
+      deleteLocalStorage();
+      if (error) {
+        throw new Error(error.message);
+      } else {
+        await getProductsCartItens();
+      }
+      return true;
+    } catch (error) {
       return false;
     }
   };
@@ -631,7 +655,7 @@ export const ProductProvider = ({ children }) => {
     getLastProducts();
     getUserPostings();
     if (sessionUser) {
-      getProductsCartIds();
+      getProductsCartItens();
     }
   }, [sessionUser]);
 
@@ -641,6 +665,8 @@ export const ProductProvider = ({ children }) => {
     userPostings,
     userCartItens,
     userCartItensIds,
+    cartTotalPrice,
+    cartTotalItens,
     insertNewProduct,
     getUserPost,
     updatePostData,
@@ -651,6 +677,7 @@ export const ProductProvider = ({ children }) => {
     deletePostImage,
     deletePost,
     addProductToCart,
+    updateCartIten,
     getPost,
     getSeller,
     postToast,
