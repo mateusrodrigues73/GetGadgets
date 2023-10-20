@@ -19,6 +19,7 @@ import UserProductEdit from './pages/UserProductEdit';
 import ProductAdPosting from './pages/ProductAdPosting';
 import ProductPage from './pages/ProductPage';
 import ShoppingCart from './pages/ShoppingCart';
+import AdvancedSearch from './pages/AdvancedSearch';
 import ErrorPage from './pages/ErrorPage';
 
 const router = createBrowserRouter([
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
       {
         path: '/carrinho-de-compras',
         element: <ShoppingCart />,
+      },
+      {
+        path: '/busca-avancada',
+        element: <AdvancedSearch />,
       },
     ],
   },
