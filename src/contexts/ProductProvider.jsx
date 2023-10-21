@@ -13,6 +13,9 @@ export const ProductContext = createContext({});
 
 export const ProductProvider = ({ children }) => {
   const [lastProducts, setLastproducts] = useState(null);
+  const [allProducts, setAllproducts] = useState(null);
+  const [productsSearch, setProductsSearch] = useState(null);
+  const [textSearch, setTextSearch] = useState(null);
   const [userPostings, setUserPostings] = useState(null);
   const [userCartItens, setUserCartItens] = useState(null);
   const [cartTotalPrice, setCartTotalPrice] = useState(null);
@@ -675,6 +678,119 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const getAllProducts = async () => {
+    setLoading(true);
+    try {
+      if (sessionUser) {
+        saveLocalStorage();
+        const { data, error } = await supabase
+          .from('produtos')
+          .select('*, produto_imagens(*), produto_informacoes(*)')
+          .neq('id_usuario', sessionUser.id);
+        deleteLocalStorage();
+        if (error) {
+          throw new Error(error.message);
+        } else {
+          if (data.length > 0) {
+            setAllproducts(data);
+          } else {
+            setAllproducts(null);
+          }
+          setLoading(false);
+          return true;
+        }
+      } else {
+        saveLocalStorage();
+        const { data, error } = await supabase
+          .from('produtos')
+          .select('*, produto_imagens(*), produto_informacoes(*)');
+        deleteLocalStorage();
+        if (error) {
+          throw new Error(error.message);
+        } else {
+          if (data.length > 0) {
+            setAllproducts(data);
+          } else {
+            setAllproducts(null);
+          }
+          setLoading(false);
+          return true;
+        }
+      }
+    } catch (error) {
+      const toast = {
+        id: `delete-all-cart-itens-error`,
+        type: 'error',
+        message:
+          'Um erro ocorreu ao remover os produtos do seu carrinho! Tente novamente',
+      };
+      setPostToast(toast);
+      setLoading(false);
+      return false;
+    }
+  };
+
+  const getProductsByModel = async (search) => {
+    try {
+      setTextSearch(search);
+      if (sessionUser) {
+        saveLocalStorage();
+        const { data, error } = await supabase
+          .from('produtos')
+          .select('*, produto_imagens(*), produto_informacoes(*)')
+          .or(
+            `titulo.ilike.%${search}%`,
+            `modelo.ilike.%${search}%`,
+            `marca.ilike.%${search}%`
+          )
+          .neq('id_usuario', sessionUser.id);
+        deleteLocalStorage();
+        if (error) {
+          throw new Error(error.message);
+        } else {
+          if (data.length > 0) {
+            setProductsSearch(data);
+          } else {
+            setProductsSearch(null);
+          }
+          navigate('busca-avancada');
+          return true;
+        }
+      } else {
+        saveLocalStorage();
+        const { data, error } = await supabase
+          .from('produtos')
+          .select('*, produto_imagens(*), produto_informacoes(*)')
+          .or(
+            `titulo.ilike.%${search}%`,
+            `modelo.ilike.%${search}%`,
+            `marca.ilike.%${search}%`
+          );
+        deleteLocalStorage();
+        if (error) {
+          throw new Error(error.message);
+        } else {
+          if (data.length > 0) {
+            setProductsSearch(data);
+          } else {
+            setProductsSearch(null);
+          }
+          navigate('busca-avancada');
+          return true;
+        }
+      }
+    } catch (error) {
+      const toast = {
+        id: `delete-all-cart-itens-error`,
+        type: 'error',
+        message:
+          'Um erro ocorreu ao remover os produtos do seu carrinho! Tente novamente',
+      };
+      setPostToast(toast);
+      return false;
+    }
+  };
+
   const getLastProducts = async () => {
     setLoading(true);
     try {
@@ -710,6 +826,7 @@ export const ProductProvider = ({ children }) => {
   useEffect(() => {
     getLastProducts();
     getUserPostings();
+    getAllProducts();
     if (sessionUser) {
       getProductsCartItens();
     }
@@ -723,6 +840,11 @@ export const ProductProvider = ({ children }) => {
     userCartItensIds,
     cartTotalPrice,
     cartTotalItens,
+    productsSearch,
+    allProducts,
+    textSearch,
+    setTextSearch,
+    setProductsSearch,
     insertNewProduct,
     getUserPost,
     updatePostData,
@@ -736,6 +858,8 @@ export const ProductProvider = ({ children }) => {
     updateCartIten,
     deleteCartIten,
     deleteAllCartItens,
+    getProductsByModel,
+    getAllProducts,
     getPost,
     getSeller,
     postToast,
