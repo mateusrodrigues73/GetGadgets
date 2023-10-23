@@ -159,3 +159,80 @@ export const SummaryPrice = styled.h1`
   font-size: 30px;
   color: ${({ theme }) => theme.colors.contrastLight};
 `;
+
+export const RevisionContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: auto;
+`;
+
+export const RevisionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 30px;
+  background-color: ${({ theme }) => theme.colors.secondaryDark};
+  border-radius: 20px 0px;
+  padding: 30px;
+`;
+
+export const RevisionTilleContainer = styled.div`
+  width: 100%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.colors.primary};
+  border-radius: 10px 0px;
+`;
+
+export const RevisionTitle = styled.h1`
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: 24px;
+  color: ${({ theme }) => theme.colors.neutralWith};
+`;
+
+export const RevisionItensContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 15px;
+`;
+
+export const RevisionCartItenContainer = styled.div`
+  width: 895px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 5px;
+  background-color: ${({ theme }) => theme.colors.secondaryLight};
+  border-radius: 10px 0px;
+`;
+
+export const RevisionItenImage = styled.img`
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  object-position: center;
+`;
+
+export const RevisionActionsContainer = styled.div`
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  align-items: center;
+  justify-content: space-around;
+  background-color: ${({ theme }) => theme.colors.primary};
+  border-radius: 10px 0px;
+`;

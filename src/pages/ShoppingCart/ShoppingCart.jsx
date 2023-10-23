@@ -20,6 +20,14 @@ import {
   SummaryDataWrapper,
   SummaryPriceContainer,
   SummaryPrice,
+  RevisionContainer,
+  RevisionWrapper,
+  RevisionTilleContainer,
+  RevisionTitle,
+  RevisionItensContainer,
+  RevisionCartItenContainer,
+  RevisionItenImage,
+  RevisionActionsContainer,
 } from './ShoppingCart.styles';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
@@ -35,6 +43,7 @@ import { AuthContext } from '../../contexts/AuthProvider';
 import { ProductContext } from '../../contexts/ProductProvider';
 
 const ShoppingCart = () => {
+  const [showRevision, setShowRevision] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isAlerting, setIsAlerting] = useState(false);
@@ -54,6 +63,15 @@ const ShoppingCart = () => {
   } = useContext(ProductContext);
   const navigate = useNavigate();
 
+  const closeRevision = () => {
+    setShowRevision(false);
+  };
+
+  // TODO: implementar página de pagamento
+  const gotToPayment = () => {
+    setShowRevision(false);
+  };
+
   const deleteCart = () => {
     setAlert(
       'Tem certeza que deseja remover todos os produtos do seu carrinho de compras?'
@@ -68,7 +86,9 @@ const ShoppingCart = () => {
     setIsLoading(false);
   };
 
-  const buyItens = () => {};
+  const buyItens = () => {
+    setShowRevision(true);
+  };
 
   const decrease = async (productId, userQuantity) => {
     if (userQuantity > 1) {
@@ -193,6 +213,63 @@ const ShoppingCart = () => {
     </ItensContainer>
   );
 
+  const renderRevision = () => (
+    <RevisionContainer>
+      <RevisionWrapper>
+        <RevisionTilleContainer>
+          <RevisionTitle>Revisão</RevisionTitle>
+        </RevisionTilleContainer>
+        <RevisionItensContainer>
+          {userCartItens.map((iten, index) => (
+            <RevisionCartItenContainer key={index}>
+              <RevisionItenImage src={iten.imagem} alt={iten.titulo} />
+              <ItenTilleContainer>
+                <ItenTitle>{iten.titulo}</ItenTitle>
+              </ItenTilleContainer>
+              <AmountContainer>
+                <ItenTitle>{`Quantidade: ${iten.quantidade_usuario}`}</ItenTitle>
+              </AmountContainer>
+              {iten.quantidade_usuario === 1 ? (
+                <CartItenPriceContainer>
+                  <ItenTitle>{`Preço: 1 x R$${iten.preco_unitario.toFixed(
+                    2
+                  )}`}</ItenTitle>
+                </CartItenPriceContainer>
+              ) : (
+                <CartItenPriceContainer>
+                  <ItenTitle>{`Preço: ${
+                    iten.quantidade_usuario
+                  } x R$${iten.preco_unitario.toFixed(2)}`}</ItenTitle>
+                  <ItenTitle>{`Total: R${(
+                    iten.quantidade_usuario * iten.preco_unitario
+                  ).toFixed(2)}`}</ItenTitle>
+                </CartItenPriceContainer>
+              )}
+            </RevisionCartItenContainer>
+          ))}
+        </RevisionItensContainer>
+        <RevisionTilleContainer>
+          <RevisionTitle>{`Valor total: R$${cartTotalPrice}`}</RevisionTitle>
+        </RevisionTilleContainer>
+        <RevisionActionsContainer>
+          <CautionButton
+            width="200px"
+            height="25px"
+            text="Cancelar"
+            onClick={closeRevision}
+            icon={false}
+          />
+          <GradientButton
+            width="200px"
+            height="25px"
+            text="Ir para o pagamento"
+            onClick={gotToPayment}
+          />
+        </RevisionActionsContainer>
+      </RevisionWrapper>
+    </RevisionContainer>
+  );
+
   useEffect(() => {
     if (!sessionUser) {
       setAlert(
@@ -260,6 +337,7 @@ const ShoppingCart = () => {
           </SummaryContainer>
         </CartContainer>
       )}
+      {showRevision && renderRevision()}
       {isLoading && <Loader />}
       {isAlerting && (
         <Alert
