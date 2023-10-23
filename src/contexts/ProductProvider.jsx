@@ -566,7 +566,9 @@ export const ProductProvider = ({ children }) => {
     saveLocalStorage();
     try {
       const product = await getPost(productId);
-      const cleanPriceString = product[0].preco.replace(/(R|\$|\s)/g, '');
+      const cleanPriceString = product[0].preco
+        .replace(/(R|\$|\s|\.)/g, '')
+        .replace(',', '.');
       const priceFloat = parseFloat(cleanPriceString);
       const itenCart = {
         id_usuario: sessionUser.id,
