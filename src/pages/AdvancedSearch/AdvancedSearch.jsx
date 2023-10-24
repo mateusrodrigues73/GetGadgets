@@ -260,6 +260,7 @@ const AdvancedSearch = () => {
       maxPriceFloat,
       category,
       sortIten,
+      noResults,
     ]
   );
 
@@ -367,14 +368,15 @@ const AdvancedSearch = () => {
             <ProductsContainer>{renderedProducts}</ProductsContainer>
           )}
         </CenterContainer>
-        {totalPages && totalPages > 1 && (
-          <PagesNav
-            currentPage={currentPage}
-            totalPages={totalPages}
-            goPrevious={previousPage}
-            goNext={nextPage}
-          />
-        )}
+        {(totalPages && totalPages > 1) ||
+          (!noResults && (
+            <PagesNav
+              currentPage={currentPage}
+              totalPages={totalPages}
+              goPrevious={previousPage}
+              goNext={nextPage}
+            />
+          ))}
       </PageContainer>
       {isLoading && <Loader />}
     </>
