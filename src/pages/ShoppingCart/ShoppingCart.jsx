@@ -63,6 +63,7 @@ const ShoppingCart = () => {
     updateCartIten,
     deleteCartIten,
     deleteAllCartItens,
+    finalizeOrder,
   } = useContext(ProductContext);
   const navigate = useNavigate();
 
@@ -168,7 +169,7 @@ const ShoppingCart = () => {
       setIsLoading(false);
     } else if (option === 3) {
       setIsLoading(true);
-      // TODO: finalizar compras
+      await finalizeOrder(userCartItens);
       setIsLoading(false);
     }
   };

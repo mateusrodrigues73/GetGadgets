@@ -573,6 +573,7 @@ export const ProductProvider = ({ children }) => {
       const itenCart = {
         id_usuario: sessionUser.id,
         id_produto: productId,
+        id_vemdedor: product[0].id_usuario,
         quantidade_total: product[0].quantidade,
         preco_unitario: priceFloat,
         titulo: product[0].titulo,
@@ -678,6 +679,11 @@ export const ProductProvider = ({ children }) => {
       setPostToast(toast);
       return false;
     }
+  };
+
+  const finalizeOrder = async (cartItens) => {
+    // eslint-disable-next-line no-console
+    console.log(cartItens);
   };
 
   const getAllProducts = async () => {
@@ -860,6 +866,7 @@ export const ProductProvider = ({ children }) => {
     updateCartIten,
     deleteCartIten,
     deleteAllCartItens,
+    finalizeOrder,
     getProductsByModel,
     getAllProducts,
     getPost,
