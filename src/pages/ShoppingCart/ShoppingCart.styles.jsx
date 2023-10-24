@@ -108,8 +108,8 @@ export const CartItenPriceContainer = styled.div`
 
 export const SummaryContainer = styled.div`
   width: 285px;
-  height: 400px;
   padding: 30px;
+  row-gap: 30px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -195,7 +195,7 @@ export const RevisionTilleContainer = styled.div`
   border-radius: 10px 0px;
 `;
 
-export const RevisionTitle = styled.h1`
+export const RevisionTitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.heading};
   font-size: 24px;
   color: ${({ theme }) => theme.colors.neutralWith};
@@ -235,4 +235,28 @@ export const RevisionActionsContainer = styled.div`
   justify-content: space-around;
   background-color: ${({ theme }) => theme.colors.primary};
   border-radius: 10px 0px;
+`;
+
+export const PaymentMethodContainer = styled.div`
+  width: 895px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+  background-color: ${({ theme }) => theme.colors.primary};
+  border-radius: 20px 0px;
+  transition: transform 0.5s ease;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.secondaryDark};
+    cursor: pointer;
+    transform: scale(1.03);
+  }
+`;
+
+export const PaymentMethodTitle = styled.h2`
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: 24px;
+  color: ${({ theme }) => theme.colors.neutralWith};
 `;

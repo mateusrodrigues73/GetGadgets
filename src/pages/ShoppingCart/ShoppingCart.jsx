@@ -28,6 +28,8 @@ import {
   RevisionCartItenContainer,
   RevisionItenImage,
   RevisionActionsContainer,
+  PaymentMethodContainer,
+  PaymentMethodTitle,
 } from './ShoppingCart.styles';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
@@ -44,6 +46,7 @@ import { ProductContext } from '../../contexts/ProductProvider';
 
 const ShoppingCart = () => {
   const [showRevision, setShowRevision] = useState(false);
+  const [showPaymentMethods, setShowPaymentMethods] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isAlerting, setIsAlerting] = useState(false);
@@ -63,13 +66,23 @@ const ShoppingCart = () => {
   } = useContext(ProductContext);
   const navigate = useNavigate();
 
+  const completePurchase = (paymentMethod) => {
+    setAlert(`Finalizar compra utilizando ${paymentMethod}?`);
+    setIsAlerting(true);
+    setAction(3);
+  };
+
+  const backToCart = () => {
+    setShowPaymentMethods(false);
+  };
+
   const closeRevision = () => {
     setShowRevision(false);
   };
 
-  // TODO: implementar página de pagamento
   const gotToPayment = () => {
     setShowRevision(false);
+    setShowPaymentMethods(true);
   };
 
   const deleteCart = () => {
@@ -110,7 +123,7 @@ const ShoppingCart = () => {
       showToast(
         `decrease-user-quantity-cart-iten-verify-warn-${productId}`,
         'warn',
-        'Mínimo de 1 iten por produto!'
+        'Mínimo de 1 item por produto!'
       );
     }
   };
@@ -143,8 +156,9 @@ const ShoppingCart = () => {
   };
 
   const alertAction = async (option) => {
+    setIsAlerting(false);
+    setAction(null);
     if (option === 1) {
-      setIsAlerting(false);
       const url = '/carrinho-de-compras';
       setDispathUrl(url);
       navigate('/entrar');
@@ -152,12 +166,16 @@ const ShoppingCart = () => {
       setIsLoading(true);
       await deleteAllCartItens();
       setIsLoading(false);
+    } else if (option === 3) {
+      setIsLoading(true);
+      // TODO: finalizar compras
+      setIsLoading(false);
     }
-    setAction(null);
   };
 
   const cancel = () => {
     setIsAlerting(false);
+    setAction(null);
   };
 
   const renderCartItens = () => (
@@ -270,6 +288,47 @@ const ShoppingCart = () => {
     </RevisionContainer>
   );
 
+  const renderPaymentMethods = () => (
+    <CartContainer>
+      <ItensContainer>
+        <PaymentMethodContainer
+          onClick={() => completePurchase('Cartão de Crédito')}
+        >
+          <PaymentMethodTitle>Cartão de Crédito</PaymentMethodTitle>
+        </PaymentMethodContainer>
+        <PaymentMethodContainer
+          onClick={() => completePurchase('Boleto Bancário')}
+        >
+          <PaymentMethodTitle>Boleto Bancário</PaymentMethodTitle>
+        </PaymentMethodContainer>
+        <PaymentMethodContainer onClick={() => completePurchase('Pix')}>
+          <PaymentMethodTitle>Pix</PaymentMethodTitle>
+        </PaymentMethodContainer>
+      </ItensContainer>
+      <SummaryContainer>
+        <SummaryTitle>Resumo</SummaryTitle>
+        <SummaryDataContainer>
+          <SummaryDataWrapper>
+            <ItenTitle>{`Total de produtos: ${cartTotalItens}`}</ItenTitle>
+          </SummaryDataWrapper>
+          <SummaryDataWrapper>
+            <ItenTitle>{`Valor total: R$${cartTotalPrice}`}</ItenTitle>
+          </SummaryDataWrapper>
+        </SummaryDataContainer>
+        <SummaryPriceContainer>
+          <SummaryPrice>{`R$${cartTotalPrice}`}</SummaryPrice>
+        </SummaryPriceContainer>
+        <CautionButton
+          width="100%"
+          height="25px"
+          text="Voltar"
+          onClick={backToCart}
+          icon={false}
+        />
+      </SummaryContainer>
+    </CartContainer>
+  );
+
   useEffect(() => {
     if (!sessionUser) {
       setAlert(
@@ -305,7 +364,7 @@ const ShoppingCart = () => {
           <SectionTitle title="Você não possui nenhum produto no seu carrinho" />
         </PageContainer>
       )}
-      {isLogged && userCartItens && (
+      {isLogged && userCartItens && !showPaymentMethods && (
         <CartContainer>
           {renderCartItens()}
           <SummaryContainer>
@@ -337,6 +396,7 @@ const ShoppingCart = () => {
           </SummaryContainer>
         </CartContainer>
       )}
+      {showPaymentMethods && renderPaymentMethods()}
       {showRevision && renderRevision()}
       {isLoading && <Loader />}
       {isAlerting && (
