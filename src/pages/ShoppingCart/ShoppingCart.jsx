@@ -47,6 +47,7 @@ import { ProductContext } from '../../contexts/ProductProvider';
 const ShoppingCart = () => {
   const [showRevision, setShowRevision] = useState(false);
   const [showPaymentMethods, setShowPaymentMethods] = useState(false);
+  const [payment, setPayment] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isAlerting, setIsAlerting] = useState(false);
@@ -69,6 +70,7 @@ const ShoppingCart = () => {
 
   const completePurchase = (paymentMethod) => {
     setAlert(`Finalizar compra utilizando ${paymentMethod}?`);
+    setPayment(paymentMethod);
     setIsAlerting(true);
     setAction(3);
   };
@@ -169,7 +171,7 @@ const ShoppingCart = () => {
       setIsLoading(false);
     } else if (option === 3) {
       setIsLoading(true);
-      await finalizeOrder(userCartItens);
+      await finalizeOrder(userCartItens, payment);
       setIsLoading(false);
     }
   };
@@ -177,6 +179,7 @@ const ShoppingCart = () => {
   const cancel = () => {
     setIsAlerting(false);
     setAction(null);
+    setPayment(null);
   };
 
   const renderCartItens = () => (
