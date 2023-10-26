@@ -573,7 +573,7 @@ export const ProductProvider = ({ children }) => {
       const itenCart = {
         id_usuario: sessionUser.id,
         id_produto: productId,
-        id_vemdedor: product[0].id_usuario,
+        id_vendedor: product[0].id_usuario,
         quantidade_total: product[0].quantidade,
         preco_unitario: priceFloat,
         titulo: product[0].titulo,
