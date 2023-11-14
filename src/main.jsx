@@ -20,6 +20,7 @@ import ProductAdPosting from './pages/ProductAdPosting';
 import ProductPage from './pages/ProductPage';
 import ShoppingCart from './pages/ShoppingCart';
 import AdvancedSearch from './pages/AdvancedSearch';
+import History from './pages/History';
 import ErrorPage from './pages/ErrorPage';
 
 const router = createBrowserRouter([
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
       {
         path: '/busca-avancada',
         element: <AdvancedSearch />,
+      },
+      {
+        path: '/seu-historico',
+        element: <History />,
       },
     ],
   },
