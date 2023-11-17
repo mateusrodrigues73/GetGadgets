@@ -21,6 +21,8 @@ export const ProductProvider = ({ children }) => {
   const [cartTotalPrice, setCartTotalPrice] = useState(null);
   const [cartTotalItens, setCartTotalItens] = useState(null);
   const [userCartItensIds, setUserCartItensIds] = useState(null);
+  const [historicItems, setHistoricItens] = useState(null);
+  const [historicListener, setHistoricListener] = useState(null);
   const [postToast, setPostToast] = useState(null);
   const [loading, setLoading] = useState(true);
   const { supabase } = useContext(SupabaseContext);
@@ -727,6 +729,91 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const getBuyerImage = (sales) => {
+    sales.map(async (iten) => {
+      const { data, error } = await supabase
+        .from('usuarios')
+        .select('imagem')
+        .eq('id', iten.id_comprador);
+      if (error) {
+        iten.comprador_imagem = null;
+        iten.comprador_nome = null;
+      } else {
+        iten.comprador_imagem = data[0].imagem;
+        iten.comprador_nome = `${data[0].nome} ${data[0].sobrenome}`;
+      }
+    });
+    return sales;
+  };
+
+  const getHitoricSales = async () => {
+    const { data, error } = await supabase
+      .from('historico')
+      .select('*')
+      .eq('id_vendedor', sessionUser.id);
+    if (error) {
+      return false;
+    }
+    const sales = getBuyerImage(data);
+    return sales;
+  };
+
+  const getSellerImage = (purchases) => {
+    purchases.map(async (iten) => {
+      const { data, error } = await supabase
+        .from('usuarios')
+        .select('imagem, nome, sobrenome')
+        .eq('id', iten.id_vendedor);
+      if (error) {
+        iten.vendedor_imagem = null;
+        iten.vendedor_nome = null;
+      } else {
+        iten.vendedor_imagem = data[0].imagem;
+        iten.vendedor_nome = `${data[0].nome} ${data[0].sobrenome}`;
+      }
+    });
+    return purchases;
+  };
+
+  const getHitoricPurchases = async () => {
+    const { data, error } = await supabase
+      .from('historico')
+      .select('*')
+      .eq('id_comprador', sessionUser.id);
+    if (error) {
+      return false;
+    }
+    const purchases = getSellerImage(data);
+    return purchases;
+  };
+
+  const getHitoricItens = async () => {
+    setLoading(true);
+    saveLocalStorage();
+    try {
+      const sales = await getHitoricSales();
+      const purchases = await getHitoricPurchases();
+      if (sales === false || purchases === false) {
+        throw new Error();
+      }
+      if (sales.length === 0 && purchases.length === 0) {
+        setHistoricItens(null);
+      } else {
+        const historic = {
+          sales: sales.length > 0 ? sales : null,
+          purchases: purchases.length > 0 ? purchases : null,
+        };
+        setHistoricItens(historic);
+      }
+      setLoading(false);
+      deleteLocalStorage();
+    } catch (error) {
+      setHistoricItens(null);
+      setLoading(false);
+      deleteLocalStorage();
+    }
+  };
+
   const getAllProducts = async () => {
     setLoading(true);
     try {
@@ -872,14 +959,53 @@ export const ProductProvider = ({ children }) => {
     setLoading(false);
   };
 
+  const unsubscribeHistoricListener = () => {
+    if (historicListener) {
+      historicListener.unsubscribe();
+    }
+    setHistoricListener(null);
+  };
+
   useEffect(() => {
     getLastProducts();
     getUserPostings();
     getAllProducts();
     if (sessionUser) {
       getProductsCartItens();
+      getHitoricItens();
     }
   }, [sessionUser]);
+
+  useEffect(() => {
+    if (sessionUser) {
+      setHistoricListener(
+        supabase
+          .channel('table-db-changes')
+          .on(
+            'postgres_changes',
+            {
+              event: '*',
+              schema: 'public',
+              table: 'historico',
+              filter: `id_comprador=eq.${sessionUser.id}`,
+            },
+            () => getHitoricItens()
+          )
+          .on(
+            'postgres_changes',
+            {
+              event: '*',
+              schema: 'public',
+              table: 'historico',
+              filter: `id_vendedor=eq.${sessionUser.id}`,
+            },
+            () => getHitoricItens()
+          )
+          .subscribe()
+      );
+    }
+    return unsubscribeHistoricListener();
+  }, []);
 
   const productContextValue = {
     lastProducts,
@@ -889,6 +1015,7 @@ export const ProductProvider = ({ children }) => {
     userCartItensIds,
     cartTotalPrice,
     cartTotalItens,
+    historicItems,
     productsSearch,
     allProducts,
     textSearch,
