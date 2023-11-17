@@ -292,6 +292,8 @@ const ShoppingCart = () => {
     </RevisionContainer>
   );
 
+  // TODO: corrigir erro de estado do método de pagamento
+
   const renderPaymentMethods = () => (
     <CartContainer>
       <ItensContainer>
