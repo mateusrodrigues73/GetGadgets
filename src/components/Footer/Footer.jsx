@@ -23,12 +23,12 @@ const Footer = () => (
         <LinksWrapper>
           <LinksColumn>
             <FooterLink to="/seus-anuncios">seus anúncios</FooterLink>
-            <FooterLink to="/">seus histórico</FooterLink>
-            <FooterLink to="/">fóruns</FooterLink>
+            <FooterLink to="/seu-historico">seu histórico</FooterLink>
+            <FooterLink to="/">home</FooterLink>
           </LinksColumn>
           <LinksColumn>
-            <FooterLink to="/">busca avançada</FooterLink>
-            <FooterLink to="/">
+            <FooterLink to="/busca-avancada">busca avançada</FooterLink>
+            <FooterLink to="/carrinho-de-compras">
               seu carrinho <br /> de compras
             </FooterLink>
           </LinksColumn>
