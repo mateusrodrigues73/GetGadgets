@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   HeaderContainer,
@@ -26,6 +27,7 @@ const Header = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { sessionUser } = useContext(AuthContext);
   const { getProductsByModel } = useContext(ProductContext);
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     setSearchinput(event.target.value);
@@ -45,7 +47,7 @@ const Header = () => {
     <>
       <HeaderContainer>
         <HeaderWrapper>
-          <Logo src="/images/logo.png" />
+          <Logo src="/images/logo.png" onClick={() => navigate('/')} />
           <SearchLinksContainer>
             <SearchContainer>
               <SearchInput
@@ -56,7 +58,7 @@ const Header = () => {
               <SearchIcon onClick={findProducts} />
             </SearchContainer>
             <LinksContainer>
-              <LinkItem to="/">Seu histórico</LinkItem>
+              <LinkItem to="/seu-historico">Seu histórico</LinkItem>
               <LinkItem to="/busca-avancada">Busca avançada</LinkItem>
               <LinkItem to="/seus-anuncios">Seus anúncios</LinkItem>
             </LinksContainer>
