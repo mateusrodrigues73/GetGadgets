@@ -29,6 +29,12 @@ export const HeaderWrapper = styled.div`
 export const Logo = styled.img`
   width: 100px;
   height: 100px;
+  border-radius: 50%;
+
+  &:hover {
+    cursor: pointer;
+    border: 1px solid ${({ theme }) => theme.colors.neutralWith};
+  }
 `;
 
 export const SearchLinksContainer = styled.div`
