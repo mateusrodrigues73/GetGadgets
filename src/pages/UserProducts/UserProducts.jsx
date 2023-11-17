@@ -28,7 +28,7 @@ const UserProducts = () => {
   const [isAlerting, setIsAlerting] = useState(false);
   const [alert, setAlert] = useState('');
   const linksString = '/\\Home';
-  const { sessionUser } = useContext(AuthContext);
+  const { sessionUser, setDispathUrl } = useContext(AuthContext);
   const { userPostings, postToast, setPostToast } = useContext(ProductContext);
   const adsPerPage = 7;
   const totalPages = userPostings
@@ -38,6 +38,7 @@ const UserProducts = () => {
 
   const goToLogin = () => {
     setIsAlerting(false);
+    setDispathUrl('/seus-anuncios');
     navigate('/entrar');
   };
 
