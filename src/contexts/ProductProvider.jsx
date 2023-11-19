@@ -729,11 +729,11 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-  const getBuyerImage = (sales) => {
+  const getBuyerData = async (sales) => {
     sales.map(async (iten) => {
       const { data, error } = await supabase
         .from('usuarios')
-        .select('imagem')
+        .select('imagem, nome, sobrenome')
         .eq('id', iten.id_comprador);
       if (error) {
         iten.comprador_imagem = null;
@@ -754,11 +754,11 @@ export const ProductProvider = ({ children }) => {
     if (error) {
       return false;
     }
-    const sales = getBuyerImage(data);
+    const sales = await getBuyerData(data);
     return sales;
   };
 
-  const getSellerImage = (purchases) => {
+  const getSellerData = async (purchases) => {
     purchases.map(async (iten) => {
       const { data, error } = await supabase
         .from('usuarios')
@@ -783,7 +783,7 @@ export const ProductProvider = ({ children }) => {
     if (error) {
       return false;
     }
-    const purchases = getSellerImage(data);
+    const purchases = await getSellerData(data);
     return purchases;
   };
 
@@ -811,6 +811,35 @@ export const ProductProvider = ({ children }) => {
       setHistoricItens(null);
       setLoading(false);
       deleteLocalStorage();
+    }
+  };
+
+  const updateHistoricStatus = async (id, status) => {
+    saveLocalStorage();
+    try {
+      const { error } = await supabase
+        .from('historico')
+        .update(status)
+        .eq('id', id);
+      if (error) {
+        throw new Error(error.message);
+      }
+      const toast = {
+        id: 'update-historic-status-success',
+        type: 'success',
+        message: 'Status alterado com sucesso',
+      };
+      setPostToast(toast);
+      deleteLocalStorage();
+      return true;
+    } catch (error) {
+      showToast(
+        'update-historic-status-error',
+        'error',
+        'Um erro ocorreu ao atualizar o status! Tente novamente'
+      );
+      deleteLocalStorage();
+      return false;
     }
   };
 
@@ -1035,6 +1064,7 @@ export const ProductProvider = ({ children }) => {
     deleteCartIten,
     deleteAllCartItens,
     finalizeOrder,
+    updateHistoricStatus,
     getProductsByModel,
     getAllProducts,
     getPost,
