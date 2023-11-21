@@ -22,6 +22,7 @@ export const ChatWindowContainer = styled.div`
   transition: left 1s ease-out;
   border-radius: 0px 20px 20px 0px;
   border: 2px solid ${({ theme }) => theme.colors.neutralWith};
+  border-left: none;
   overflow: hidden;
   z-index: 1;
 `;
@@ -138,6 +139,7 @@ export const ChatContainer = styled.div`
 
 export const UserChatContainer = styled.div`
   width: 100%;
+  height: 65px;
   padding: 5px;
   padding-left: 10px;
   background-color: ${({ theme }) => theme.colors.secondaryLight};
@@ -154,7 +156,7 @@ export const CloseUserChatIcon = styled(CloseOutlined)`
   font-size: 25px;
   color: ${({ theme }) => theme.colors.neutralWith};
   position: absolute;
-  top: 17px;
+  top: 20px;
   right: 20px;
 
   &:hover {
@@ -165,13 +167,17 @@ export const CloseUserChatIcon = styled(CloseOutlined)`
 
 export const MessagesWrapper = styled.div`
   width: 100%;
-  height: 300px;
+  height: calc(100vh - 340px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   row-gap: 15px;
-  align-items: flex-end;
-  justify-content: flex-end;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const MessageSendBox = styled.div`
@@ -182,6 +188,7 @@ export const MessageSendBox = styled.div`
   background-color: ${({ theme }) => theme.colors.secondaryLight};
   padding-bottom: 20px;
   position: relative;
+  align-self: flex-end;
 `;
 
 export const MessageReceivedBox = styled.div`
@@ -190,7 +197,6 @@ export const MessageReceivedBox = styled.div`
   padding: 5px;
   border-radius: 5px 0px;
   background-color: ${({ theme }) => theme.colors.primary};
-  align-self: flex-start;
   padding-bottom: 20px;
   position: relative;
 `;
@@ -213,6 +219,7 @@ export const MessageDate = styled.p`
 export const NewMessageContainer = styled.div`
   position: relative;
   width: 100%;
+  height: 55px;
 `;
 
 export const NewMessageInput = styled.textarea`

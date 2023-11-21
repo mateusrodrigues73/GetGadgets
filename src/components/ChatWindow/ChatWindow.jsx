@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -35,6 +35,7 @@ const ChatWindow = ({ isOpen, setIsOpen }) => {
   const [chatId, setChatId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [messageText, setMessageText] = useState('');
+  const messagesWrapperRef = useRef();
   const { sessionUser } = useContext(AuthContext);
   const { messages, insertNewMessage } = useContext(ChatContext);
 
@@ -57,6 +58,13 @@ const ChatWindow = ({ isOpen, setIsOpen }) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       sendMessage();
+    }
+  };
+
+  const scrollToBottom = () => {
+    if (messagesWrapperRef.current) {
+      messagesWrapperRef.current.scrollTop =
+        messagesWrapperRef.current.scrollHeight;
     }
   };
 
@@ -106,7 +114,7 @@ const ChatWindow = ({ isOpen, setIsOpen }) => {
           <UserName>{`${chatUser[0].user.nome} ${chatUser[0].user.sobrenome}`}</UserName>
           <CloseUserChatIcon onClick={back} />
         </UserChatContainer>
-        <MessagesWrapper>
+        <MessagesWrapper ref={messagesWrapperRef}>
           {chatUser[0].messages.map((iten) =>
             iten.remetente === sessionUser.id ? (
               <MessageSendBox>
@@ -172,6 +180,10 @@ const ChatWindow = ({ isOpen, setIsOpen }) => {
       </UsersContainer>
     );
   };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <>
