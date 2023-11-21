@@ -115,6 +115,25 @@ export const LinkItem = styled(Link)`
   }
 `;
 
+export const ChatButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.secondaryDark};
+  border: none;
+  color: ${({ theme }) => theme.colors.neutralWith};
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: 18px;
+  padding: 3px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${({ theme }) => theme.colors.secondaryLight};
+    border-radius: 3px;
+  }
+
+  &:active {
+    background: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
 export const LinkIconContainer = styled.div`
   display: flex;
   column-gap: 20px;

@@ -12,11 +12,14 @@ import {
   LinksContainer,
   LinkIconContainer,
   LinkItem,
+  ChatButton,
   UserIcon,
   ShoppingCarIcon,
   LinkWithIcon,
 } from './Header.styles';
 
+import ChatWindow from '../ChatWindow';
+import Alert from '../Alert';
 import Loader from '../Loader';
 
 import { AuthContext } from '../../contexts/AuthProvider';
@@ -25,9 +28,32 @@ import { ProductContext } from '../../contexts/ProductProvider';
 const Header = () => {
   const [searchInput, setSearchinput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [alert, setAlert] = useState('');
+  const [isAlerting, setIsAlerting] = useState(false);
   const { sessionUser } = useContext(AuthContext);
   const { getProductsByModel } = useContext(ProductContext);
   const navigate = useNavigate();
+
+  const goToLogin = () => {
+    setIsAlerting(false);
+    navigate('/entrar');
+  };
+
+  const cancel = () => {
+    setIsAlerting(false);
+  };
+
+  const handleChatClick = () => {
+    if (!sessionUser) {
+      setAlert(
+        'Você deve estar logado para visualizar suas conversas. Deseja ir para tela de login?'
+      );
+      setIsAlerting(true);
+    } else {
+      setIsChatOpen(!isChatOpen);
+    }
+  };
 
   const handleInputChange = (event) => {
     setSearchinput(event.target.value);
@@ -61,6 +87,7 @@ const Header = () => {
               <LinkItem to="/seu-historico">Seu histórico</LinkItem>
               <LinkItem to="/busca-avancada">Busca avançada</LinkItem>
               <LinkItem to="/seus-anuncios">Seus anúncios</LinkItem>
+              <ChatButton onClick={handleChatClick}>Suas conversas</ChatButton>
             </LinksContainer>
           </SearchLinksContainer>
           <LinkIconContainer>
@@ -83,6 +110,10 @@ const Header = () => {
           </LinkIconContainer>
         </HeaderWrapper>
       </HeaderContainer>
+      <ChatWindow isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
+      {isAlerting && (
+        <Alert message={alert} onCancel={cancel} onContinue={goToLogin} />
+      )}
       {isLoading && <Loader />}
     </>
   );
