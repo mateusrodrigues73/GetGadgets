@@ -8,7 +8,11 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background: linear-gradient(45deg, #D9EBEE, #5299F2);
+    background: linear-gradient(
+      45deg, 
+      ${({ theme }) => theme.colors.neutralWith},
+      ${({ theme }) => theme.colors.secondaryLight}
+    );
     background-repeat: no-repeat;
   }
 
