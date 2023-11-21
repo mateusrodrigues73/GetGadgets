@@ -510,7 +510,9 @@ export const ProductProvider = ({ children }) => {
     try {
       const { data, error } = await supabase
         .from('usuarios')
-        .select('nome, imagem, media_avaliacoes, total_avaliacoes')
+        .select(
+          'id, nome, sobrenome, imagem, media_avaliacoes, total_avaliacoes'
+        )
         .eq('id', id);
       if (error) {
         throw new Error(error);
