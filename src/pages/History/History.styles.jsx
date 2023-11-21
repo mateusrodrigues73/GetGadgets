@@ -116,7 +116,7 @@ export const UserIcon = styled(UserOutlined)`
 export const UserImage = styled.img`
   width: 60px;
   height: 60px;
-  border-radius: 50px;
+  border-radius: 30px;
 `;
 
 export const UserDataContainer = styled.div`
