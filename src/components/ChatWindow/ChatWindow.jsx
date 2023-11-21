@@ -26,17 +26,39 @@ import {
   SendMessageIcon,
 } from './ChatWindow.styles';
 
+import Loader from '../Loader';
+
 import { AuthContext } from '../../contexts/AuthProvider';
 import { ChatContext } from '../../contexts/ChatProvider';
 
 const ChatWindow = ({ isOpen, setIsOpen }) => {
   const [chatId, setChatId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [messageText, setMessageText] = useState('');
   const { sessionUser } = useContext(AuthContext);
-  const { messages } = useContext(ChatContext);
+  const { messages, insertNewMessage } = useContext(ChatContext);
 
-  // console.log('messages:');
-  // console.log(messages);
+  const sendMessage = async () => {
+    if (!messageText) {
+      return;
+    }
+    const message = {
+      mensagem: messageText,
+      id_destinatario: chatId,
+      id_remetente: sessionUser.id,
+    };
+    setMessageText('');
+    setIsLoading(true);
+    await insertNewMessage(message);
+    setIsLoading(false);
+  };
+
+  const sendMessageOnEnter = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
 
   const handleInputChange = (event) => {
     if (messageText.length > 499) {
@@ -44,6 +66,16 @@ const ChatWindow = ({ isOpen, setIsOpen }) => {
     } else {
       setMessageText(event.target.value);
     }
+  };
+
+  const back = () => {
+    setChatId(null);
+    setMessageText('');
+  };
+
+  const closeChat = () => {
+    setMessageText('');
+    setIsOpen(false);
   };
 
   const formatDate = (rawDate) => {
@@ -58,7 +90,6 @@ const ChatWindow = ({ isOpen, setIsOpen }) => {
 
   const renderChat = () => {
     const chatUser = messages.filter((iten) => iten.user.id === chatId);
-
     return (
       <ChatContainer>
         <UserChatContainer>
@@ -73,10 +104,10 @@ const ChatWindow = ({ isOpen, setIsOpen }) => {
             )}
           </UserIconWrapper>
           <UserName>{`${chatUser[0].user.nome} ${chatUser[0].user.sobrenome}`}</UserName>
-          <CloseUserChatIcon onClick={() => setChatId(null)} />
+          <CloseUserChatIcon onClick={back} />
         </UserChatContainer>
         <MessagesWrapper>
-          {chatUser[0].messages.reverse().map((iten) =>
+          {chatUser[0].messages.map((iten) =>
             iten.remetente === sessionUser.id ? (
               <MessageSendBox>
                 <MessageText>{iten.mensagem}</MessageText>
@@ -95,8 +126,9 @@ const ChatWindow = ({ isOpen, setIsOpen }) => {
             placeholder="Digite uma mensagem"
             onChange={handleInputChange}
             value={messageText}
+            onKeyDown={sendMessageOnEnter}
           />
-          <SendMessageIcon />
+          <SendMessageIcon onClick={sendMessage} />
         </NewMessageContainer>
       </ChatContainer>
     );
@@ -142,13 +174,16 @@ const ChatWindow = ({ isOpen, setIsOpen }) => {
   };
 
   return (
-    <ChatWindowContainer open={isOpen}>
-      <Header>
-        <HeaderTitle>Suas conversas</HeaderTitle>
-        <CloseChatIcon onClick={() => setIsOpen(false)} />
-      </Header>
-      {!chatId ? renderUsers() : renderChat()}
-    </ChatWindowContainer>
+    <>
+      <ChatWindowContainer open={isOpen}>
+        <Header>
+          <HeaderTitle>Suas conversas</HeaderTitle>
+          <CloseChatIcon onClick={closeChat} />
+        </Header>
+        {!chatId ? renderUsers() : renderChat()}
+      </ChatWindowContainer>
+      {isLoading && <Loader />}
+    </>
   );
 };
 

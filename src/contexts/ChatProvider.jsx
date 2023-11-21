@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { SupabaseContext } from './SupabaseProvider';
 import { AuthContext } from './AuthProvider';
 
+import showToast from '../utils/showToasts';
+
 export const ChatContext = createContext({});
 
 export const ChatProvider = ({ children }) => {
@@ -61,7 +63,7 @@ export const ChatProvider = ({ children }) => {
         .or(
           `id_destinatario.eq.${sessionUser.id},id_remetente.eq.${sessionUser.id}`
         )
-        .order('data_hora', { ascending: false });
+        .order('data_hora', { ascending: true });
       if (error) {
         throw new Error(error.message);
       }
@@ -74,6 +76,26 @@ export const ChatProvider = ({ children }) => {
       deleteLocalStorage();
     } catch (error) {
       setMessages(false);
+      deleteLocalStorage();
+    }
+  };
+
+  const insertNewMessage = async (newMessage) => {
+    saveLocalStorage();
+    try {
+      const { error } = await supabase
+        .from('usuarios_mensagens')
+        .insert(newMessage);
+      if (error) {
+        throw new Error(error.message);
+      }
+      deleteLocalStorage();
+    } catch (error) {
+      showToast(
+        `send-message-error`,
+        'error',
+        'Um erro occoreu ao enviar sua mensagem! Tente novamente'
+      );
       deleteLocalStorage();
     }
   };
@@ -117,7 +139,7 @@ export const ChatProvider = ({ children }) => {
     return unsubscribeMessagesListener();
   }, [sessionUser]);
 
-  const chatContextValue = { messages };
+  const chatContextValue = { messages, insertNewMessage };
 
   return (
     <ChatContext.Provider value={chatContextValue}>
