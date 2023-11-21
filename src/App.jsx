@@ -9,16 +9,19 @@ import { SupabaseProvider } from './contexts/SupabaseProvider';
 import { AuthProvider } from './contexts/AuthProvider';
 import { UserProvider } from './contexts/UserProvider';
 import { ProductProvider } from './contexts/ProductProvider';
+import { ChatProvider } from './contexts/ChatProvider';
 
 const App = () => (
   <SupabaseProvider>
     <AuthProvider>
       <UserProvider>
         <ProductProvider>
-          <Toast />
-          <Header />
-          <Outlet />
-          <Footer />
+          <ChatProvider>
+            <Toast />
+            <Header />
+            <Outlet />
+            <Footer />
+          </ChatProvider>
         </ProductProvider>
       </UserProvider>
     </AuthProvider>
