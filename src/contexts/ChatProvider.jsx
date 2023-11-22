@@ -10,6 +10,7 @@ export const ChatContext = createContext({});
 
 export const ChatProvider = ({ children }) => {
   const [messages, setMessages] = useState(null);
+  const [userChat, setUserChat] = useState(null);
   const [messagesListener, setMessagesListener] = useState(null);
   const { supabase } = useContext(SupabaseContext);
   const { sessionUser, saveLocalStorage, deleteLocalStorage } =
@@ -139,7 +140,12 @@ export const ChatProvider = ({ children }) => {
     return unsubscribeMessagesListener();
   }, [sessionUser]);
 
-  const chatContextValue = { messages, insertNewMessage };
+  const chatContextValue = {
+    messages,
+    insertNewMessage,
+    userChat,
+    setUserChat,
+  };
 
   return (
     <ChatContext.Provider value={chatContextValue}>
