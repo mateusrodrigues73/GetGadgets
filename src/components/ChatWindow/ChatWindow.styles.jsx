@@ -181,24 +181,31 @@ export const MessagesWrapper = styled.div`
 `;
 
 export const MessageSendBox = styled.div`
-  width: 90%;
+  max-width: 90%;
   word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  row-gap: 5px;
   padding: 5px;
   border-radius: 5px 0px;
   background-color: ${({ theme }) => theme.colors.secondaryLight};
-  padding-bottom: 20px;
-  position: relative;
   align-self: flex-end;
+  text-align: right;
 `;
 
 export const MessageReceivedBox = styled.div`
-  width: 90%;
+  max-width: 90%;
   word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  row-gap: 5px;
   padding: 5px;
   border-radius: 5px 0px;
   background-color: ${({ theme }) => theme.colors.primary};
-  padding-bottom: 20px;
-  position: relative;
 `;
 
 export const MessageText = styled.p`
@@ -211,9 +218,6 @@ export const MessageDate = styled.p`
   font-family: ${({ theme }) => theme.fonts.body};
   font-size: 10px;
   color: ${({ theme }) => theme.colors.neutralWith};
-  position: absolute;
-  bottom: 2px;
-  right: 5px;
 `;
 
 export const NewMessageContainer = styled.div`
