@@ -35,9 +35,9 @@ const ChatWindow = ({ isOpen, setIsOpen }) => {
   const [chatId, setChatId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [messageText, setMessageText] = useState('');
-  const messagesWrapperRef = useRef();
   const { sessionUser } = useContext(AuthContext);
   const { messages, insertNewMessage } = useContext(ChatContext);
+  const messagesWrapperRef = useRef();
 
   const sendMessage = async () => {
     if (!messageText) {
@@ -115,14 +115,14 @@ const ChatWindow = ({ isOpen, setIsOpen }) => {
           <CloseUserChatIcon onClick={back} />
         </UserChatContainer>
         <MessagesWrapper ref={messagesWrapperRef}>
-          {chatUser[0].messages.map((iten) =>
+          {chatUser[0].messages.map((iten, index) =>
             iten.remetente === sessionUser.id ? (
-              <MessageSendBox>
+              <MessageSendBox key={index}>
                 <MessageText>{iten.mensagem}</MessageText>
                 <MessageDate>{formatDate(iten.data_hora)}</MessageDate>
               </MessageSendBox>
             ) : (
-              <MessageReceivedBox>
+              <MessageReceivedBox key={index}>
                 <MessageText>{iten.mensagem}</MessageText>
                 <MessageDate>{formatDate(iten.data_hora)}</MessageDate>
               </MessageReceivedBox>
@@ -184,6 +184,10 @@ const ChatWindow = ({ isOpen, setIsOpen }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatId]);
 
   return (
     <>
