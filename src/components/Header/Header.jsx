@@ -51,7 +51,7 @@ const Header = () => {
       );
       setIsAlerting(true);
     } else {
-      setIsChatOpen(!isChatOpen);
+      setIsChatOpen(true);
     }
   };
 
