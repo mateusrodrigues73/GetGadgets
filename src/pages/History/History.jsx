@@ -27,6 +27,8 @@ import {
 import Breadcrumbs from '../../components/Breadcrumbs';
 import SectionTitle from '../../components/SectionTitle';
 import GradientButton from '../../components/GradientButton';
+import ChatWindow from '../../components/ChatWindow';
+import FloatChatWindow from '../../components/FloatChatWindow';
 import Loader from '../../components/Loader';
 import Alert from '../../components/Alert';
 
@@ -34,18 +36,29 @@ import showToast from '../../utils/showToasts';
 
 import { AuthContext } from '../../contexts/AuthProvider';
 import { ProductContext } from '../../contexts/ProductProvider';
+import { ChatContext } from '../../contexts/ChatProvider';
 
 export const History = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isFloatChatOpen, setIsFloatChatOpen] = useState(false);
   const [isAlerting, setIsAlerting] = useState(false);
   const [alert, setAlert] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const linksString = '/\\Home';
   const { sessionUser, setDispathUrl } = useContext(AuthContext);
   const { historicItems, updateHistoricStatus, postToast, setPostToast } =
     useContext(ProductContext);
+  const { messages, setUserChat } = useContext(ChatContext);
   const navigate = useNavigate();
+  const linksString = '/\\Home';
 
-  const chatWithSeller = () => {};
+  const chatWithSeller = (userChat) => {
+    if (messages && messages.some((objeto) => objeto.user.id === userChat.id)) {
+      setIsChatOpen(true);
+    } else {
+      setUserChat(userChat);
+      setIsFloatChatOpen(true);
+    }
+  };
 
   const changeStatus = async (id, status) => {
     setIsLoading(true);
@@ -108,7 +121,13 @@ export const History = () => {
                     width="175px"
                     height="20px"
                     text="Conversar"
-                    onClick={chatWithSeller}
+                    onClick={() =>
+                      chatWithSeller({
+                        id: iten.id_vendedor,
+                        nome: iten.vendedor_nome,
+                        imagem: iten.vendedor_imagem,
+                      })
+                    }
                   />
                 </UserDataContainer>
               </UserWrapper>
@@ -181,7 +200,13 @@ export const History = () => {
                     width="175px"
                     height="20px"
                     text="Conversar"
-                    onClick={chatWithSeller}
+                    onClick={() =>
+                      chatWithSeller({
+                        id: iten.id_comprador,
+                        nome: iten.comprador_nome,
+                        imagem: iten.comprador_imagem,
+                      })
+                    }
                   />
                 </UserDataContainer>
               </UserWrapper>
@@ -355,6 +380,11 @@ export const History = () => {
       ) : (
         historicItems && <PageContainer>{renderHistoricItens()}</PageContainer>
       )}
+      <ChatWindow isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
+      <FloatChatWindow
+        isOpen={isFloatChatOpen}
+        setIsOpen={setIsFloatChatOpen}
+      />
       {isLoading && <Loader />}
       {isAlerting && (
         <Alert message={alert} onCancel={cancel} onContinue={goToLogin} />
