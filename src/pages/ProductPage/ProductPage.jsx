@@ -26,6 +26,8 @@ import {
 import Breadcrumbs from '../../components/Breadcrumbs';
 import AddToCartButton from '../../components/AddToCartButton';
 import GradientButton from '../../components/GradientButton';
+import ChatWindow from '../../components/ChatWindow';
+import FloatChatWindow from '../../components/FloatChatWindow';
 import Alert from '../../components/Alert';
 import Loader from '../../components/Loader';
 
@@ -33,6 +35,7 @@ import showToast from '../../utils/showToasts';
 
 import { AuthContext } from '../../contexts/AuthProvider';
 import { ProductContext } from '../../contexts/ProductProvider';
+import { ChatContext } from '../../contexts/ChatProvider';
 
 const ProductPage = () => {
   const [title, setTitle] = useState(null);
@@ -41,6 +44,8 @@ const ProductPage = () => {
   const [sideImages, setSideImages] = useState(null);
   const [specs, setSpecs] = useState(null);
   const [seller, setSeller] = useState(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isFloatChatOpen, setIsFloatChatOpen] = useState(false);
   const [alert, setAlert] = useState('');
   const [isAlerting, setIsAlerting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,6 +54,7 @@ const ProductPage = () => {
   const { sessionUser, setDispathUrl } = useContext(AuthContext);
   const { getPost, getSeller, userCartItensIds, addProductToCart } =
     useContext(ProductContext);
+  const { messages, setUserChat } = useContext(ChatContext);
   const navigate = useNavigate();
 
   const goToLogin = () => {
@@ -77,7 +83,27 @@ const ProductPage = () => {
     }
   };
 
-  const chatWithSeller = () => {};
+  const chatWithSeller = async () => {
+    if (!sessionUser) {
+      setAlert(
+        'Você deve estar logado para conversar com o vendedor. Deseja ir para tela de login?'
+      );
+      setIsAlerting(true);
+    } else if (
+      messages &&
+      messages.some((objeto) => objeto.user.id === seller.id)
+    ) {
+      setIsChatOpen(true);
+    } else {
+      const user = {
+        id: seller.id,
+        nome: `${seller.nome} ${seller.sobrenome}`,
+        imagem: seller.imagem,
+      };
+      setUserChat(user);
+      setIsFloatChatOpen(true);
+    }
+  };
 
   const renderSpecs = () => (
     <SpecsWrapper>
@@ -196,7 +222,7 @@ const ProductPage = () => {
                       )}
                     </SellerIconWrapper>
                     <SellerInfoContainer>
-                      <SellerInfo>{seller.nome}</SellerInfo>
+                      <SellerInfo>{`${seller.nome} ${seller.sobrenome}`}</SellerInfo>
                       <SellerInfo>
                         {seller.total_avaliacoes === 0
                           ? 'Sem avaliações'
@@ -228,6 +254,11 @@ const ProductPage = () => {
           )}
         </ProductWrapper>
       </ProductContainer>
+      <ChatWindow isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
+      <FloatChatWindow
+        isOpen={isFloatChatOpen}
+        setIsOpen={setIsFloatChatOpen}
+      />
       {isLoading && <Loader />}
       {isAlerting && (
         <Alert message={alert} onCancel={cancel} onContinue={goToLogin} />
