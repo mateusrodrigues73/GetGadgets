@@ -69,8 +69,8 @@ const ShoppingCart = () => {
   const navigate = useNavigate();
 
   const completePurchase = (method) => {
-    setAlert(`Finalizar compra utilizando ${paymentMethod}?`);
     setPaymentMethod(method);
+    setAlert(`Finalizar compra utilizando ${method}?`);
     setIsAlerting(true);
     setAction(3);
   };
