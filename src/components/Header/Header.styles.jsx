@@ -101,7 +101,7 @@ export const LinksContainer = styled.div`
 export const LinkItem = styled(Link)`
   color: ${({ theme }) => theme.colors.neutralWith};
   font-family: ${({ theme }) => theme.fonts.heading};
-  font-size: 18px;
+  font-size: 16px;
   text-decoration: none;
   padding: 3px;
 
@@ -120,7 +120,7 @@ export const ChatButton = styled.button`
   border: none;
   color: ${({ theme }) => theme.colors.neutralWith};
   font-family: ${({ theme }) => theme.fonts.heading};
-  font-size: 18px;
+  font-size: 16px;
   padding: 3px;
 
   &:hover {

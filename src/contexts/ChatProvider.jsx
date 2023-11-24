@@ -91,6 +91,7 @@ export const ChatProvider = ({ children }) => {
         throw new Error(error.message);
       }
       deleteLocalStorage();
+      return true;
     } catch (error) {
       showToast(
         `send-message-error`,
@@ -98,6 +99,7 @@ export const ChatProvider = ({ children }) => {
         'Um erro occoreu ao enviar sua mensagem! Tente novamente'
       );
       deleteLocalStorage();
+      return false;
     }
   };
 

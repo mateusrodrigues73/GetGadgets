@@ -37,18 +37,20 @@ const FloatChatWindow = ({ isOpen, setIsOpen }) => {
     if (!messageText) {
       return;
     }
-    const newArray = [...arrayMessages];
-    newArray.push(messageText);
-    setArrayMessages(newArray);
-    setMessageText('');
     const message = {
       mensagem: messageText,
       id_destinatario: userChat.id,
       id_remetente: sessionUser.id,
     };
     setIsLoading(true);
-    await insertNewMessage(message);
+    const result = await insertNewMessage(message);
     setIsLoading(false);
+    if (result) {
+      const newArray = [...arrayMessages];
+      newArray.push(messageText);
+      setArrayMessages(newArray);
+      setMessageText('');
+    }
   };
 
   const scrollToBottom = () => {
