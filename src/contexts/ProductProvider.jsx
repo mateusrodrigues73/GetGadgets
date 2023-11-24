@@ -693,44 +693,6 @@ export const ProductProvider = ({ children }) => {
     return true;
   };
 
-  const finalizeOrder = async (cartItens, paymentMethod) => {
-    try {
-      const items = cartItens.map((iten) => ({
-        titulo: iten.titulo,
-        preco: iten.preco_unitario,
-        imagem: iten.imagem,
-        quantidade: iten.quantidade_usuario,
-        metodo_pagamento: paymentMethod,
-        status: 1,
-        id_comprador: iten.id_usuario,
-        id_vendedor: iten.id_vendedor,
-      }));
-      const { error } = await supabase.from('historico').insert(items);
-      if (error) {
-        throw new Error(error.message);
-      }
-      const ids = cartItens.map((iten) => iten.id_produto);
-      const result = await deletProducts(ids);
-      if (!result) {
-        throw new Error();
-      }
-      const toast = {
-        id: 'finalize-order-success',
-        type: 'success',
-        message: 'Compra finalizada com sucesso',
-      };
-      navigate('/seu-historico');
-      setPostToast(toast);
-    } catch (error) {
-      const toast = {
-        id: 'finalize-order-error',
-        type: 'error',
-        message: 'Um erro ocorreu ao finalizar sua compra! Tente novamente',
-      };
-      setPostToast(toast);
-    }
-  };
-
   const getBuyerData = async (sales) => {
     sales.map(async (iten) => {
       const { data, error } = await supabase
@@ -813,6 +775,45 @@ export const ProductProvider = ({ children }) => {
       setHistoricItens(null);
       setLoading(false);
       deleteLocalStorage();
+    }
+  };
+
+  const finalizeOrder = async (cartItens, paymentMethod) => {
+    try {
+      const items = cartItens.map((iten) => ({
+        titulo: iten.titulo,
+        preco: iten.preco_unitario,
+        imagem: iten.imagem,
+        quantidade: iten.quantidade_usuario,
+        metodo_pagamento: paymentMethod,
+        status: 1,
+        id_comprador: iten.id_usuario,
+        id_vendedor: iten.id_vendedor,
+      }));
+      const { error } = await supabase.from('historico').insert(items);
+      if (error) {
+        throw new Error(error.message);
+      }
+      const ids = cartItens.map((iten) => iten.id_produto);
+      const result = await deletProducts(ids);
+      if (!result) {
+        throw new Error();
+      }
+      await getHitoricItens();
+      const toast = {
+        id: 'finalize-order-success',
+        type: 'success',
+        message: 'Compra finalizada com sucesso',
+      };
+      navigate('/seu-historico');
+      setPostToast(toast);
+    } catch (error) {
+      const toast = {
+        id: 'finalize-order-error',
+        type: 'error',
+        message: 'Um erro ocorreu ao finalizar sua compra! Tente novamente',
+      };
+      setPostToast(toast);
     }
   };
 
