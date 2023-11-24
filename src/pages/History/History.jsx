@@ -231,12 +231,12 @@ export const History = () => {
   };
 
   const renderHistoricItens = () => {
-    const emAndamento = historicItems.sales
-      .concat(historicItems.purchases)
+    const emAndamento = (historicItems.sales ?? [])
+      .concat(historicItems.purchases ?? [])
       .filter((item) => item.status === 1 || item.status === 2)
       .sort((a, b) => new Date(b.data) - new Date(a.data));
-    const concluido = historicItems.sales
-      .concat(historicItems.purchases)
+    const concluido = (historicItems.sales ?? [])
+      .concat(historicItems.purchases ?? [])
       .filter((item) => item.status === 3)
       .sort((a, b) => new Date(b.data) - new Date(a.data));
     const compras = emAndamento.filter(
@@ -339,6 +339,13 @@ export const History = () => {
       setPostToast(null);
     }
   }, []);
+
+  useEffect(() => {
+    if (postToast) {
+      showToast(postToast.id, postToast.type, postToast.message);
+      setPostToast(null);
+    }
+  }, [historicItems]);
 
   return (
     <>
