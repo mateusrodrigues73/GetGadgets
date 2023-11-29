@@ -124,8 +124,8 @@ export const History = () => {
                     onClick={() =>
                       chatWithSeller({
                         id: iten.id_vendedor,
-                        nome: iten.vendedor_nome,
-                        imagem: iten.vendedor_imagem,
+                        nome: `${iten.seller.nome} ${iten.seller.sobrenome}`,
+                        imagem: iten.seller.imagem,
                       })
                     }
                   />
@@ -203,8 +203,8 @@ export const History = () => {
                     onClick={() =>
                       chatWithSeller({
                         id: iten.id_comprador,
-                        nome: iten.comprador_nome,
-                        imagem: iten.comprador_imagem,
+                        nome: `${iten.buyer.nome} ${iten.buyer.sobrenome}`,
+                        imagem: iten.buyer.imagem,
                       })
                     }
                   />
