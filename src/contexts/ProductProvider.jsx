@@ -693,62 +693,26 @@ export const ProductProvider = ({ children }) => {
     return true;
   };
 
-  const getBuyerData = async (sales) => {
-    sales.map(async (iten) => {
-      const { data, error } = await supabase
-        .from('usuarios')
-        .select('imagem, nome, sobrenome')
-        .eq('id', iten.id_comprador);
-      if (error) {
-        iten.comprador_imagem = null;
-        iten.comprador_nome = null;
-      } else {
-        iten.comprador_imagem = data[0].imagem;
-        iten.comprador_nome = `${data[0].nome} ${data[0].sobrenome}`;
-      }
-    });
-    return sales;
-  };
-
   const getHitoricSales = async () => {
     const { data, error } = await supabase
       .from('historico')
-      .select('*')
+      .select('*, buyer:id_comprador(nome, sobrenome, imagem)')
       .eq('id_vendedor', sessionUser.id);
     if (error) {
       return false;
     }
-    const sales = await getBuyerData(data);
-    return sales;
-  };
-
-  const getSellerData = async (purchases) => {
-    purchases.map(async (iten) => {
-      const { data, error } = await supabase
-        .from('usuarios')
-        .select('imagem, nome, sobrenome')
-        .eq('id', iten.id_vendedor);
-      if (error) {
-        iten.vendedor_imagem = null;
-        iten.vendedor_nome = null;
-      } else {
-        iten.vendedor_imagem = data[0].imagem;
-        iten.vendedor_nome = `${data[0].nome} ${data[0].sobrenome}`;
-      }
-    });
-    return purchases;
+    return data;
   };
 
   const getHitoricPurchases = async () => {
     const { data, error } = await supabase
       .from('historico')
-      .select('*')
+      .select('*, seller:id_vendedor(nome, sobrenome, imagem)')
       .eq('id_comprador', sessionUser.id);
     if (error) {
       return false;
     }
-    const purchases = await getSellerData(data);
-    return purchases;
+    return data;
   };
 
   const getHitoricItens = async () => {

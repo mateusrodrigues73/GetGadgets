@@ -109,14 +109,14 @@ export const History = () => {
               <UserTitle>Vendedor:</UserTitle>
               <UserWrapper>
                 <UserIconWrapper>
-                  {iten.vendedor_imagem === 'no_image' ? (
+                  {iten.seller.imagem === 'no_image' ? (
                     <UserIcon />
                   ) : (
-                    <UserImage src={iten.vendedor_imagem} alt="Vendedor" />
+                    <UserImage src={iten.seller.imagem} alt="Vendedor" />
                   )}
                 </UserIconWrapper>
                 <UserDataContainer>
-                  <ItenData>{iten.vendedor_nome}</ItenData>
+                  <ItenData>{`${iten.seller.nome} ${iten.seller.sobrenome}`}</ItenData>
                   <GradientButton
                     width="175px"
                     height="20px"
@@ -188,14 +188,14 @@ export const History = () => {
               <UserTitle>Comprador:</UserTitle>
               <UserWrapper>
                 <UserIconWrapper>
-                  {iten.comprador_imagem === 'no_image' ? (
+                  {iten.buyer.imagem === 'no_image' ? (
                     <UserIcon />
                   ) : (
-                    <UserImage src={iten.comprador_imagem} alt="Comprador" />
+                    <UserImage src={iten.buyer.imagem} alt="Comprador" />
                   )}
                 </UserIconWrapper>
                 <UserDataContainer>
-                  <ItenData>{iten.comprador_nome}</ItenData>
+                  <ItenData>{`${iten.buyer.nome} ${iten.buyer.sobrenome}`}</ItenData>
                   <GradientButton
                     width="175px"
                     height="20px"
@@ -235,17 +235,17 @@ export const History = () => {
     );
 
   const renderSellerImage = (iten) =>
-    iten.vendedor_imagem === 'no_image' ? (
+    iten.seller.imagem === 'no_image' ? (
       <UserIcon />
     ) : (
-      <UserImage src={iten.vendedor_imagem} alt="Vendedor" />
+      <UserImage src={iten.seller.imagem} alt="Vendedor" />
     );
 
   const renderBuyerImage = (iten) =>
-    iten.comprador_imagem === 'no_image' ? (
+    iten.buyer.imagem === 'no_image' ? (
       <UserIcon />
     ) : (
-      <UserImage src={iten.comprador_imagem} alt="Comprador" />
+      <UserImage src={iten.buyer.imagem} alt="Comprador" />
     );
 
   const formatDate = (date) => {
@@ -334,8 +334,8 @@ export const History = () => {
                       <UserDataContainer>
                         <ItenData>
                           {iten.id_comprador === sessionUser.id
-                            ? iten.vendedor_nome
-                            : iten.comprador_nome}
+                            ? `${iten.seller.nome} ${iten.seller.sobrenome}`
+                            : `${iten.buyer.nome} ${iten.buyer.sobrenome}`}
                         </ItenData>
                       </UserDataContainer>
                     </UserWrapper>
